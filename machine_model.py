@@ -9,8 +9,8 @@ It takes as input also the LogisticModel, to get and put raw materials from ware
 """
 import random
 import simpy
-from GlobalVariables import *
-import Monitoring
+from global_variables import *
+import monitoring
 
 
 # TODO: Add the breakdown logging and console printing. Test the breakdown system.

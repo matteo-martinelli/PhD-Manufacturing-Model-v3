@@ -15,8 +15,8 @@ type is the second one, middle warehouse.
 
 # from Makers import *
 import simpy
-import Monitoring
-from GlobalVariables import *
+import monitoring
+from global_variables import *
 
 
 # TODO: split this class into two different classes - one for the input container and one for the output. Apply

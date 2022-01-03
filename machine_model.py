@@ -10,7 +10,7 @@ It takes as input also the LogisticModel, to get and put raw materials from ware
 import random
 import simpy
 from global_variables import *
-import monitoring
+from monitoring import *
 
 
 # TODO: Add the breakdown logging and console printing. Test the breakdown system.
@@ -49,7 +49,7 @@ class Machine(object):
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH_generic_version
         self.log_filename = GlobalVariables.LOG_FILENAME
-        self.data_logger = Monitoring.DataLogger(self.log_path, self.log_filename)
+        self.data_logger = DataLogger(self.log_path, self.log_filename)
         self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
 
     #  Function describing the machine process.

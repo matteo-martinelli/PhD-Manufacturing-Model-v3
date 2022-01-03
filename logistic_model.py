@@ -15,8 +15,8 @@ type is the second one, middle warehouse.
 
 # from Makers import *
 import simpy
-import monitoring
 from global_variables import *
+from monitoring import *
 
 
 # TODO: split this class into two different classes - one for the input container and one for the output. Apply
@@ -131,5 +131,5 @@ class LogisticWrapper:
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH_generic_version
         self.log_filename = GlobalVariables.LOG_FILENAME
-        self.data_logger = Monitoring.DataLogger(self.log_path, self.log_filename)
+        self.data_logger = DataLogger(self.log_path, self.log_filename)
         self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")

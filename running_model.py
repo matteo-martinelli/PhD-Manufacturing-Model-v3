@@ -5,8 +5,8 @@ that's the class where the model is described and launched.
 """
 
 # TODO: refactor the import statements adding the package reference in each imported file.
-from LogisticModel_Generic import *
-from Machine_Generic import *
+from logistic_model import *
+from machine_model import *
 
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------

@@ -115,7 +115,7 @@ class Machine(object):
             print(str(prod_time) + ": Node " + self.name + " assembled {0} pieces.".format(self.parts_made))
 
             # Perform the output warehouse level checking: if full, wait 1 time step. NOT WORKING
-            output_node_level = self.output_buffer.output_container.level
+            output_node_level = self.output_buffer.level
             """
             while output_node_level == self.output_buffer.output_container.capacity:
                 print(str(self.env.now) + ": the " + self.name + " output buffer level is " + str(output_node_level) +
@@ -125,7 +125,7 @@ class Machine(object):
                 yield self.env.timeout(1)
             """
             # Put the finished product into the finished warehouse
-            self.output_buffer.output_container.put(1)
+            self.output_buffer.put(1)
             output_time = self.env.now
 
             # Writing to the log file

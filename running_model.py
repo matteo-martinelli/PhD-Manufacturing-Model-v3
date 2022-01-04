@@ -22,11 +22,6 @@ input_A = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPAC
                          supplier_std_supply=GlobalVariables.SUPPLIER_STD_SUPPLY_A_RAW,
                          input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_A_RAW,
                          input_std_check_time=GlobalVariables.STANDARD_A_CHECK_TIME)
-"""
-output_A = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
-                           init_capacity=GlobalVariables.INITIAL_A_FINISHED, bool_input_control_container=False,
-                           bool_output_control_container=False)
-"""
 
 output_A = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_A_FINISHED, output_control=False)
@@ -39,26 +34,13 @@ input_B = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPAC
                          supplier_std_supply=GlobalVariables.SUPPLIER_STD_SUPPLY_B_RAW,
                          input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_B_RAW,
                          input_std_check_time=GlobalVariables.STANDARD_B_CHECK_TIME)
-"""
-output_B = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
-                           init_capacity=GlobalVariables.INITIAL_B_FINISHED, bool_input_control_container=False,
-                           bool_output_control_container=False)
-"""
+
 output_B = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_B_FINISHED, output_control=False)
 
 input_C = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_C_FINISHED, input_control=False)
 
-"""
-output_C = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
-                           init_capacity=GlobalVariables.INITIAL_C_FINISHED, bool_input_control_container=False,
-                           bool_output_control_container=True,
-                           critical_level_output_container=GlobalVariables.CRITICAL_STOCK_C_FINISHED,
-                           dispatcher_lead_time=GlobalVariables.DISPATCHER_LEAD_TIME_C_FINISHED,
-                           dispatcher_retrieved_check_time=GlobalVariables.DISPATCHER_RETRIEVED_CHECK_TIME_C_FINISHED,
-                           dispatcher_std_check_time=GlobalVariables.DISPATCHER_STD_CHECK_TIME_C_FINISHED)
-"""
 output_C = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_C_FINISHED, output_control=True,
                            critical_level_output_container=GlobalVariables.CRITICAL_STOCK_C_FINISHED,
@@ -80,10 +62,6 @@ machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, Globa
 
 # TODO: maybe **args and **kwargs could help here?
 # Moving from output A&B to input C
-# output_A.input_container.get(1)
-# output_B.input_container.get(1)
-# input_C.input_container.put(1)
-
 output_A.get(1)
 output_B.get(1)
 input_C.put(1)

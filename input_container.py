@@ -7,7 +7,6 @@ The level control is needed in order to have always some material available.
 Is possible to exclude the level control service.
 """
 
-# from Makers import *
 import simpy
 from global_variables import *
 from monitoring import *

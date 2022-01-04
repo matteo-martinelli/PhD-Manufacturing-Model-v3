@@ -61,7 +61,7 @@ class Machine(object):
         """
         while True:
             # Perform the output warehouse level checking: if empty, wait 1 time step. NOT WORKING.
-            input_node_level = self.input_buffer.input_container.level
+            input_node_level = self.input_buffer.level
             """
             while input_node_level == 0:
                 print(str(self.env.now) + ": the " + self.name + " input buffer level is " + str(input_node_level) +
@@ -74,7 +74,7 @@ class Machine(object):
             input_time = self.env.now
 
             # Take the raw product from raw products warehouse
-            self.input_buffer.input_container.get(1)
+            self.input_buffer.get(1)
 
             # Start making a new part
             time_per_part = self.mean_process_time

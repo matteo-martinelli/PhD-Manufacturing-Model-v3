@@ -8,11 +8,13 @@ that's the class where the model is described and launched.
 from logistic_model import *
 from machine_model import *
 from global_variables import *
+from input_container import *
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
 
 # LOGISTIC ENTITIES DEFINITION -----------------------------------------------------------------------------------------
+"""
 input_A = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPACITY,
                           init_capacity=GlobalVariables.INITIAL_A_RAW, bool_input_control_container=True,
                           critical_level_input_container=GlobalVariables.CRITICAL_STOCK_A_RAW,
@@ -21,11 +23,20 @@ input_A = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPA
                           input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_A_RAW,
                           input_std_check_time=GlobalVariables.STANDARD_A_CHECK_TIME,
                           bool_output_control_container=False)
+"""
+
+input_A = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPACITY,
+                         init_capacity=GlobalVariables.INITIAL_A_RAW, input_control=True,
+                         critical_level_input_container=GlobalVariables.CRITICAL_STOCK_A_RAW,
+                         supplier_lead_time=GlobalVariables.SUPPLIER_LEAD_TIME_A_RAW,
+                         supplier_std_supply=GlobalVariables.SUPPLIER_STD_SUPPLY_A_RAW,
+                         input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_A_RAW,
+                         input_std_check_time=GlobalVariables.STANDARD_A_CHECK_TIME)
 
 output_A = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_A_FINISHED, bool_input_control_container=False,
                            bool_output_control_container=False)
-
+"""
 input_B = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
                           init_capacity=GlobalVariables.INITIAL_B_RAW, bool_input_control_container=True,
                           critical_level_input_container=GlobalVariables.CRITICAL_STOCK_B_RAW,
@@ -34,14 +45,28 @@ input_B = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPA
                           input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_B_RAW,
                           input_std_check_time=GlobalVariables.STANDARD_B_CHECK_TIME,
                           bool_output_control_container=False)
+"""
+
+input_B = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
+                         init_capacity=GlobalVariables.INITIAL_B_RAW, input_control=True,
+                         critical_level_input_container=GlobalVariables.CRITICAL_STOCK_B_RAW,
+                         supplier_lead_time=GlobalVariables.SUPPLIER_LEAD_TIME_B_RAW,
+                         supplier_std_supply=GlobalVariables.SUPPLIER_STD_SUPPLY_B_RAW,
+                         input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_B_RAW,
+                         input_std_check_time=GlobalVariables.STANDARD_B_CHECK_TIME)
+
 
 output_B = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_B_FINISHED, bool_input_control_container=False,
                            bool_output_control_container=False)
-
+"""
 input_C = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                           init_capacity=GlobalVariables.INITIAL_C_FINISHED, bool_input_control_container=False,
                           bool_output_control_container=False)
+"""
+
+input_C = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
+                         init_capacity=GlobalVariables.INITIAL_C_FINISHED, input_control=False)
 
 output_C = LogisticWrapper(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_C_FINISHED, bool_input_control_container=False,
@@ -67,7 +92,8 @@ machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, Globa
 # Moving from output A&B to input C
 output_A.input_container.get(1)
 output_B.input_container.get(1)
-input_C.input_container.put(1)
+# input_C.input_container.put(1)
+input_C.put(1)
 
 machine_C = Machine(env, "Machine C", GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
                     GlobalVariables.MTTF_C, GlobalVariables.REPAIR_TIME_C, input_C, output_C)
@@ -78,11 +104,11 @@ print(f'----------------------------------')
 
 env.run(until=int(GlobalVariables.SIM_TIME))
 
-print('Node A raw container has {0} pieces ready to be processed'.format(input_A.input_container.level))
+print('Node A raw container has {0} pieces ready to be processed'.format(input_A.level))
 print('Node A finished container has {0} pieces ready to be processed'.
       format(output_A.output_container.level))
 
-print('Node B raw container has {0} pieces ready to be processed'.format(input_B.input_container.level))
+print('Node B raw container has {0} pieces ready to be processed'.format(input_B.level))
 print('Node B finished container has {0} pieces ready to be processed'.format(output_B.output_container.level))
 
 print(f'Dispatch C has %d pieces ready to go!' % output_C.output_container.level)

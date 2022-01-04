@@ -37,6 +37,7 @@ input_B = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPAC
 output_B = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_B_FINISHED, output_control=False)
 
+
 input_C = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_C_FINISHED, input_control=False)
 

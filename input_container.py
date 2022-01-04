@@ -30,6 +30,7 @@ class InputContainer(simpy.Container):
         self.input_refilled_check_time = input_refilled_check_time
         self.input_std_check_time = input_std_check_time
 
+        # TODO: implement container counter somehow.
         self.products_delivered = 0
 
         # Logging objects

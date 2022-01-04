@@ -22,6 +22,41 @@ from monitoring import *
 # TODO: split this class into two different classes - one for the input container and one for the output. Apply
 #  subclasses with respect to the simpy.Container class.
 class LogisticWrapper:
+    def __init__(self, env, max_capacity, init_capacity, bool_input_control_container=False,
+                 critical_level_input_container=50, supplier_lead_time=0, supplier_std_supply=50,
+                 input_refilled_check_time=8, input_std_check_time=1, bool_output_control_container=False,
+                 critical_level_output_container=50, dispatcher_lead_time=0, dispatcher_retrieved_check_time=8,
+                 dispatcher_std_check_time=1):
+
+        self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
+        self.output_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
+        # The following container has to be always full. The stock-out is to avoid.
+        self.input_control_container = env.process(self.input_control_container(env))
+        # The following container has to be emptied when runs full.
+        self.output_control_container = env.process(self.output_control_container(env))
+
+        # Basic parameters - to be confirmed
+        self.bool_input_control_container = bool_input_control_container
+        self.critical_level_input_container = critical_level_input_container
+        self.supplier_lead_time = supplier_lead_time
+        self.supplier_std_supply = supplier_std_supply
+        self.input_refilled_check_time = input_refilled_check_time
+        self.input_std_check_time = input_std_check_time
+
+        self.bool_output_control_container = bool_output_control_container
+        self.products_delivered = 0
+        self.critical_level_output_container = critical_level_output_container
+        self.dispatcher_lead_time = dispatcher_lead_time
+
+        self.dispatcher_retrieved_check_time = dispatcher_retrieved_check_time
+        self.dispatcher_std_check_time = dispatcher_std_check_time
+
+        # Logging objects
+        self.log_path = GlobalVariables.LOG_PATH_generic_version
+        self.log_filename = GlobalVariables.LOG_FILENAME
+        self.data_logger = DataLogger(self.log_path, self.log_filename)
+        self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
+
     def input_control_container(self, env):
         yield env.timeout(0)
 
@@ -98,38 +133,3 @@ class LogisticWrapper:
             else:
                 # If no dispatch, check the level status after at the next step.
                 yield env.timeout(self.dispatcher_std_check_time)
-
-    def __init__(self, env, max_capacity, init_capacity, bool_input_control_container=False,
-                 critical_level_input_container=50, supplier_lead_time=0, supplier_std_supply=50,
-                 input_refilled_check_time=8, input_std_check_time=1, bool_output_control_container=False,
-                 critical_level_output_container=50, dispatcher_lead_time=0, dispatcher_retrieved_check_time=8,
-                 dispatcher_std_check_time=1):
-
-        self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
-        self.output_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
-        # The following container has to be always full. The stock-out is to avoid.
-        self.input_control_container = env.process(self.input_control_container(env))
-        # The following container has to be emptied when runs full.
-        self.output_control_container = env.process(self.output_control_container(env))
-
-        # Basic parameters - to be confirmed
-        self.bool_input_control_container = bool_input_control_container
-        self.critical_level_input_container = critical_level_input_container
-        self.supplier_lead_time = supplier_lead_time
-        self.supplier_std_supply = supplier_std_supply
-        self.input_refilled_check_time = input_refilled_check_time
-        self.input_std_check_time = input_std_check_time
-
-        self.bool_output_control_container = bool_output_control_container
-        self.products_delivered = 0
-        self.critical_level_output_container = critical_level_output_container
-        self.dispatcher_lead_time = dispatcher_lead_time
-
-        self.dispatcher_retrieved_check_time = dispatcher_retrieved_check_time
-        self.dispatcher_std_check_time = dispatcher_std_check_time
-
-        # Logging objects
-        self.log_path = GlobalVariables.LOG_PATH_generic_version
-        self.log_filename = GlobalVariables.LOG_FILENAME
-        self.data_logger = DataLogger(self.log_path, self.log_filename)
-        self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")

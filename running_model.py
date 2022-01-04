@@ -5,7 +5,6 @@ that's the class where the model is described and launched.
 """
 
 # TODO: refactor the import statements adding the package reference in each imported file.
-from logistic_model import *
 from machine_model import *
 from global_variables import *
 from input_container import *

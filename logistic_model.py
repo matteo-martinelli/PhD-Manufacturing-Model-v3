@@ -35,7 +35,7 @@ class LogisticWrapper:
         # The following container has to be emptied when runs full.
         self.output_control_container = env.process(self.output_control_container(env))
 
-        # Basic parameters - to be confirmed
+        # Basic parameters
         self.bool_input_control_container = bool_input_control_container
         self.critical_level_input_container = critical_level_input_container
         self.supplier_lead_time = supplier_lead_time

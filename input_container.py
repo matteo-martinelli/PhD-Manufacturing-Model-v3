@@ -2,7 +2,9 @@
 input_container.py Class:
 
 This class extends the Container/Store Class of SimPy, integrating the level control.
-The level control is needed in order to have always with some material available;
+The level control is needed in order to have always some material available.
+
+Is possible to exclude the level control service.
 """
 
 # from Makers import *

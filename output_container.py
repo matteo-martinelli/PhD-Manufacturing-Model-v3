@@ -1,8 +1,8 @@
 """
-input_container.py Class:
+output_container.py Class:
 
 This class extends the Container/Store Class of SimPy, integrating the level control.
-The level control is needed in order to have always some material available.
+The level control is needed in order to not run out of available space.
 
 Is possible to exclude the level control service.
 """

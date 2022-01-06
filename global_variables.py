@@ -101,12 +101,8 @@ class GlobalVariables(object):
     SIM_TIME = WORKING_HOURS * BUSINESS_DAYS * WORKING_WEEKS  # Simulation time in minutes.
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
-    # Log path for standard model version
-    LOG_PATH_standard_version = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Manufacturing-Model-v2\\" \
-                                "standardVersion\\Logs"
     # Log path for generic model version
-    LOG_PATH_generic_version = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Manufacturing-Model-v2\\" \
-                               "genericVersion\\Logs"
+    LOG_PATH = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Manufacturing-Model-v3\\logs"
     # Log filename
     LOG_FILENAME = "Log.txt"
 

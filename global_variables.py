@@ -102,7 +102,7 @@ class GlobalVariables(object):
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
     # Log path for generic model version
-    LOG_PATH = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Manufacturing-Model-v3\\logs"
+    LOG_PATH = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs"
     # Log filename
     LOG_FILENAME = "Log.txt"
 

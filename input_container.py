@@ -20,8 +20,9 @@ class InputContainer(simpy.Container):
         super().__init__(env, max_capacity, init_capacity)
         # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
         self.name = name
+        self.env = env
         # The following container has to be always full. The stock-out is to avoid.
-        self.input_control_container = env.process(self.input_control_container(env))
+        self.input_control_container = env.process(self.input_control_container(self.env))
 
         # Basic parameters
         self.input_control = input_control

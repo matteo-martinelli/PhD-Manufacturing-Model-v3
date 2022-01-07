@@ -15,10 +15,11 @@ from monitoring import *
 # TODO: Implement full-level-check logic and relative raising error. Sync the logic in the machine section.
 class OutputContainer(simpy.Container):
 
-    def __init__(self, env, max_capacity, init_capacity, output_control=True, critical_level_output_container=50,
+    def __init__(self, env, name, max_capacity, init_capacity, output_control=True, critical_level_output_container=50,
                  dispatcher_lead_time=0, dispatcher_retrieved_check_time=8, dispatcher_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
         # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
+        self.name = name
         # The following container has to be always full. The stock-out is to avoid.
         self.output_control_container = env.process(self.output_control_container(env))
 
@@ -48,28 +49,35 @@ class OutputContainer(simpy.Container):
             # Check container level. If under the critical level, start the emptying process.
             if self.level >= self.critical_level_output_container:
 
-                # Print the event in the console and write in the log
-                print('dispatch stock is {0}, calling store to pick guitars at day {1}, hour {2}'.format(
-                    self.level, int(env.now / 8), env.now % 8))
+                # Logging the event.
+                print('{0}.1: container {1} dispatch stock upper the critical level{2}, {3} pieces left.'
+                      .format(env.now, self.name, self.critical_level_output_container, self.level))
+                print('Calling the dispatcher.')
                 print('----------------------------------')
-                self.data_logger.write_log(str(env.now) + ".1: stock finished C upper the critical level. " +
-                                           str(self.level) + " pieces left. Calling the dispatcher\n")
+                # Writing into the log file - logistic
+                self.data_logger.write_log('{0}.1: container {1} dispatch stock upper the critical level{2}, {3} pieces'
+                                           ' left.'.format(env.now, self.name, self.critical_level_output_container, self.level))
+                self.data_logger.write_log('Calling the dispatcher.\n')
 
                 # Wait for the dispatcher lead time.
                 yield env.timeout(self.dispatcher_lead_time)
 
                 # Dispatcher arrived, writing in the console.
-                print('store picking {0} guitars at day {1}, hour {2}'.format(self.level,
-                                                                              int(env.now / 8), env.now % 8))
-                print('----------------------------------')
+                print('{0}.2: component dispatcher {1} arrived'.format(env.now, self.name))
+                # Writing into the log file - logistic
+                self.data_logger.write_log('{0}.2: component dispatcher {1} arrived\n'.format(env.now, self.name))
 
                 # The warehouse will be completely emptied. Counting the material amount.
                 self.products_delivered += self.level
                 yield self.get(self.level)
 
+                # Logging the event.
+                print("{0}.3: dispatcher arrived. {1} pieces took by the dispatcher.\n"
+                      .format(str(env.now), str(self.level)))
+                print('----------------------------------')
                 # Writing to the log file
-                self.data_logger.write_log(str(env.now) + ".2: dispatcher arrived. " + str(self.level)
-                                           + " pieces took by the dispatcher.\n")
+                self.data_logger.write_log("{0}.3: dispatcher arrived. {1} pieces took by the dispatcher.\n"
+                                           .format(str(env.now), str(self.level)))
 
                 # After the dispatch, check the level status after a given time (usually 8).
                 yield env.timeout(self.dispatcher_retrieved_check_time)

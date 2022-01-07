@@ -92,7 +92,7 @@ class Machine(object):
                     done_in -= self.env.now - start     # How much time left to finish the job?
 
                     # Logging the event.
-                    print("\n" + str(self.env.now) + ": " + self.name + " broke." + str(done_in) +
+                    print("\n" + str(self.env.now) + ": " + self.name + " broke. " + str(done_in) +
                           " step for the job to be completed. Machine will be repaired in " +
                           str(self.repair_time) + "\n")
                     self.data_logger.write_log(str(self.env.now) + ": " + self.name + " broke. " + str(done_in) +

@@ -20,8 +20,9 @@ class OutputContainer(simpy.Container):
         super().__init__(env, max_capacity, init_capacity)
         # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
         self.name = name
+        self.env = env
         # The following container has to be always full. The stock-out is to avoid.
-        self.output_control_container = env.process(self.output_control_container(env))
+        self.output_control_container = env.process(self.output_control_container(self.env))
 
         # Basic parameters
         self.output_control = output_control
@@ -55,8 +56,9 @@ class OutputContainer(simpy.Container):
                 print('Calling the dispatcher.')
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self.data_logger.write_log('{0}.1: container {1} dispatch stock upper the critical level{2}, {3} pieces'
-                                           ' left.'.format(env.now, self.name, self.critical_level_output_container, self.level))
+                self.data_logger.write_log('{0}.1: container {1} dispatch stock upper the critical level {2}, {3} '
+                                           'pieces left.'.format(env.now, self.name,
+                                                                 self.critical_level_output_container, self.level))
                 self.data_logger.write_log('Calling the dispatcher.\n')
 
                 # Wait for the dispatcher lead time.
@@ -69,7 +71,6 @@ class OutputContainer(simpy.Container):
 
                 # The warehouse will be completely emptied. Counting the material amount.
                 self.products_delivered += self.level
-                yield self.get(self.level)
 
                 # Logging the event.
                 print("{0}.3: dispatcher arrived. {1} pieces took by the dispatcher.\n"
@@ -78,6 +79,8 @@ class OutputContainer(simpy.Container):
                 # Writing to the log file
                 self.data_logger.write_log("{0}.3: dispatcher arrived. {1} pieces took by the dispatcher.\n"
                                            .format(str(env.now), str(self.level)))
+                # Dispatcher get made after the log; otherwise the level logged would be zero.
+                yield self.get(self.level)
 
                 # After the dispatch, check the level status after a given time (usually 8).
                 yield env.timeout(self.dispatcher_retrieved_check_time)

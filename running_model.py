@@ -61,6 +61,7 @@ machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, Globa
                     GlobalVariables.MTTF_B, GlobalVariables.REPAIR_TIME_B, input_B, output_B)
 
 # TODO: maybe **args and **kwargs could help here?
+# TODO: make a transference object that moves the material as needed.
 # Moving from output A&B to input C
 output_A.get(1)
 output_B.get(1)

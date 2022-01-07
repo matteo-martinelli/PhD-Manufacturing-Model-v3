@@ -14,7 +14,7 @@ from output_container import *
 env = simpy.Environment()
 
 # LOGISTIC ENTITIES DEFINITION -----------------------------------------------------------------------------------------
-input_A = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPACITY,
+input_A = InputContainer(env, name="input A", max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_A_RAW, input_control=True,
                          critical_level_input_container=GlobalVariables.CRITICAL_STOCK_A_RAW,
                          supplier_lead_time=GlobalVariables.SUPPLIER_LEAD_TIME_A_RAW,
@@ -22,11 +22,11 @@ input_A = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPAC
                          input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_A_RAW,
                          input_std_check_time=GlobalVariables.STANDARD_A_CHECK_TIME)
 
-output_A = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
+output_A = OutputContainer(env, name="output A", max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_A_FINISHED, output_control=False)
 
 
-input_B = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
+input_B = InputContainer(env, name="input B", max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_B_RAW, input_control=True,
                          critical_level_input_container=GlobalVariables.CRITICAL_STOCK_B_RAW,
                          supplier_lead_time=GlobalVariables.SUPPLIER_LEAD_TIME_B_RAW,
@@ -34,14 +34,14 @@ input_B = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPAC
                          input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_B_RAW,
                          input_std_check_time=GlobalVariables.STANDARD_B_CHECK_TIME)
 
-output_B = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
+output_B = OutputContainer(env, name="output B", max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_B_FINISHED, output_control=False)
 
 
-input_C = InputContainer(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
+input_C = InputContainer(env, name="input C", max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_C_FINISHED, input_control=False)
 
-output_C = OutputContainer(env, max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
+output_C = OutputContainer(env, name="output C", max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_C_FINISHED, output_control=True,
                            critical_level_output_container=GlobalVariables.CRITICAL_STOCK_C_FINISHED,
                            dispatcher_lead_time=GlobalVariables.DISPATCHER_LEAD_TIME_C_FINISHED,

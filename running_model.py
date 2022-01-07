@@ -75,6 +75,7 @@ print(f'----------------------------------')
 
 env.run(until=int(GlobalVariables.SIM_TIME))
 
+print(f'----------------------------------')
 print('Node A raw container has {0} pieces ready to be processed'.format(input_A.level))
 print('Node A finished container has {0} pieces ready to be processed'.
       format(output_A.level))

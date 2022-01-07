@@ -13,7 +13,7 @@ from global_variables import *
 from monitoring import *
 
 
-# TODO: Add the breakdown logging and console printing. Test the breakdown system.
+# TODO: Add a -1 time logging mapping the overall initial state of the system.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """A machine produces parts and gets broken every now and then.

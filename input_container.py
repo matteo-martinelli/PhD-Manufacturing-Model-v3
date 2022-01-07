@@ -56,7 +56,7 @@ class InputContainer(simpy.Container):
                 # Logging the event.
                 print('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
                       .format(env.now, self.name, self.critical_level, self.level))
-                print('calling A component supplier')
+                print('calling the component supplier')
                 print('----------------------------------')
                 # Writing into the log file - logistic
                 self.data_logger.write_log('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'

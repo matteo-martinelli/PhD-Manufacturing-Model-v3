@@ -15,23 +15,25 @@ from monitoring import *
 # TODO: Implement full-level-check logic and relative raising error. Sync the logic in the machine section.
 class InputContainer(simpy.Container):
 
-    def __init__(self, env, max_capacity, init_capacity, input_control=True, critical_level_input_container=50,
+    def __init__(self, env, name, max_capacity, init_capacity, input_control=True, critical_level_input_container=50,
                  supplier_lead_time=0, supplier_std_supply=50, input_refilled_check_time=8, input_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
         # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
+        self.name = name
         # The following container has to be always full. The stock-out is to avoid.
         self.input_control_container = env.process(self.input_control_container(env))
 
         # Basic parameters
         self.input_control = input_control
-        self.critical_level_input_container = critical_level_input_container
+        self.critical_level = critical_level_input_container
         self.supplier_lead_time = supplier_lead_time
         self.supplier_std_supply = supplier_std_supply
-        self.input_refilled_check_time = input_refilled_check_time
-        self.input_std_check_time = input_std_check_time
+        self.after_refilling_check_time = input_refilled_check_time
+        self.std_check_time = input_std_check_time
 
         # TODO: implement container counter somehow.
-        self.products_delivered = 0
+        self.products_picked = 0
+        self.products_stored = 0
 
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH
@@ -39,6 +41,8 @@ class InputContainer(simpy.Container):
         self.data_logger = DataLogger(self.log_path, self.log_filename)
         self.data_logger.write_log("### DATA LOG FROM INPUT CONTAINER FILE ###\n")
 
+    # TODO: Check the env parameter passed at the function: should it be there or should I use the self.env instead?
+    #  Maybe i should add self.env in the attributes definitions
     def input_control_container(self, env):
         yield env.timeout(0)
 
@@ -47,34 +51,38 @@ class InputContainer(simpy.Container):
 
             # Check container level. If under the critical level, start the emptying process.
             # if self.input_container.level <= self.critical_level_input_container:
-            if self.level <= self.critical_level_input_container:
+            if self.level <= self.critical_level:
 
-                # Writing to the log file
-                print('A component stock bellow critical level ({0}) at day {1}, hour {2}'.format(
-                    self.level, int(env.now / 8), env.now % 8))
+                # Logging the event.
+                print('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
+                      .format(env.now, self.name, self.critical_level, self.level))
                 print('calling A component supplier')
                 print('----------------------------------')
-                self.data_logger.write_log(str(env.now) + ".1: stock raw A under the critical level. " +
-                                           str(self.level) + " pieces left. Calling the supplier\n")
+                # Writing into the log file - logistic
+                self.data_logger.write_log('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
+                                           .format(env.now, self.name, self.critical_level, self.level))
+                self.data_logger.write_log('Calling the components supplier. \n')
 
-                # Wait for the refiller lead time.
+                # Wait for the supplier lead time.
                 yield env.timeout(self.supplier_lead_time)
 
-                # Refiller arrived, writing in the console.
-                print('A component supplier arrives at day {0}, hour {1}'.format(int(env.now / 8), env.now % 8))
+                # Supplier arrived, logging the event.
+                print('{0}.2: component supplier {1} arrived'.format(env.now, self.name))
+                # Writing into the log file - logistic
+                self.data_logger.write_log('{0}.2: component supplier {1} arrived\n'.format(env.now, self.name))
 
                 # The warehouse will be refilled with a standard quantity.
                 yield self.put(50)
 
-                # Writing to the console and the log.
-                print('new A component stock is {0}'.format(self.level))
+                # Logging the event.
+                print('{0}.3: container {1} new A component stock is {2}'.format(env.now, self.name, self.level))
                 print('----------------------------------')
-                self.data_logger.write_log(str(env.now) + ".2: supplier arrived. " + str(50) +
-                                           " pieces supplied to raw B. New level " + str(self.level) +
-                                           ".\n")
+                # Writing into the log file - logistic
+                self.data_logger.write_log('{0}.3: container {1} new A component stock is {2}\n'
+                                           .format(env.now, self.name, self.level))
 
                 # After the refill, check the level status after a given time (usually 8).
-                yield env.timeout(self.input_refilled_check_time)
+                yield env.timeout(self.after_refilling_check_time)
             else:
                 # If no dispatch, check the level status after at the next step.
-                yield env.timeout(self.input_std_check_time)
+                yield env.timeout(self.std_check_time)

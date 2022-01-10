@@ -45,7 +45,7 @@ class Machine(object):
 
         # Start "working" and "break_machine" processes for this machine.
         self.process = env.process(self.working())
-        self.env.process(self.break_machine())  # To exclude breakdowns, comment this line.
+        # self.env.process(self.break_machine())  # To exclude breakdowns, comment this line.
 
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH
@@ -62,14 +62,13 @@ class Machine(object):
         """
         while True:
             # Perform the output warehouse level checking: if empty, wait 1 time step. NOT WORKING.
-            """
             while self.input_buffer.level == 0:
-                print(str(self.env.now) + ": the " + self.name + " input buffer level is " + str(input_node_level) +
-                      ". Waiting 1 time step and re-check.")
-                self.data_logger.write_log(str(self.env.now) + ": the " + self.name + " input buffer level is "
-                                           + str(input_node_level) + ". Waiting 1 time step and re-check.\n")
+                print(str(self.env.now) + ": the " + self.name + " input buffer level is " +
+                      str(self.input_buffer.level) + ". Waiting 1 time step and re-check.")
+                self.data_logger.write_log(str(self.env.now) + ": the " + self.name + " input buffer level is " +
+                                           str(self.input_buffer.level) + ". Waiting 1 time step and re-check.\n")
                 yield self.env.timeout(1)
-            """
+
             # Warehouse tracking (made before the piece to be took/placed).
             # Logging the event.
             print("{0}.1a: input {1} level {2}; get 1 from input {1}."

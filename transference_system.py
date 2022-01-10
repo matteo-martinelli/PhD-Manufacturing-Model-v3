@@ -5,10 +5,6 @@ Class that has the responsibility to move material from the raw container A and 
 Written in the most generic way, still a class taylor made to solve a singular problem.
 """
 
-import simpy
-from global_variables import *
-from monitoring import *
-
 
 # TRANSFERENCE SYSTEM CLASS --------------------------------------------------------------------------------------------
 class TransferenceSystem(object):

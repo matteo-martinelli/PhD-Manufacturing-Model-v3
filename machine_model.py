@@ -7,6 +7,7 @@ The file have to be integrated with the env.
 
 It takes as input also the LogisticModel, to get and put raw materials from warehouses.
 """
+
 import random
 import simpy
 from global_variables import *

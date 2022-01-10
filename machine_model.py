@@ -138,14 +138,13 @@ class Machine(object):
                                        .format(str(prod_time), self.name, self.parts_made))
 
             # Perform the output warehouse level checking: if full, wait 1 time step. NOT WORKING
-            """
-            while self.output_buffer.level == self.output_buffer.output_container.capacity:
-                print(str(self.env.now) + ": the " + self.name + " output buffer level is " + str(output_node_level) +
-                      ". Waiting 1 time step and re-check.")
+            while self.output_buffer.level == self.output_buffer.capacity:
+                print(str(self.env.now) + ": the " + self.name + " output buffer level is " +
+                      str(self.output_buffer.level) + ". Waiting 1 time step and re-check.")
                 self.data_logger.write_log(str(self.env.now) + ": the " + self.name + " output buffer level is " +
-                                           str(output_node_level) + ". Waiting 1 time step and re-check.\n")
+                                           str(self.output_buffer.level) + ". Waiting 1 time step and re-check.\n")
                 yield self.env.timeout(1)
-            """
+
             # Logging the event - prod
             print("{0}.3a: output {1} level {2}; put 1 in output {1}.".format(str(self.env.now), self.name,
                                                                               str(self.output_buffer.level)))

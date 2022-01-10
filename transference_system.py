@@ -35,3 +35,4 @@ class TransferenceSystem(object):
 
             # Once all the material has been taken, put one element in the output container
             self.output_container.put(1)
+            yield self.env.timeout(0)

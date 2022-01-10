@@ -21,22 +21,20 @@ class TransferenceSystem(object):
         self.input_containers = input_containers    # This is passed as a list
         self.output_container = output_container
 
-        # self.process = env.process(self.working())
-        self.env.process(self.material_transfer())
-
-        # Logging objects
-        self.log_path = GlobalVariables.LOG_PATH
-        self.log_filename = GlobalVariables.LOG_FILENAME
-        self.data_logger = DataLogger(self.log_path, self.log_filename)
-        self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
+        # self.process = env.process(self.material_transfer())
+        # self.env.process(self.material_transfer(env))
+        self.material_transfer = env.process(self.material_transfer(self.env))
 
     #  Function describing the machine process.
-    def material_transfer(self):
+    def material_transfer(self, env):
+        yield env.timeout(0)
+
         while True:
             # Get all the material in the input container
             for element in range(len(self.input_containers)):
-                self.input_containers(element).get(1)
+                self.input_containers[element].get(1)
 
             # Once all the material has been taken, put one element in the output container
             self.output_container.put(1)
-            yield self.env.timeout(0)
+            # print('here')
+            yield env.timeout(1)

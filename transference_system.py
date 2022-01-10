@@ -9,6 +9,7 @@ import simpy
 from global_variables import *
 from monitoring import *
 
+
 # TRANSFERENCE SYSTEM CLASS --------------------------------------------------------------------------------------------
 class TransferenceSystem(object):
     """
@@ -19,6 +20,9 @@ class TransferenceSystem(object):
         self.process_name = process_name
         self.input_containers = input_containers    # This is passed as a list
         self.output_container = output_container
+
+        # self.process = env.process(self.working())
+        self.env.process(self.material_transfer())
 
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH

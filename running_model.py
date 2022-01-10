@@ -8,6 +8,7 @@ that's the class where the model is described and launched.
 from machine_model import *
 from input_container import *
 from output_container import *
+from transference_system import *
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
@@ -62,9 +63,11 @@ machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, Globa
 # TODO: maybe **args and **kwargs could help here?
 # TODO: make a transference object that moves the material as needed.
 # Moving from output A&B to input C
-output_A.get(1)
-output_B.get(1)
-input_C.put(1)
+output_containers = list()
+output_containers.append(output_A)
+output_containers.append(output_B)
+
+transference_from_A_B_to_C = TransferenceSystem(env, "from A and B to C", output_containers, input_C)
 
 machine_C = Machine(env, "Machine C", GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
                     GlobalVariables.MTTF_C, GlobalVariables.REPAIR_TIME_C, input_C, output_C)

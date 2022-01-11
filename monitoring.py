@@ -20,7 +20,7 @@ class DataLogger(object):
             f.write(text)
             f.close()
 
-    def __initialize_log_file(self):
+    def initialize_log_file(self):
         try:
             os.remove(self.complete_filename)
         except FileNotFoundError:

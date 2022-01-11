@@ -25,6 +25,7 @@ input_A = InputContainer(env, name="input A", max_capacity=GlobalVariables.CONTA
 output_A = OutputContainer(env, name="output A", max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_A_FINISHED, output_control=False)
 
+
 input_B = InputContainer(env, name="input B", max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_B_RAW, input_control=True,
                          critical_level_input_container=GlobalVariables.CRITICAL_STOCK_B_RAW,

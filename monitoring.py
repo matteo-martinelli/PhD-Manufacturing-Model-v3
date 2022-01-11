@@ -5,6 +5,7 @@ Class containing the global variables for the model.
 """
 
 import os
+import csv
 
 
 class DataLogger(object):
@@ -19,7 +20,7 @@ class DataLogger(object):
             f.write(text)
             f.close()
 
-    def initialize_log_file(self):
+    def __initialize_log_file(self):
         try:
             os.remove(self.complete_filename)
         except FileNotFoundError:

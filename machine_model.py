@@ -58,10 +58,10 @@ class Machine(object):
         """Produces parts as long as the simulation runs.
 
         While making a part, the machine may break multiple times.
-        Request a repairman when this happens.
+        When machine breaks, MTTR is computed from its statistics.
         """
         while True:
-            # Perform the output warehouse level checking: if empty, wait 1 time step. NOT WORKING.
+            # Perform the output warehouse level checking: if empty, wait 1 time step.
             while self.input_buffer.level == 0:
                 print(str(self.env.now) + ": the " + self.name + " input buffer level is " +
                       str(self.input_buffer.level) + ". Waiting 1 time step and re-check.")

@@ -65,7 +65,7 @@ class GlobalVariables(object):
     # Employees per activity
     # 1.Node A - Note: the aleatory process time has not been used.
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_A = 1         # Avg. processing time in hours.
+    MEAN_PROCESS_TIME_A = 2         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_A = 0.1      # Sigma processing time.
     MTTF_A = 4                      # Mean time to failure in minutes Initial value: 300
     BREAK_MEAN_A = 1 / MTTF_A       # Param. for expovariate distribution
@@ -74,7 +74,7 @@ class GlobalVariables(object):
 
     # 2.Node B - Note: the aleatory process time has not been used.
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_B = 1         # Avg. processing time in hours.
+    MEAN_PROCESS_TIME_B = 2         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_B = 0.1      # Sigma processing time.
     MTTF_B = 6                      # Mean time to failure in minutes
     BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distribution
@@ -83,7 +83,7 @@ class GlobalVariables(object):
 
     # 3.Node C - Note: the aleatory process time has not been used.
     NUM_MACHINES_C = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_C = 1         # Avg. processing time in hours.
+    MEAN_PROCESS_TIME_C = 2         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_C = 0.1      # Sigma processing time.
     MTTF_C = 8                      # Mean time to failure in minutes
     BREAK_MEAN_C = 1 / MTTF_C       # Param. for expovariate distribution

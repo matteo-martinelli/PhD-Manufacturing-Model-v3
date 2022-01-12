@@ -26,7 +26,7 @@ class Machine(object):
     def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, repair_time, input_buffer,
                  output_buffer):
         self.env = env
-        self.name = name
+        self.name = name    # Must be coded as "Machine" + identifying letter from A to Z
 
         # Process variables.
         self.parts_made = 0
@@ -49,8 +49,8 @@ class Machine(object):
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH
         self.log_filename = GlobalVariables.LOG_FILENAME
-        self.excel_filename = GlobalVariables.EXCEL_FILENAME
-        self.data_logger = DataLogger(self.log_path, self.log_filename, self.excel_filename)
+        self.csv_filename = self.name + "_log.txt"
+        self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
         self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
 
     #  Function describing the machine process.
@@ -67,6 +67,7 @@ class Machine(object):
                       str(self.input_buffer.level) + ". Waiting 1 time step and re-check.")
                 self.data_logger.write_log(str(self.env.now) + ": the " + self.name + " input buffer level is " +
                                            str(self.input_buffer.level) + ". Waiting 1 time step and re-check.\n")
+
                 yield self.env.timeout(1)
 
             # Warehouse tracking (made before the piece to be took/placed).

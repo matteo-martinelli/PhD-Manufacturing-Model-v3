@@ -51,7 +51,7 @@ class Machine(object):
         self.log_filename = GlobalVariables.LOG_FILENAME
         self.csv_filename = self.name + "_log.txt"
         self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
-        self.data_logger.write_log("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
+        self.data_logger.write_log_txt("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
 
     #  Function describing the machine process.
     def working(self):
@@ -61,15 +61,17 @@ class Machine(object):
         When machine breaks, MTTR is computed from its statistics.
         """
 
-        # TODO: write first log line here with the situation at step -1.
+        # TODO: should it be moved?
+        self.data_logger.write_log_csv(str('-1'), str(self.input_buffer.level), str('0'), str('0'),
+                                       str(self.output_buffer.level), str(self.MTTF), str('0'))
 
         while True:
             # Perform the output warehouse level checking: if empty, wait 1 time step.
             while self.input_buffer.level == 0:
                 print(str(self.env.now) + ": the " + self.name + " input buffer level is " +
                       str(self.input_buffer.level) + ". Waiting 1 time step and re-check.")
-                self.data_logger.write_log(str(self.env.now) + ": the " + self.name + " input buffer level is " +
-                                           str(self.input_buffer.level) + ". Waiting 1 time step and re-check.\n")
+                self.data_logger.write_log_txt(str(self.env.now) + ": the " + self.name + " input buffer level is " +
+                                               str(self.input_buffer.level) + ". Waiting 1 time step and re-check.\n")
 
                 yield self.env.timeout(1)
 
@@ -78,8 +80,8 @@ class Machine(object):
             print("{0}.1a: input {1} level {2}; get 1 from input {1}."
                   .format(str(self.env.now), self.name, str(self.input_buffer.level)))
             # Writing into the log file - prod - del
-            self.data_logger.write_log("{0}.1a: input {1} level {2}; get 1 from input {1}.\n"
-                                       .format(str(self.env.now), self.name, str(self.input_buffer.level)))
+            self.data_logger.write_log_txt("{0}.1a: input {1} level {2}; get 1 from input {1}.\n"
+                                           .format(str(self.env.now), self.name, str(self.input_buffer.level)))
 
             # Take the raw product from raw products warehouse
             self.input_buffer.get(1)
@@ -88,8 +90,8 @@ class Machine(object):
             print("{0}.1b: input {1} level {2}; taken 1 from input {1}. "
                   .format(str(self.env.now), self.name, str(self.input_buffer.level)))
             # Writing into the log file - prod
-            self.data_logger.write_log("{0}.1b: input {1} level {2}; taken 1 from input {1}.\n"
-                                       .format(str(self.env.now), self.name, str(self.input_buffer.level)))
+            self.data_logger.write_log_txt("{0}.1b: input {1} level {2}; taken 1 from input {1}.\n"
+                                           .format(str(self.env.now), self.name, str(self.input_buffer.level)))
 
             # Start making a new part
             time_per_part = self.mean_process_time
@@ -101,7 +103,7 @@ class Machine(object):
                     # Logging the event.
                     print(str(start) + ".2b: started 1 in " + self.name + ". ")
                     # Writing into the log file - prod
-                    self.data_logger.write_log(str(start) + ".2b: started 1 in " + self.name + ".\n")
+                    self.data_logger.write_log_txt(str(start) + ".2b: started 1 in " + self.name + ".\n")
 
                     yield self.env.timeout(done_in)
                     done_in = 0     # Set 0 to exit to the loop
@@ -116,9 +118,9 @@ class Machine(object):
                           .format(str(self.env.now), self.name, str(done_in),
                                   str(self.repair_time)))
                     # Writing into the log file - prod
-                    self.data_logger.write_log("{0}: {1} broke. {2} step for the job to be completed. "
-                                               .format(str(self.env.now), self.name, str(done_in)))
-                    self.data_logger.write_log("Machine will be repaired in {0}\n".format(str(self.repair_time)))
+                    self.data_logger.write_log_txt("{0}: {1} broke. {2} step for the job to be completed. "
+                                                   .format(str(self.env.now), self.name, str(done_in)))
+                    self.data_logger.write_log_txt("Machine will be repaired in {0}\n".format(str(self.repair_time)))
 
                     yield self.env.timeout(self.repair_time)
 
@@ -128,8 +130,8 @@ class Machine(object):
                     # Logging the event. The machine is repaired.
                     print("{0}: {1} repaired. Working restarted.".format(str(self.env.now), self.name))
                     # Writing into the log file - prod
-                    self.data_logger.write_log("{0}: {1} repaired. Working restarted.\n"
-                                               .format(str(self.env.now), self.name))
+                    self.data_logger.write_log_txt("{0}: {1} repaired. Working restarted.\n"
+                                                   .format(str(self.env.now), self.name))
 
             # Part is done
             prod_time = self.env.now
@@ -138,23 +140,23 @@ class Machine(object):
             # Logging the event - prod
             print("{0}.2b: made 1 in {1}. Total pieces made: {2}.".format(str(prod_time), self.name, self.parts_made))
             # Writing into the log file - prod
-            self.data_logger.write_log("{0}.2b: made 1 in {1}. Total pieces made: {2}.\n"
-                                       .format(str(prod_time), self.name, self.parts_made))
+            self.data_logger.write_log_txt("{0}.2b: made 1 in {1}. Total pieces made: {2}.\n"
+                                           .format(str(prod_time), self.name, self.parts_made))
 
             # Perform the output warehouse level checking: if full, wait 1 time step. NOT WORKING
             while self.output_buffer.level == self.output_buffer.capacity:
                 print(str(self.env.now) + ": the " + self.name + " output buffer level is " +
                       str(self.output_buffer.level) + ". Waiting 1 time step and re-check.")
-                self.data_logger.write_log(str(self.env.now) + ": the " + self.name + " output buffer level is " +
-                                           str(self.output_buffer.level) + ". Waiting 1 time step and re-check.\n")
+                self.data_logger.write_log_txt(str(self.env.now) + ": the " + self.name + " output buffer level is " +
+                                               str(self.output_buffer.level) + ". Waiting 1 time step and re-check.\n")
                 yield self.env.timeout(1)
 
             # Logging the event - prod
             print("{0}.3a: output {1} level {2}; put 1 in output {1}.".format(str(self.env.now), self.name,
                                                                               str(self.output_buffer.level)))
             # Writing into the log file - prod
-            self.data_logger.write_log("{0}.3a: output {1} level {2}; put 1 in output {1}.\n"
-                                       .format(str(self.env.now), self.name, str(self.output_buffer.level)))
+            self.data_logger.write_log_txt("{0}.3a: output {1} level {2}; put 1 in output {1}.\n"
+                                           .format(str(self.env.now), self.name, str(self.output_buffer.level)))
 
             # Put the finished product into the finished warehouse
             self.output_buffer.put(1)
@@ -163,8 +165,8 @@ class Machine(object):
             print("{0}.3b: output {1} level {2}; put 1 in output {1}.".format(str(self.env.now), self.name,
                                                                                 str(self.output_buffer.level)))
             # Writing into the log file - prod
-            self.data_logger.write_log("{0}.3b: output {1} level {2}; put 1 in output {1}.\n"
-                                       .format(str(self.env.now), self.name, str(self.output_buffer.level)))
+            self.data_logger.write_log_txt("{0}.3b: output {1} level {2}; put 1 in output {1}.\n"
+                                           .format(str(self.env.now), self.name, str(self.output_buffer.level)))
 
         # yield self.env.timeout(0)
 

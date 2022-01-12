@@ -60,6 +60,9 @@ class Machine(object):
         While making a part, the machine may break multiple times.
         When machine breaks, MTTR is computed from its statistics.
         """
+
+        # TODO: write first log line here with the situation at step -1.
+
         while True:
             # Perform the output warehouse level checking: if empty, wait 1 time step.
             while self.input_buffer.level == 0:

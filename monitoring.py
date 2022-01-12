@@ -8,21 +8,23 @@ import os
 import xlwt
 # from xlwt import Workbook
 from openpyxl import Workbook
+from openpyxl import load_workbook
 from global_variables import *
 
 
 class DataLogger(object):
-    def __init__(self, path, filename_txt, filename_xlsx):
+    def __init__(self, path, filename_txt, filename_csv):
         self.path = path
 
         self.filename_txt = filename_txt
         self.complete_filename_txt = self.path + "\\" + self.filename_txt
 
-        self.filename_xlsx = filename_xlsx
-        self.complete_filename_xlsx = self.path + "\\" + self.filename_xlsx
+        self.filename_csv = filename_csv
+        self.heading = self.filename_csv.split("_")[0]
+        self.complete_filename_csv = self.path + "\\" + self.filename_csv
 
         self.initialize_log_file()
-        self.initialize_excel_file()
+        self.initialize_csv_file()
 
     def write_log(self, text):
         with open(self.complete_filename_txt, "a") as f:
@@ -38,45 +40,24 @@ class DataLogger(object):
             with open(self.complete_filename_txt, "w") as f:
                 f.close()
 
-    def write_excel(self, row_step, data):
+    def write_csv(self, step, ):
 
         pass
 
-    def initialize_excel_file(self):
-        # Create the workbook
-        wb = Workbook()
-        # add_sheet is used to create sheet.
-        sheet1 = wb.active
-        sheet1.title = "Sheet 1"
-        # Writing the heading
-        sheet1['A1'] = "Timestep [step]"
-
-        sheet1['B1'] = "input A [level]"
-        sheet1['C1'] = "timeprocess A [step]"
-        sheet1['D1'] = "output A [level]"
-        sheet1['E1'] = "failure A [bool]"
-        sheet1['F1'] = "MTTF A [step]"
-        sheet1['G1'] = "MTTR A [step]"
-
-        sheet1['H1'] = "input B [level]"
-        sheet1['I1'] = "timeprocess B [step]"
-        sheet1['J1'] = "output B [level]"
-        sheet1['K1'] = "failure B [bool]"
-        sheet1['L1'] = "MTTF B [step]"
-        sheet1['M1'] = "MTTR B [step]"
-
-        sheet1['N1'] = "input C [level]"
-        sheet1['O1'] = "timeprocess C [step]"
-        sheet1['P1'] = "output C [level]"
-        sheet1['Q1'] = "failure C [bool]"
-        sheet1['R1'] = "MTTF C [step]"
-        sheet1['S1'] = "MTTR C [step]"
-
-        for i in range(GlobalVariables.SIM_TIME):
-            sheet1['A' + str(i+2)] = i
+    def initialize_csv_file(self):
         try:
-            wb.save(self.complete_filename_xlsx)
+            with open(self.complete_filename_csv, "w") as f:
+                f.close()
         except FileExistsError:
-            print('Already existing xlsx log file. Cleaning and creating a new one.')
-            os.remove(self.complete_filename_xlsx)
-            wb.save(self.complete_filename_xlsx)
+            print('The log file already exists, cleaning up and creating a new one.')
+            os.remove(self.complete_filename_csv)
+            with open(self.complete_filename_csv, "w") as f:
+                f.close()
+        finally:
+            # TODO: Maybe instead of time process should be written the number of the processed material ... or should
+            #  be added as a column
+            with open(self.complete_filename_csv, "a") as f:
+                f.write('step [step], input ' + self.heading + ' [level], time process ' + self.heading + ' [step], '
+                        'output ' + self.heading + ' [level], failure ' + self.heading + ' [bool], '
+                        'MTTF ' + self.heading + ' [step], MTTR ' + self.heading + ' [step]')
+                f.close()

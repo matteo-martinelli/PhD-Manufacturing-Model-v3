@@ -40,9 +40,16 @@ class DataLogger(object):
             with open(self.complete_filename_txt, "w") as f:
                 f.close()
 
-    def write_log_csv(self, step, input_level, time_process, output_level, failure, MTTF, MTTR):
-        text = step + ", " + input_level + ", " + time_process + ", " + output_level + ", " + failure + ", " + \
-               MTTF + ", " + MTTR
+    def write_log_csv(self, data_list):
+        # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
+        text = ''
+        for i in range(len(data_list)):
+            for j in range(len(data_list[i])):
+                if j+1 == len(data_list[i]):
+                    text = text + str(data_list[i][j]) + "\n"
+                else:
+                    text = text + str(data_list[i][j]) + ", "
+
         with open(self.complete_filename_csv, "a") as f:
             f.write(text)
             f.close()
@@ -61,7 +68,7 @@ class DataLogger(object):
                 # TODO: Maybe instead of time process should be written the number of the processed material ...
                 #  or should be added as a column
                 with open(self.complete_filename_csv, "a") as f:
-                    f.write('step [step], input ' + self.heading + ' [level], time process ' + self.heading + ' [step], '
-                            'output ' + self.heading + ' [level], failure ' + self.heading + ' [bool], '
-                            'MTTF ' + self.heading + ' [step], MTTR ' + self.heading + ' [step]\n')
+                    f.write('step, input ' + self.heading + ', time process ' + self.heading + ', output ' +
+                            self.heading + ', failure' + self.heading + ', MTTF ' + self.heading + ', MTTR' +
+                            self.heading + '\n')
                     f.close()

@@ -53,6 +53,7 @@ class Machine(object):
         self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
         self.data_logger.write_log_txt("### DATA LOG FROM PROCESS MACHINE FILE ###\n")
 
+    # TODO: turn private
     #  Function describing the machine process.
     def working(self):
         """Produces parts as long as the simulation runs.
@@ -186,6 +187,7 @@ class Machine(object):
             # Resetting the data collecting list.
             data = list()
 
+    # TODO: turn private
     def break_machine(self):
         """Break the machine every now and then."""
         while True:
@@ -195,6 +197,7 @@ class Machine(object):
                 # Only breaks when machine is currently working.
                 self.process.interrupt()
 
+    # TODO: turn private
     def input_level_check(self):
         while self.input_buffer.level == 0:
             print("{0}.in_empty - mach: the {1} input buffer level is {2}. Waiting 1 time step and re-check."
@@ -204,6 +207,7 @@ class Machine(object):
                                                                          str(self.input_buffer.level)))
             yield self.env.timeout(1)
 
+    # TODO: turn private
     def output_level_check(self):
         while self.output_buffer.level == self.output_buffer.capacity:
             print("{0}.out_full - mach: the {1} output buffer level is {2}. Waiting 1 time step and re-check."

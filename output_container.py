@@ -13,7 +13,6 @@ from monitoring import *
 
 # TODO: Implement full-level-check logic and relative raising error. Sync the logic in the machine section.
 class OutputContainer(simpy.Container):
-
     def __init__(self, env, name, max_capacity, init_capacity, output_control=True, critical_level_output_container=50,
                  dispatcher_lead_time=0, dispatcher_retrieved_check_time=8, dispatcher_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
@@ -40,6 +39,7 @@ class OutputContainer(simpy.Container):
         self.data_logger = DataLogger(self.log_path, self.log_filename)
         self.data_logger.write_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
 
+    # TODO: turn private
     def output_control_container(self, env):
         yield env.timeout(0)
 

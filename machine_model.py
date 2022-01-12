@@ -10,7 +10,6 @@ It takes as input also the LogisticModel, to get and put raw materials from ware
 
 import random
 import simpy
-from global_variables import *
 from monitoring import *
 
 

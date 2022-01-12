@@ -38,7 +38,8 @@ class OutputContainer(simpy.Container):
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH
         self.log_filename = GlobalVariables.LOG_FILENAME
-        self.data_logger = DataLogger(self.log_path, self.log_filename)
+        self.excel_filename = GlobalVariables.EXCEL_FILENAME
+        self.data_logger = DataLogger(self.log_path, self.log_filename, self.excel_filename)
         self.data_logger.write_log("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
 
     def output_control_container(self, env):

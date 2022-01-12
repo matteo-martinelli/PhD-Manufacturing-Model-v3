@@ -38,9 +38,8 @@ class InputContainer(simpy.Container):
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH
         self.log_filename = GlobalVariables.LOG_FILENAME
-        self.excel_filename = GlobalVariables.EXCEL_FILENAME
-        self.data_logger = DataLogger(self.log_path, self.log_filename, self.excel_filename)
-        self.data_logger.write_log("### DATA LOG FROM INPUT CONTAINER FILE ###\n")
+        self.data_logger = DataLogger(self.log_path, self.log_filename)
+        self.data_logger.write_log_txt("### DATA LOG FROM INPUT CONTAINER FILE ###\n")
 
     # TODO: Check the env parameter passed at the function: should it be there or should I use the self.env instead?
     #  Maybe i should add self.env in the attributes definitions
@@ -60,9 +59,9 @@ class InputContainer(simpy.Container):
                 print('calling the component supplier')
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self.data_logger.write_log('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
-                                           .format(env.now, self.name, self.critical_level, self.level))
-                self.data_logger.write_log('Calling the components supplier. \n')
+                self.data_logger.write_log_txt('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
+                                               .format(env.now, self.name, self.critical_level, self.level))
+                self.data_logger.write_log_txt('Calling the components supplier. \n')
 
                 # Wait for the supplier lead time.
                 yield env.timeout(self.supplier_lead_time)
@@ -70,7 +69,7 @@ class InputContainer(simpy.Container):
                 # Supplier arrived, logging the event.
                 print('{0}.2: component supplier {1} arrived'.format(env.now, self.name))
                 # Writing into the log file - logistic
-                self.data_logger.write_log('{0}.2: component supplier {1} arrived\n'.format(env.now, self.name))
+                self.data_logger.write_log_txt('{0}.2: component supplier {1} arrived\n'.format(env.now, self.name))
 
                 # The warehouse will be refilled with a standard quantity.
                 yield self.put(50)
@@ -79,8 +78,8 @@ class InputContainer(simpy.Container):
                 print('{0}.3: container {1} new A component stock is {2}'.format(env.now, self.name, self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self.data_logger.write_log('{0}.3: container {1} new A component stock is {2}\n'
-                                           .format(env.now, self.name, self.level))
+                self.data_logger.write_log_txt('{0}.3: container {1} new A component stock is {2}\n'
+                                               .format(env.now, self.name, self.level))
 
                 # After the refill, check the level status after a given time (usually 8).
                 yield env.timeout(self.after_refilling_check_time)

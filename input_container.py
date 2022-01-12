@@ -54,31 +54,32 @@ class InputContainer(simpy.Container):
             if self.level <= self.critical_level:
 
                 # Logging the event.
-                print('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
+                print('{0}.1 in_log: container {1} stock under the critical level {2}, {3} pieces left.'
                       .format(env.now, self.name, self.critical_level, self.level))
                 print('calling the component supplier')
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self.data_logger.write_log_txt('{0}.1: container {1} stock under the critical level {2}, {3} pieces left.'
-                                               .format(env.now, self.name, self.critical_level, self.level))
+                self.data_logger.write_log_txt('{0}.1 in_log: container {1} stock under the critical level {2}, {3} '
+                                               'pieces left.'.format(env.now, self.name, self.critical_level,
+                                                                     self.level))
                 self.data_logger.write_log_txt('Calling the components supplier. \n')
 
                 # Wait for the supplier lead time.
                 yield env.timeout(self.supplier_lead_time)
 
                 # Supplier arrived, logging the event.
-                print('{0}.2: component supplier {1} arrived'.format(env.now, self.name))
+                print('{0}.2 in_log: component supplier {1} arrived'.format(env.now, self.name))
                 # Writing into the log file - logistic
-                self.data_logger.write_log_txt('{0}.2: component supplier {1} arrived\n'.format(env.now, self.name))
+                self.data_logger.write_log_txt('{0}.2 in_log: component supplier {1} arrived\n'.format(env.now, self.name))
 
                 # The warehouse will be refilled with a standard quantity.
                 yield self.put(50)
 
                 # Logging the event.
-                print('{0}.3: container {1} new A component stock is {2}'.format(env.now, self.name, self.level))
+                print('{0}.3 in_log: container {1} new A component stock is {2}'.format(env.now, self.name, self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self.data_logger.write_log_txt('{0}.3: container {1} new A component stock is {2}\n'
+                self.data_logger.write_log_txt('{0}.3 in_log: container {1} new A component stock is {2}\n'
                                                .format(env.now, self.name, self.level))
 
                 # After the refill, check the level status after a given time (usually 8).

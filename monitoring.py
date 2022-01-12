@@ -41,7 +41,8 @@ class DataLogger(object):
                 f.close()
 
     def write_csv(self, step, input_level, time_process, output_level, failure, MTTF, MTTR):
-        text = pass
+        text = step + ", " + input_level + ", " + time_process + ", " + output_level + ", " + failure + ", " + \
+               MTTF + ", " + MTTR
         with open(self.complete_filename_csv, "a") as f:
             f.write(text)
             f.close()

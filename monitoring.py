@@ -11,24 +11,30 @@ from openpyxl import Workbook
 
 
 class DataLogger(object):
-    def __init__(self, path, filename):
+    def __init__(self, path, filename_txt, filename_xlsx):
         self.path = path
-        self.filename = filename
-        self.complete_filename = self.path + "\\" + self.filename
+
+        self.filename_txt = filename_txt
+        self.complete_filename_txt = self.path + "\\" + self.filename_txt
+
+        self.filename_xlsx = filename_xlsx
+        self.complete_filename_xlsx = self.path + "\\" + self.filename_xlsx
+
         self.initialize_log_file()
+        self.initialize_excel_file()
 
     def write_log(self, text):
-        with open(self.complete_filename, "a") as f:
+        with open(self.complete_filename_txt, "a") as f:
             f.write(text)
             f.close()
 
     def initialize_log_file(self):
         try:
-            os.remove(self.complete_filename)
+            os.remove(self.complete_filename_txt)
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
             os.makedirs(self.path)
-            with open(self.complete_filename, "w") as f:
+            with open(self.complete_filename_txt, "w") as f:
                 f.close()
 
     def initialize_excel_file(self):
@@ -61,5 +67,4 @@ class DataLogger(object):
         sheet1['S1'] = "MTTF C [step]"
         sheet1['T1'] = "MTTR C [step]"
 
-        wb.save("C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\" +
-                "empty_workbook.xlsx")
+        wb.save(self.complete_filename_xlsx)

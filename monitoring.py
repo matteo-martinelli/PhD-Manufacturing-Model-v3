@@ -10,7 +10,6 @@ import xlwt
 from openpyxl import Workbook
 
 
-
 class DataLogger(object):
     def __init__(self, path, filename):
         self.path = path
@@ -55,12 +54,12 @@ class DataLogger(object):
         sheet1['M1'] = "MTTF B [step]"
         sheet1['N1'] = "MTTR B [step]"
 
-        sheet1['O1'] = (0, 0, "input C [level]")
-        sheet1['P1'] = (0, 0, "timeprocess C [step]")
-        sheet1['Q1'] = (0, 0, "output C [level]")
-        sheet1['R1'] = (0, 0, "failure C [bool]")
-        sheet1['S1'] = (0, 0, "MTTF C [step]")
-        sheet1['T1'] = (0, 0, "MTTR C [step]")
+        sheet1['O1'] = "input C [level]"
+        sheet1['P1'] = "timeprocess C [step]"
+        sheet1['Q1'] = "output C [level]"
+        sheet1['R1'] = "failure C [bool]"
+        sheet1['S1'] = "MTTF C [step]"
+        sheet1['T1'] = "MTTR C [step]"
 
         wb.save("C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\" +
                 "empty_workbook.xlsx")

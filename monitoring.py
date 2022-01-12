@@ -54,17 +54,17 @@ class DataLogger(object):
         sheet1['G1'] = "MTTR A [step]"
 
         sheet1['H1'] = "input B [level]"
-        sheet1['J1'] = "timeprocess B [step]"
-        sheet1['K1'] = "output B [level]"
-        sheet1['L1'] = "failure B [bool]"
-        sheet1['M1'] = "MTTF B [step]"
-        sheet1['N1'] = "MTTR B [step]"
+        sheet1['I1'] = "timeprocess B [step]"
+        sheet1['J1'] = "output B [level]"
+        sheet1['K1'] = "failure B [bool]"
+        sheet1['L1'] = "MTTF B [step]"
+        sheet1['M1'] = "MTTR B [step]"
 
-        sheet1['O1'] = "input C [level]"
-        sheet1['P1'] = "timeprocess C [step]"
-        sheet1['Q1'] = "output C [level]"
-        sheet1['R1'] = "failure C [bool]"
-        sheet1['S1'] = "MTTF C [step]"
-        sheet1['T1'] = "MTTR C [step]"
+        sheet1['N1'] = "input C [level]"
+        sheet1['O1'] = "timeprocess C [step]"
+        sheet1['P1'] = "output C [level]"
+        sheet1['Q1'] = "failure C [bool]"
+        sheet1['R1'] = "MTTF C [step]"
+        sheet1['S1'] = "MTTR C [step]"
 
         wb.save(self.complete_filename_xlsx)

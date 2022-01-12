@@ -8,7 +8,6 @@ Is possible to exclude the level control service.
 """
 
 import simpy
-from global_variables import *
 from monitoring import *
 
 

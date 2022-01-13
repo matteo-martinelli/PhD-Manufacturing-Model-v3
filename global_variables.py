@@ -60,6 +60,10 @@ class GlobalVariables(object):
     # Total delivered pieces.
     DELIVERED_PIECES = 0
 
+    # Warehouse get and put standard delay
+    GET_STD_DELAY = 1
+    PUT_STD_DELAY = 1
+
     # PROCESS PARAMETERS ----------------------------------------------------------------------------------------------
     RANDOM_SEED = 42
     # Employees per activity

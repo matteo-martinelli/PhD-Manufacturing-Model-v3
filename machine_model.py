@@ -11,6 +11,7 @@ It takes as input also the LogisticModel, to get and put raw materials from ware
 import random
 import simpy
 from monitoring import *
+from global_variables import *
 
 
 # TODO: Add a -1 time logging mapping the overall initial state of the system.
@@ -32,6 +33,7 @@ class Machine(object):
         self.parts_made = 0
         self.mean_process_time = mean_process_time
         self.sigma_process_time = sigma_process_time
+        self.machine_working = False
 
         # Breakdowns variables.
         self.MTTF = MTTF
@@ -69,20 +71,55 @@ class Machine(object):
         data.append(['-1', self.input_buffer.level, '0', self.output_buffer.level, self.parts_made, self.broken,
                      self.MTTF, '0'])
 
+        # TODO: add a timeout for every container.get() and put() and everytime there is a write in the csv.
         while True:
             # Perform the output warehouse level checking: if empty, wait 1 time step.
             self.input_level_check()
 
+            # TODO: restart from here! Finish to move all the logging text into the relative function.
             # Warehouse tracking (made before the piece to be took/placed).
-            # Logging the event.
-            print("{0}.1 - mach: input {1} level {2}; get 1 from input {1}."
-                  .format(str(self.env.now), self.name, str(self.input_buffer.level)))
-            # Writing into the log file - prod - del
-            self.data_logger.write_log_txt("{0}.1 - mach: input {1} level {2}; get 1 from input {1}.\n"
-                                           .format(str(self.env.now), self.name, str(self.input_buffer.level)))
+            # Logging the event - prod - del
+            self.write_log("{0}.1 - mach: input {1} level {2}; get 1 from input {1}.", str(self.env.now), self.name, str(self.input_buffer.level))
 
-            # Take the raw product from raw products warehouse
-            self.input_buffer.get(1)
+            # Take the raw product from raw products warehouse. Wait the necessary step to retrieve the material.
+            # The action is performed in a try-except block because the machine may break during the handling of the
+            # material
+            handled_in = GlobalVariables.GET_STD_DELAY
+            start_handling = 0
+
+            while handled_in:
+                try:
+                    # Handling the part
+                    start_handling = self.env.now
+                    yield self.env.timeout(handled_in)
+                    self.input_buffer.get(1)
+                    handled_in = 0  # Set 0 to exit to the loop
+                    # TODO: Put some log here
+
+                except simpy.Interrupt:
+                    # The machine broke.
+                    self.broken = True
+                    handled_in -= self.env.now - start_handling  # How much time left to handle the material?
+
+                    # Logging the event.
+                    # Writing into the log file - prod
+                    # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
+                    # TODO: Put some log here
+
+                    yield self.env.timeout(self.repair_time)
+
+                    # Machine repaired.
+                    self.broken = False
+
+                    # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
+                    data.append([self.env.now, self.input_buffer.level, '0', self.output_buffer.level,
+                                 self.parts_made, self.broken, self.MTTF, '0'])
+
+                    # Logging the event. The machine is repaired.
+                    print("\n{0}.3 up - mach: {1} repaired. Working restarted.\n".format(str(self.env.now), self.name))
+                    # Writing into the log file - prod
+                    self.data_logger.write_log_txt("{0}.3 up - mach: {1} repaired. Working restarted.\n"
+                                                   .format(str(self.env.now), self.name))
 
             # Logging the event.
             print("{0}.2 - mach: input {1} level {2}; taken 1 from input {1}. "
@@ -103,12 +140,14 @@ class Machine(object):
             data.append([self.env.now, self.input_buffer.level, done_in, self.output_buffer.level, self.parts_made,
                          self.broken, self.MTTF, '0'])
 
+            start = 0
+
             while done_in:
                 try:
                     # Working on the part
                     start = self.env.now
                     # Logging the event.
-                    print("{0}.3 - mach: started 1 in {1}\n".format(str(start), self.name))
+                    print("{0}.3 - mach: started 1 in {1}".format(str(start), self.name))
                     # Writing into the log file - prod
                     self.data_logger.write_log_txt("{0}.3 - mach: started 1 in {1}\n".format(str(start), self.name))
 
@@ -121,8 +160,8 @@ class Machine(object):
                     done_in -= self.env.now - start     # How much time left to finish the job?
 
                     # Logging the event.
-                    print("{0}.3 down - mach: {1} broke. {2} step for the job to be completed. "
-                          "Machine will be repaired in {0}\n".format(str(self.env.now), self.name, str(done_in),
+                    print("\n{0}.3 down - mach: {1} broke. {2} step for the job to be completed. "
+                          "Machine will be repaired in {3}\n".format(str(self.env.now), self.name, str(done_in),
                                                                      str(self.repair_time)))
                     # Writing into the log file - prod
                     self.data_logger.write_log_txt("{0}.3 down - mach: {1} broke. {2} step for the job to be completed."
@@ -143,7 +182,7 @@ class Machine(object):
                                  self.parts_made, self.broken, self.MTTF, '0'])
 
                     # Logging the event. The machine is repaired.
-                    print("{0}.3 up - mach: {1} repaired. Working restarted.".format(str(self.env.now), self.name))
+                    print("\n{0}.3 up - mach: {1} repaired. Working restarted.\n".format(str(self.env.now), self.name))
                     # Writing into the log file - prod
                     self.data_logger.write_log_txt("{0}.3 up - mach: {1} repaired. Working restarted.\n"
                                                    .format(str(self.env.now), self.name))
@@ -153,7 +192,8 @@ class Machine(object):
             self.parts_made += 1
 
             # Logging the event - prod
-            print("{0}.4 - mach: made 1 in {1}. Total pieces made: {2}.".format(str(prod_time), self.name, self.parts_made))
+            print("{0}.4 - mach: made 1 in {1}. Total pieces made: {2}.".format(str(prod_time), self.name,
+                                                                                self.parts_made))
             # Writing into the log file - prod
             self.data_logger.write_log_txt("{0}.4 - mach: made 1 in {1}. Total pieces made: {2}.\n"
                                            .format(str(prod_time), self.name, self.parts_made))
@@ -168,7 +208,9 @@ class Machine(object):
             self.data_logger.write_log_txt("{0}.6 - mach: output {1} level {2}; put 1 in output {1}.\n"
                                            .format(str(self.env.now), self.name, str(self.output_buffer.level)))
 
-            # Put the finished product into the finished warehouse
+            # Put the finished product into the finished warehouse. Wait the necessary step to retrieve the material.
+            # yield self.env.timeout(1)
+
             self.output_buffer.put(1)
 
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
@@ -190,7 +232,7 @@ class Machine(object):
     # TODO: turn private
     def break_machine(self):
         """Break the machine every now and then."""
-        while True:
+        while self.machine_working:
             time_to_failure = round(random.expovariate(self.break_mean))
             yield self.env.timeout(time_to_failure)
             if not self.broken:
@@ -217,6 +259,12 @@ class Machine(object):
                                            .format(str(self.env.now), self.name, str(self.output_buffer.level)))
             yield self.env.timeout(1)
 
+    # TODO: write and turn private
+    def write_log(self, text, *data):
+        # Writing into console
+        print(str(text).format(*data))
+        # Writing into the txt
+        self.data_logger.write_log_txt(str(text + "\n").format(*data))
 
 """
 # REPAIRMAN FUNCTION ---------------------------------------------------------------------------------------------------

@@ -5,11 +5,6 @@ Class containing the global variables for the model.
 """
 
 import os
-import xlwt
-# from xlwt import Workbook
-from openpyxl import Workbook
-from openpyxl import load_workbook
-from global_variables import *
 
 
 class DataLogger(object):
@@ -72,3 +67,6 @@ class DataLogger(object):
                             self.heading + ', produced, failure ' + self.heading + ', MTTF ' + self.heading + ', MTTR ' +
                             self.heading + '\n')
                     f.close()
+
+    def merge_logs(self):
+        pass

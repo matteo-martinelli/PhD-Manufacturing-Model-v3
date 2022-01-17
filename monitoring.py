@@ -1,7 +1,8 @@
 """
 Monitoring.py class:
 
-Class containing the global variables for the model.
+the class responsibility is to enable the log capabilities for the instantiated model objects, and to save it into a csv
+file. Because of the similarity, the logs are also saved into a plain text .txt file and printed on the console.
 """
 
 import os
@@ -67,27 +68,3 @@ class DataLogger(object):
                             self.heading + ', produced, failure ' + self.heading + ', MTTF ' + self.heading + ', MTTR ' +
                             self.heading + '\n')
                     f.close()
-
-    def merge_logs(self, file_name_1, file_name_2, file_name3):
-        try:
-            with open(file_name_1, "r") as f:
-                line = f.readline()
-                head_1 = line
-                f.close()
-
-            with open(file_name_2, "r") as f:
-                line = f.readline()
-                head_2 = line
-                f.close()
-
-            with open(file_name3, "r") as f:
-                line = f.readline()
-                head_3 = line
-                f.close()
-
-            with open(self.path + "\\merged_logs.txt", "w") as f:
-                f.write(head_1 + "," + head_2 + "," + head_3)
-                f.close()
-
-        except FileExistsError:
-            print('The log file does not exists!')

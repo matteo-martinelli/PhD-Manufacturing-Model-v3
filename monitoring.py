@@ -68,5 +68,26 @@ class DataLogger(object):
                             self.heading + '\n')
                     f.close()
 
-    def merge_logs(self):
-        pass
+    def merge_logs(self, file_name_1, file_name_2, file_name3):
+        try:
+            with open(file_name_1, "r") as f:
+                line = f.readline()
+                head_1 = line
+                f.close()
+
+            with open(file_name_2, "r") as f:
+                line = f.readline()
+                head_2 = line
+                f.close()
+
+            with open(file_name3, "r") as f:
+                line = f.readline()
+                head_3 = line
+                f.close()
+
+            with open(self.path + "\\merged_logs.txt", "w") as f:
+                f.write(head_1 + "," + head_2 + "," + head_3)
+                f.close()
+
+        except FileExistsError:
+            print('The log file does not exists!')

@@ -9,6 +9,7 @@ Is possible to exclude the level control service.
 
 import simpy
 from monitoring import *
+from global_variables import *
 
 
 # TODO: Implement full-level-check logic and relative raising error. Sync the logic in the machine section.

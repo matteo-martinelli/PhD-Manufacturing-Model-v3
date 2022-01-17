@@ -49,7 +49,7 @@ output_C = OutputContainer(env, name="output C", max_capacity=GlobalVariables.CO
                            dispatcher_std_check_time=GlobalVariables.DISPATCHER_STD_CHECK_TIME_C_FINISHED)
 
 # REPAIRMEN DEFINITION -------------------------------------------------------------------------------------------------
-# TODO: after the process testing, switch from 3 to 1 repairman definition, changing its capacity.
+# TODO_in the future: after the process testing, switch from 3 to 1 repairman definition, changing its capacity.
 # actual_repairman_A = simpy.PreemptiveResource(env, capacity=1)
 # actual_repairman_B = simpy.PreemptiveResource(env, capacity=1)
 # actual_repairman_C = simpy.PreemptiveResource(env, capacity=1)
@@ -61,7 +61,6 @@ machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, Globa
                     GlobalVariables.MTTF_B, GlobalVariables.REPAIR_TIME_B, input_B, output_B)
 
 # TODO: maybe **args and **kwargs could help here?
-# TODO: make a transference object that moves the material as needed.
 # Moving from output A&B to input C
 output_containers = list()
 output_containers.append(output_A)

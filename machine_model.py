@@ -14,7 +14,6 @@ from monitoring import *
 from global_variables import *
 
 
-# TODO: Add a -1 time logging mapping the overall initial state of the system.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """A machine produces parts and gets broken every now and then.
@@ -54,7 +53,7 @@ class Machine(object):
         self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
 
     # TODO: turn private
-    #  Function describing the machine process.
+    # Function describing the machine process.
     def working(self):
         """Produces parts as long as the simulation runs.
 
@@ -69,7 +68,7 @@ class Machine(object):
         data.append(['-1', self.input_buffer.level, '0', self.output_buffer.level, self.parts_made, self.broken,
                      self.MTTF, '0'])
 
-        # TODO: add a timeout for every container.get() and put() and everytime there is a change write in the csv.
+        # TODO: check if there is a logging action everytime something happens.
         while True:
             # CHECK THE INPUT BUFFER LEVEL -----------------------------------------------------------------------------
             # Perform the output warehouse level checking: if empty, wait 1 time step.
@@ -282,7 +281,7 @@ class Machine(object):
 
             yield self.env.timeout(1)
 
-    # TODO: write and turn private
+    # TODO: turn private
     def write_log(self, text, *data):
         # Writing into console
         print(str(text).format(*data))

@@ -9,9 +9,9 @@ Is possible to exclude the level control service.
 
 import simpy
 from monitoring import *
+from global_variables import *
 
 
-# TODO: Implement full-level-check logic and relative raising error. Sync the logic in the machine section.
 class OutputContainer(simpy.Container):
     def __init__(self, env, name, max_capacity, init_capacity, output_control=True, critical_level_output_container=50,
                  dispatcher_lead_time=0, dispatcher_retrieved_check_time=8, dispatcher_std_check_time=1):

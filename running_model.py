@@ -9,7 +9,7 @@ from machine_model import *
 from input_container import *
 from output_container import *
 from transference_system import *
-from monitoring import *
+from log_merger import *
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
@@ -93,8 +93,6 @@ print(f'----------------------------------')
 print(f'SIMULATION COMPLETED')
 
 
-log_path = GlobalVariables.LOG_PATH
-log_filename = "none"
-dl = DataLogger(log_path, log_filename)
-dl.merge_logs(log_path + "\\Machine A_log.txt", log_path + "\\Machine B_log.txt", log_path + "\\Machine C_log.txt")
+lm = LogMerger(GlobalVariables.LOG_PATH)
+lm.merge_logs("Machine A_log.txt", "Machine B_log.txt", "Machine C_log.txt")
 

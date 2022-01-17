@@ -9,6 +9,7 @@ from machine_model import *
 from input_container import *
 from output_container import *
 from transference_system import *
+from monitoring import *
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
@@ -90,3 +91,10 @@ print('total pieces delivered: {0}'.format(output_C.products_delivered + output_
 print('total pieces assembled: {0}'.format(machine_C.parts_made))
 print(f'----------------------------------')
 print(f'SIMULATION COMPLETED')
+
+
+log_path = GlobalVariables.LOG_PATH
+log_filename = "none"
+dl = DataLogger(log_path, log_filename)
+dl.merge_logs(log_path + "\\Machine A_log.txt", log_path + "\\Machine B_log.txt", log_path + "\\Machine C_log.txt")
+

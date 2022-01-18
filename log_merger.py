@@ -6,6 +6,7 @@ The merged file has to be consistent with time order.
 """
 
 import os
+import pandas
 from global_variables import *
 
 
@@ -17,82 +18,33 @@ class LogMerger(object):
     def merge_logs(self, *args):
         # Initializing the merged_logs.txt file.
         try:
-            os.remove(self.save_path + "\\merged_logs.txt")
+            os.remove(self.save_path + "\\merged_logs.csv")
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
             # os.makedirs(self.path)
-            with open(self.save_path + "\\merged_logs.txt", "w") as f:
+            with open(self.save_path + "\\merged_logs.csv", "w") as f:
                 f.close()
 
-        # Populating the merged_logs.txt file with the merged heading.
+        # Creating a list as a buffer to temporally save the data read from the CSVs files.
+        df_list = list()
+        # Appending the data in the list read from the CSVs files.
         for arg in args:
-            try:
-                # Read the head in the first passed file.
-                with open(self.save_path + "\\" + arg, "r") as input_file:
-                    line = input_file.readline()
-                    input_file.close()
+            df = pandas.read_csv(self.save_path + "\\" + arg)
+            df_list.append(df)
 
-                # Write the head in the merged file.
-                # If is the first file, add the step column at the file beginning.
-                if args.index(arg) == 0:
-                    with open(self.save_path + "\\merged_logs.txt", "a") as output_file:
-                        output_file.write(line[:-1])
-                        output_file.close()
+        # Merging the first two dataframes.
+        df1 = df_list[0]
+        df2 = df_list[1]
+        df_merge = pandas.merge(left=df1, right=df2, on='step', how="outer", sort=True)
 
-                # If is not the first file, do not add the first column at the file.
-                else:
-                    with open(self.save_path + "\\merged_logs.txt", "a") as output_file:
-                        output_file.write(line[4:-1])
-                        output_file.close()
+        # Merging the remaining dataframes, if any.
+        for element in range(len(df_list)):
+            # Skipping the first two dataframes in the list, cause they have been merged few lines before.
+            if element == 0 or element == 1:
+                continue
+            # Merging the remaining files.
+            else:
+                df_merge = pandas.merge(left=df_merge, right=df_list[element], on='step', how='outer', sort=True)
 
-                print("Heading {0} merged.".format(str(args.index(arg) + 1)))
-            except FileNotFoundError:
-                print('The input log file does not exists!')
-            except FileExistsError:
-                print('The output log file does not exists!')
-
-        print("Headings merged.")
-
-        # Populating the time step column in the txt file. Every simulation time step will be displayed.
-        with open(self.save_path + "\\merged_logs.txt", "a") as output_file:
-            output_file.write("\n")
-            output_file.write("-1, \n")
-            for i in range(GlobalVariables.SIM_TIME):
-                output_file.write(str(i) + ", \n")
-            output_file.close()
-
-        # Populating the merged_logs.txt file with the merged heading.
-        sel = 0
-        for arg in args:
-            # Open the machine log file.
-            with open(self.save_path + "\\" + arg, "r") as input_file:
-                # The selector will be multiplied with the column size counter
-                # TODO: implement the column size counter in the DataLogger class.
-                sel += 1
-                while True:
-                    # Read the i-th line of the machine log.
-                    input_line = input_file.read().split(", ")
-                    input_step = input_line[0]
-                    # Skip the first line, the heading one.
-                    if input_step == "step":
-                        print("Ignoring the head. Skipping to the next line")
-                        continue
-                    else:
-                        # Open the merged_log.txt file.
-                        with open(self.save_path + "\\merged_logs.txt", "a+") as output_file:
-                            while True:
-                                # Splitting the read line into the output file.
-                                output_line = output_file.readline().split(", ")
-                                output_step = output_line[0]
-                                if input_step != output_step:
-                                    continue
-                                elif output_step == "1":
-                                    for element in range(len(input_line)):
-                                        if element == 0:
-                                            continue
-                                        else:
-                                            output_file.write(input_line[element] + ", ")
-                                break
-                            output_file.close()
-                        break
-                input_file.close()
+        # Saving the merged dataframe into a csv file.
+        df_merge.to_csv(self.save_path + "\\merged_logs.csv")

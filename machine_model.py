@@ -22,6 +22,9 @@ class Machine(object):
     the production when is repaired.
 
     A machine has a "name" and a number of parts processed.
+
+    Time steps have been enriched with unique identifiers as ".progressive_numeber" in order to compute an agile join
+    operation when merging the produced log dataframes from the relative CSVs.
     """
     def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, repair_time, input_buffer,
                  output_buffer):
@@ -91,7 +94,7 @@ class Machine(object):
                     start_handling = self.env.now
                     # NOo handling logging - Maybe it should be added?
                     yield self.env.timeout(handled_in)
-
+                    # TODO: verify that the piece is effectively got.
                     self.input_buffer.get(1)
                     handled_in = 0  # Set 0 to exit to the loop
 
@@ -106,7 +109,7 @@ class Machine(object):
                                    str(self.env.now), self.name, str(self.repair_time))
 
                     # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
-                    data.append([self.env.now, self.input_buffer.level, '0', self.output_buffer.level,
+                    data.append([str(self.env.now) + ".1", self.input_buffer.level, '0', self.output_buffer.level,
                                  self.parts_made, self.broken, '0', self.repair_time])
 
                     yield self.env.timeout(self.repair_time)
@@ -119,7 +122,7 @@ class Machine(object):
                                    str(self.env.now), self.name)
 
                     # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-                    data.append([self.env.now, self.input_buffer.level, '0', self.output_buffer.level,
+                    data.append([str(self.env.now) + ".2", self.input_buffer.level, '0', self.output_buffer.level,
                                  self.parts_made, self.broken, self.MTTF, '0'])
 
             # TODO: move the logging of the finished operation into the try-block
@@ -128,7 +131,7 @@ class Machine(object):
                            str(self.input_buffer.level))
 
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            data.append([self.env.now, self.input_buffer.level, '0', self.output_buffer.level, self.parts_made,
+            data.append([str(self.env.now) + ".3", self.input_buffer.level, '0', self.output_buffer.level, self.parts_made,
                          self.broken, self.MTTF, '0'])
 
             # PROCESSING THE MATERIAL ----------------------------------------------------------------------------------
@@ -146,7 +149,7 @@ class Machine(object):
 
                     # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
                     data.append(
-                        [self.env.now, self.input_buffer.level, done_in, self.output_buffer.level, self.parts_made,
+                        [str(self.env.now) + ".4", self.input_buffer.level, done_in, self.output_buffer.level, self.parts_made,
                          self.broken, self.MTTF, '0'])
 
                     yield self.env.timeout(done_in)
@@ -163,7 +166,7 @@ class Machine(object):
                                    str(self.repair_time))
 
                     # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
-                    data.append([self.env.now, self.input_buffer.level, done_in, self.output_buffer.level,
+                    data.append([str(self.env.now) + ".5", self.input_buffer.level, done_in, self.output_buffer.level,
                                  self.parts_made, self.broken, '0', self.repair_time])
 
                     yield self.env.timeout(self.repair_time)
@@ -176,7 +179,7 @@ class Machine(object):
                                    str(self.env.now), self.name)
 
                     # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-                    data.append([self.env.now, self.input_buffer.level, done_in, self.output_buffer.level,
+                    data.append([str(self.env.now) + ".6", self.input_buffer.level, done_in, self.output_buffer.level,
                                  self.parts_made, self.broken, self.MTTF, '0'])
 
             # Part is done
@@ -208,7 +211,7 @@ class Machine(object):
                     start_handling = self.env.now
                     # NO handling logging - Maybe it should be added?
                     yield self.env.timeout(handled_out)
-
+                    # TODO: verify that the piece is effectively put.
                     self.output_buffer.put(1)
                     handled_out = 0  # Set 0 to exit to the loop
 
@@ -223,7 +226,7 @@ class Machine(object):
                                    str(self.env.now), self.name, str(self.repair_time))
 
                     # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
-                    data.append([self.env.now, self.input_buffer.level, '0', self.output_buffer.level,
+                    data.append([str(self.env.now) + ".7", self.input_buffer.level, '0', self.output_buffer.level,
                                  self.parts_made, self.broken, '0', self.repair_time])
 
                     yield self.env.timeout(self.repair_time)
@@ -236,11 +239,11 @@ class Machine(object):
                                    str(self.env.now), self.name)
 
                     # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-                    data.append([self.env.now, self.input_buffer.level, '0', self.output_buffer.level,
+                    data.append([str(self.env.now) + ".8", self.input_buffer.level, '0', self.output_buffer.level,
                                  self.parts_made, self.broken, self.MTTF, '0'])
 
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            data.append([self.env.now, self.input_buffer.level, done_in, self.output_buffer.level,
+            data.append([str(self.env.now) + ".9", self.input_buffer.level, done_in, self.output_buffer.level,
                          self.parts_made, self.broken, self.MTTF, '0'])
 
             # TODO: move the logging of the finished operation into the try-block

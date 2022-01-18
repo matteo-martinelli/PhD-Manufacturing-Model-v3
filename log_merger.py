@@ -3,6 +3,9 @@ LogMerger.py class:
 
 the class responsibility is to take all the log output of the simulator and merge it into one unique csv file.
 The merged file has to be consistent with time order.
+
+The responsibility is achieved leveraging pandas, turning the log files into dataframes and then merging them performing
+a full-outer-join.
 """
 
 import os

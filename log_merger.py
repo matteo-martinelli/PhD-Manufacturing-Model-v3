@@ -16,7 +16,7 @@ class LogMerger(object):
         self.save_path = save_path
 
     def merge_logs(self, *args):
-        # Initializing the merged_logs.txt file.
+        # Initializing the merged_logs.csv file.
         try:
             os.remove(self.save_path + "\\merged_logs.csv")
         except FileNotFoundError:

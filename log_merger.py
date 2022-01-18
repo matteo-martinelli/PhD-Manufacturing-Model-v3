@@ -7,7 +7,6 @@ The merged file has to be consistent with time order.
 
 import os
 import pandas
-from global_variables import *
 
 
 class LogMerger(object):

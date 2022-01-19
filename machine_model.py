@@ -1,11 +1,30 @@
 """
-Machine_A.py class:
+machine_model.py -> Machine class:
 
 Class describing a single machine behaviour.
 Random breakdowns are embedded in the model.
+Breakdown handling is also implemented during the input-output material handling.
+
 The file have to be integrated with the env.
 
-It takes as input also the LogisticModel, to get and put raw materials from warehouses.
+It takes as input an InputContainer and an OutputContainer object, to get and put raw materials from and in the
+warehouses.
+
+The log CSV files are encoded in the time steps in order to make every log unique within each time-step. So, time steps
+are defined as "time_step.progressive_number". This was necessary in order to compute a join when merging the produced
+log dataframes from the relative CSVs.
+
+The log encoding is thefollowing:
+    -1: initial state
+    x.1: breakdown during input material handling
+    x.2: repairing during input material handling
+    x.3: finished the input material handling
+    x.4: start to work on the part, required time to finish saved
+    x.5: breakdown during the part processing
+    x.6: repairing during the part processing
+    x.7: breakdown during output material handling
+    x.8: repairing during output material handling
+    x.9: finished the output material handling
 """
 
 import random
@@ -16,15 +35,13 @@ from global_variables import *
 
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
-    """A machine produces parts and gets broken every now and then.
+    """
+    A machine produces parts and gets broken every now and then.
 
     If it breaks, it requires a "repairman" and continues
-    the production when is repaired.
+    the production when is repaired. - DEACTIVATED IN MY IMPLEMENTATION.
 
     A machine has a "name" and a number of parts processed.
-
-    Time steps have been enriched with unique identifiers as ".progressive_numeber" in order to compute an agile join
-    operation when merging the produced log dataframes from the relative CSVs.
     """
     def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, repair_time, input_buffer,
                  output_buffer):
@@ -161,7 +178,7 @@ class Machine(object):
                     done_in -= self.env.now - start     # How much time left to finish the job?
 
                     # Writing into the log file - prod
-                    self.write_log("\n{0}.3 down - mach: {1} broke. {2} step for the job to be completed. "
+                    self.write_log("\n{0}.4 down - mach: {1} broke. {2} step for the job to be completed. "
                                    "Machine will be repaired in {3}\n", str(self.env.now), self.name, str(done_in),
                                    str(self.repair_time))
 

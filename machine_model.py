@@ -75,7 +75,8 @@ class Machine(object):
     # TODO: turn private
     # Function describing the machine process.
     def working(self):
-        """Produces parts as long as the simulation runs.
+        """
+        Produces parts as long as the simulation runs.
 
         While making a part, the machine may break multiple times.
         When machine breaks, MTTR is computed from its statistics.

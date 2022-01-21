@@ -110,7 +110,7 @@ class Machine(object):
                 try:
                     # Handling the part
                     start_handling = self.env.now
-                    # NOo handling logging - Maybe it should be added?
+                    # No handling logging - Maybe it should be added?
                     yield self.env.timeout(handled_in)
                     # TODO: verify that the piece is effectively got.
                     self.input_buffer.get(1)

@@ -94,5 +94,5 @@ print(f'SIMULATION COMPLETED')
 
 
 lm = LogMerger(GlobalVariables.LOG_PATH)
-lm.merge_logs("Machine A_log.txt", "Machine B_log.txt", "Machine C_log.txt")
+lm.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
 

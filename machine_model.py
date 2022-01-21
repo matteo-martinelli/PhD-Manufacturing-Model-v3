@@ -69,7 +69,7 @@ class Machine(object):
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
         self.log_path = GlobalVariables.LOG_PATH
         self.log_filename = GlobalVariables.LOG_FILENAME
-        self.csv_filename = self.name + "_log.txt"
+        self.csv_filename = self.name + " log.csv"
         self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
 
     # TODO: turn private

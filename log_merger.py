@@ -12,6 +12,8 @@ import os
 import pandas
 
 
+# TODO: Merge this class with the monitoring one.
+# TODO: split the "Moment" part of the time-step field of the csv file into a standalone field.
 # TODO: think about turning private the appropriate attributes.
 class LogMerger(object):
 

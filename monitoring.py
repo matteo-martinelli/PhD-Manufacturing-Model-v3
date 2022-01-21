@@ -16,7 +16,7 @@ class DataLogger(object):
         self.complete_filename_txt = self.path + "\\" + self.filename_txt
 
         self.filename_csv = filename_csv
-        self.heading = self.filename_csv.split("_")[0]
+        self.heading = self.filename_csv.split("log.")[0].strip()
         self.complete_filename_csv = self.path + "\\" + self.filename_csv
 
         self.initialize_log_txt_file()

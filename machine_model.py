@@ -113,7 +113,7 @@ class Machine(object):
                     # No handling logging - Maybe it should be added?
                     yield self.env.timeout(handled_in)
                     # TODO: verify that the piece is effectively got.
-                    self.input_buffer.get(1)
+                    # self.input_buffer.get(1)
                     handled_in = 0  # Set 0 to exit to the loop
 
                 except simpy.Interrupt:
@@ -145,6 +145,7 @@ class Machine(object):
 
             # TODO: move the logging of the finished operation into the try-block
             # Logging the event.
+            self.input_buffer.get(1)
             self.write_log("{0}.2 - mach: input {1} level {2}; taken 1 from input {1}.", str(self.env.now), self.name,
                            str(self.input_buffer.level))
 
@@ -230,7 +231,7 @@ class Machine(object):
                     # NO handling logging - Maybe it should be added?
                     yield self.env.timeout(handled_out)
                     # TODO: verify that the piece is effectively put.
-                    self.output_buffer.put(1)
+                    # self.output_buffer.put(1)
                     handled_out = 0  # Set 0 to exit to the loop
 
                 except simpy.Interrupt:
@@ -261,10 +262,11 @@ class Machine(object):
                                  self.parts_made, self.broken, self.MTTF, '0'])
 
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
+            self.output_buffer.put(1)
             data.append([str(self.env.now) + ".9", self.input_buffer.level, done_in, self.output_buffer.level,
                          self.parts_made, self.broken, self.MTTF, '0'])
 
-            # TODO: move the logging of the finished operation into the try-block
+            # TODO: move the logging of the finished operation into the try-block - NOPE the log has to be out instead.
             # Logging into the file - prod
             self.write_log("{0}.7 - mach: output {1} level {2}; put 1 in output {1}.", str(self.env.now), self.name,
                            str(self.output_buffer.level))

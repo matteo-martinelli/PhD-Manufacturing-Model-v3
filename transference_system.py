@@ -19,10 +19,10 @@ class TransferenceSystem(object):
 
         # self.process = env.process(self.material_transfer())
         # self.env.process(self.material_transfer(env))
-        self.material_transfer = env.process(self.material_transfer(self.env))
+        self.material_transfer = env.process(self._material_transfer(self.env))
 
     #  Function describing the machine process.
-    def material_transfer(self, env):
+    def _material_transfer(self, env):
         yield env.timeout(0)
 
         while True:

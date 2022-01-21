@@ -22,7 +22,7 @@ class InputContainer(simpy.Container):
         self.name = name
         self.env = env
         # The following container has to be always full. The stock-out is to avoid.
-        self.input_control_container = env.process(self.input_control_container(self.env))
+        self.input_control_container = env.process(self._input_control_container(self.env))
 
         # Basic parameters
         self.input_control = input_control
@@ -44,8 +44,7 @@ class InputContainer(simpy.Container):
 
     # TODO: Check the env parameter passed at the function: should it be there or should I use the self.env instead?
     #  Maybe i should add self.env in the attributes definitions
-    # TODO: turn private
-    def input_control_container(self, env):
+    def _input_control_container(self, env):
         yield env.timeout(0)
 
         # If the input container service has been activated in the object instantiation...

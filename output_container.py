@@ -20,7 +20,7 @@ class OutputContainer(simpy.Container):
         self.name = name
         self.env = env
         # The following container has to be always full. The stock-out is to avoid.
-        self.output_control_container = env.process(self.output_control_container(self.env))
+        self.output_control_container = env.process(self._output_control_container(self.env))
 
         # Basic parameters
         self.output_control = output_control
@@ -39,8 +39,7 @@ class OutputContainer(simpy.Container):
         self.data_logger = DataLogger(self.log_path, self.log_filename)
         self.data_logger.write_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
 
-    # TODO: turn private
-    def output_control_container(self, env):
+    def _output_control_container(self, env):
         yield env.timeout(0)
 
         # If the output container service has been activated in the object instantiation...

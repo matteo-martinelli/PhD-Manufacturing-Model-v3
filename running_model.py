@@ -4,6 +4,7 @@ Model.py file:
 that's the class where the model is described and launched.
 """
 
+# TODO: think about turning private the appropriate attributes.
 # TODO: refactor the import statements adding the package reference in each imported file.
 # TODO: manage this file as a class with a main section as program entry point.
 from machine_model import *

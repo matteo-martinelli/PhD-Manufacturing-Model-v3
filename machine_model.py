@@ -33,6 +33,7 @@ from monitoring import *
 from global_variables import *
 
 
+# TODO: think about turning private the appropriate attributes.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """

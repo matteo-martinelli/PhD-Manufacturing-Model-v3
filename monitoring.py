@@ -8,6 +8,7 @@ file. Because of the similarity, the logs are also saved into a plain text .txt 
 import os
 
 
+# TODO: think about turning private the appropriate attributes.
 class DataLogger(object):
     def __init__(self, path, filename_txt, filename_csv="none"):
         self.path = path

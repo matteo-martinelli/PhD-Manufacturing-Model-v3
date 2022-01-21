@@ -12,6 +12,7 @@ from monitoring import *
 from global_variables import *
 
 
+# TODO: think about turning private the appropriate attributes.
 # TODO: Implement full-level-check logic and relative raising error. Sync the logic in the machine section.
 class InputContainer(simpy.Container):
 

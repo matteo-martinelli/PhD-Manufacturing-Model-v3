@@ -12,6 +12,7 @@ import os
 import pandas
 
 
+# TODO: think about turning private the appropriate attributes.
 class LogMerger(object):
 
     def __init__(self, save_path):

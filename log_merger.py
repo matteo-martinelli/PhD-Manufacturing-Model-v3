@@ -51,5 +51,20 @@ class LogMerger(object):
             else:
                 df_merge = pandas.merge(left=df_merge, right=df_list[element], on='step', how='outer', sort=True)
 
+        # TODO: make this refactor a bit less dummy.
+        """
+        # Converting True and False in 1 and 0.
+        df_merge["failure Machine A"] = df_merge["failure Machine A"].astype(int)
+        df_merge["failure Machine B"] = df_merge["failure Machine B"].astype(int)
+        df_merge["failure Machine C"] = df_merge["failure Machine C"].astype(int)
+        """
+        # Handling missing data generated from machine breakdowns
+        df_merge.fillna(method="ffill", inplace=True)
+
         # Saving the merged dataframe into a csv file.
         df_merge.to_csv(self.save_path + "\\merged_logs.csv")
+
+    def bool_converter(self):
+        # Get the dataframe from the CSV merged file.
+        df = pandas.read_csv(self.save_path + "\\merged_logs.csv")
+        pass

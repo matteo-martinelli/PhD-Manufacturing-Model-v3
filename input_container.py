@@ -35,7 +35,6 @@ class InputContainer(simpy.Container):
 
         # TODO: implement container counter somehow.
         self.products_picked = 0
-        self.products_stored = 0
 
         # Logging objects
         self.log_path = GlobalVariables.LOG_PATH

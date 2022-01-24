@@ -31,6 +31,7 @@ class OutputContainer(simpy.Container):
         self.dispatcher_std_check_time = dispatcher_std_check_time
 
         # TODO: implement container counter somehow.
+        self.products_stored = 0
         self.products_delivered = 0
 
         # Logging objects

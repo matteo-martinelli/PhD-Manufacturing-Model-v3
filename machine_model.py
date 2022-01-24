@@ -35,8 +35,8 @@ from global_variables import *
 
 # TODO: think about turning private the appropriate attributes.
 # TODO: test the class behaviour with the csv merged file:
-#  - with longer simulations;
-#  - with breakdowns in the loop.
+#  - with longer simulations; -> DONE
+#  - with breakdowns in the loop. -> Alling data appending with written logs to better debug the code.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """
@@ -68,7 +68,7 @@ class Machine(object):
 
         # Start "working" and "break_machine" processes for this machine.
         self.process = env.process(self.working())
-        # self.env.process(self._break_machine())  # To exclude breakdowns, comment this line.
+        self.env.process(self._break_machine())  # To exclude breakdowns, comment this line.
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
         self.log_path = GlobalVariables.LOG_PATH
@@ -285,6 +285,7 @@ class Machine(object):
 
     def _break_machine(self):
         """Break the machine every now and then."""
+        random.seed(0)
         while True:
             time_to_failure = round(random.expovariate(self.break_mean))
             yield self.env.timeout(time_to_failure)

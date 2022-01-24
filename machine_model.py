@@ -34,6 +34,9 @@ from global_variables import *
 
 
 # TODO: think about turning private the appropriate attributes.
+# TODO: test the class behaviour with the csv merged file:
+#  - with longer simulations;
+#  - with breakdowns in the loop.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """
@@ -124,8 +127,7 @@ class Machine(object):
 
                     # Writing into the log file - prod
                     self._write_log("\n{0}.3 down - mach: {1} broke. Handling-in stopped. Machine will be repaired in "
-                                   "{2}\n",
-                                    str(self.env.now), self.name, str(self.repair_time))
+                                    "{2}\n", str(self.env.now), self.name, str(self.repair_time))
 
                     # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
                     data.append([str(self.env.now) + ".1", self.input_buffer.level, '0', self.output_buffer.level,
@@ -146,7 +148,9 @@ class Machine(object):
 
             # TODO: move the logging of the finished operation into the try-block
             # Logging the event.
-            self.input_buffer.get(1)
+            self.input_buffer.get(1)                # Take the piece from the input buffer
+            self.input_buffer.products_picked += 1  # Track the total products picked from the buffer
+
             self._write_log("{0}.2 - mach: input {1} level {2}; taken 1 from input {1}.", str(self.env.now), self.name,
                             str(self.input_buffer.level))
 
@@ -183,7 +187,7 @@ class Machine(object):
 
                     # Writing into the log file - prod
                     self._write_log("\n{0}.4 down - mach: {1} broke. {2} step for the job to be completed. "
-                                   "Machine will be repaired in {3}\n", str(self.env.now), self.name, str(done_in),
+                                    "Machine will be repaired in {3}\n", str(self.env.now), self.name, str(done_in),
                                     str(self.repair_time))
 
                     # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
@@ -243,8 +247,7 @@ class Machine(object):
 
                     # Writing into the log file - prod
                     self._write_log("\n{0}.3 down - mach: {1} broke. Handling-out stopped. Machine will be repaired in "
-                                   "{2}\n",
-                                    str(self.env.now), self.name, str(self.repair_time))
+                                    "{2}\n", str(self.env.now), self.name, str(self.repair_time))
 
                     # csv_log = step, input_level, time_process, output_level, produced, produced, failure, MTTF, MTTR
                     data.append([str(self.env.now) + ".7", self.input_buffer.level, '0', self.output_buffer.level,
@@ -264,7 +267,9 @@ class Machine(object):
                                  self.parts_made, self.broken, self.MTTF, '0'])
 
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.output_buffer.put(1)
+            self.output_buffer.put(1)                # Take the piece from the input buffer
+            self.output_buffer.products_stored += 1  # Track the total products stored in the buffer
+
             data.append([str(self.env.now) + ".9", self.input_buffer.level, done_in, self.output_buffer.level,
                          self.parts_made, self.broken, self.MTTF, '0'])
 

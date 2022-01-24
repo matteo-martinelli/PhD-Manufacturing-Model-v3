@@ -71,6 +71,9 @@ output_containers.append(output_B)
 
 transference_from_A_B_to_C = TransferenceSystem(env, "from A and B to C", output_containers, input_C)
 
+
+# transference_from_A_B_to_C = DummyTransferenceSystem(env, "from A and B to C", output_A, output_B, input_C)
+
 machine_C = Machine(env, "Machine C", GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
                     GlobalVariables.MTTF_C, GlobalVariables.REPAIR_TIME_C, input_C, output_C)
 
@@ -82,10 +85,22 @@ env.run(until=int(GlobalVariables.SIM_TIME))
 
 print(f'----------------------------------')
 print('Node A raw container has {0} pieces ready to be processed'.format(input_A.level))
-print('Node A finished container has {0} pieces ready to be processed'.format(output_A.level))
+print('Node A raw pieces picked: {0}\n'.format(input_A.products_picked))
+
+print('Node A finished container has {0} pieces processed'.format(output_A.level))
+print('Node A finished container pieces stored: {0}\n'.format(output_A.products_stored))
 
 print('Node B raw container has {0} pieces ready to be processed'.format(input_B.level))
-print('Node B finished container has {0} pieces ready to be processed'.format(output_B.level))
+print('Node B raw pieces picked: {0}\n'.format(input_B.products_picked))
+
+print('Node B finished container has {0} pieces processed'.format(output_B.level))
+print('Node B finished container pieces stored: {0}\n'.format(output_B.products_stored))
+
+print('Node C raw container has {0} pieces ready to be processed'.format(input_C.level))
+print('Node C raw pieces picked: {0}\n'.format(input_C.products_picked))
+
+print('Node C finished container has {0} pieces processed'.format(output_C.level))
+print('Node C finished container pieces stored: {0}\n'.format(output_C.products_stored))
 
 print(f'Dispatch C has %d pieces ready to go!' % output_C.level)
 print(f'----------------------------------')

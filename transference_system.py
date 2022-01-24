@@ -27,11 +27,21 @@ class TransferenceSystem(object):
         yield env.timeout(0)
 
         while True:
-            # Get all the material in the input container
+            # Assuming that the input buffers are not empty.
+            not_empty = True
+            # Looping all the input elements...
             for element in range(len(self.input_containers)):
-                self.input_containers[element].get(1)
+                # ...if the input element is empty, change the flag in False.
+                if self.input_containers[element].level == 0:
+                    not_empty = False
 
-            # Once all the material has been taken, put one element in the output container
-            self.output_container.put(1)
+            # If the input buffers are not full ...
+            if not_empty:
+                # ... get all the material in the input container ...
+                for element in range(len(self.input_containers)):
+                    self.input_containers[element].get(1)
+                # ... and put the material into the output container
+                self.output_container.put(1)
+
             # print('here')
             yield env.timeout(1)

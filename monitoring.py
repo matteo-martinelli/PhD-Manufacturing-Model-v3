@@ -40,11 +40,16 @@ class DataLogger(object):
     def write_log_csv(self, data_list):
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
         text = ''
+        # For each line in the data_list ...
         for i in range(len(data_list)):
+            # ... for each element in the data_list ...
             for j in range(len(data_list[i])):
+                # ... if the element is the last in the line ...
                 if j+1 == len(data_list[i]):
+                    # ... add the string to the text and a newline character.
                     text = text + str(data_list[i][j]) + "\n"
                 else:
+                    # ... else, just add the string to the text.
                     text = text + str(data_list[i][j]) + ","
 
         with open(self.complete_filename_csv, "a") as f:

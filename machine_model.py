@@ -43,12 +43,9 @@ from global_variables import *
 
 # TODO: think about turning private the appropriate attributes.
 # TODO: test the class behaviour with the csv merged file:
-#  - with longer simulations; -> DONE
-#  - with breakdowns in the loop. -> Sync data appending with written logs to better debug the code.
-#                                 -> Divide the working method into sub methods to better handle the code.
+#  - with long simulations and breakdowns in the loop.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
-
     """
     A machine produces parts and gets broken every now and then.
 
@@ -82,15 +79,13 @@ class Machine(object):
         self.env.process(self._break_machine())
         self.logistic_breakdowns = True         # To exclude breakdowns during logistic operations, set to False.
         self.processing_breakdowns = True       # To exclude breakdowns during processing operations, set to False.
-        # self.input_level_check = env.process(self._input_level_check())     # Process in parallel, WRONG
-        # self.output_level_check = env.process(self._output_level_check())   # Process in parallel, WRONG
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
         self.log_path = GlobalVariables.LOG_PATH
         self.log_filename = GlobalVariables.LOG_FILENAME
         self.csv_filename = self.name + " log.csv"
         self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
-        self.data = list()
+        self.data = list()                      # The list containing the csv log files of each machine.
 
     # TODO: turn private
     # Function describing the machine process.
@@ -103,8 +98,6 @@ class Machine(object):
         """
 
         # TODO: should it be moved? It can be eliminated!
-        # Creating the list containing the csv log files.
-        # data = list()
         # Writing the -1 initial condition in the csv file.
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
         self.data.append(['-1', self.input_buffer.level, '0', self.output_buffer.level, self.parts_made, self.broken,
@@ -134,9 +127,6 @@ class Machine(object):
                 # When the buffer is filled, log the status and continue.
                 self._write_extended_log(self.env.now, '2', self.input_buffer.level, '0',
                                          self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
-
-            # TODO: RICOMINCIA DA QUI. Aggiungi qui l'aggiornamento del buffer quando viene riempito. -> FATTO
-            # TODO: Fai lo stesso per l'output buffer.
 
             # HANDLING INPUT MATERIAL ----------------------------------------------------------------------------------
             # Take the raw product from raw products warehouse. Wait the necessary step to retrieve the material.
@@ -178,7 +168,6 @@ class Machine(object):
                         # ... else, skip the time to repair wait and go ahead.
                         pass
 
-            # TODO: move the logging of the finished operation into the try-block
             # Logging the event.
             self.input_buffer.get(1)  # Take the piece from the input buffer
             self.input_buffer.products_picked += 1  # Track the total products picked from the buffer
@@ -232,21 +221,8 @@ class Machine(object):
             prod_time = self.env.now
             self.parts_made += 1
 
-            # TODO: should be added a log here. -> Complete the upgraded log method.
-
             self._write_extended_log(prod_time, '9', self.input_buffer.level, '0', self.output_buffer.level,
                                      self.parts_made, self.broken, self.MTTF, '0')
-
-            # TODO: convert to work with _write_log potenziato
-            """
-            # Logging the event - prod
-            # Print in the console
-            print("{0}.y - mach: made 1 in {1}. Total pieces made: {2}.".format(
-                str(prod_time), self.name, self.parts_made))
-            # Print in the txt file
-            self.data_logger.write_log_txt("{0}.y - mach: made 1 in {1}. Total pieces made: {2}.".format(
-                str(prod_time), self.name, self.parts_made))
-            """
 
             # CHECK THE OUTPUT BUFFER LEVEL ----------------------------------------------------------------------------
             # Perform the output warehouse level checking: if full, wait 1 time step.
@@ -324,12 +300,6 @@ class Machine(object):
             except simpy.Interrupt:
                 pass
 
-    def _input_level_check(self):
-        pass
-
-    def _output_level_check(self):
-        pass
-
     def _break_machine(self):
         """Break the machine every now and then."""
         random.seed(0)
@@ -340,11 +310,9 @@ class Machine(object):
                 # Only breaks when machine is currently working and is not already broken.
                 self.process.interrupt()
 
-    # Signature = step, moment, input_level, done_in (time_process), output_level, parts_made (produced), broken, MTTF,
-    # MTTR
     def _write_extended_log(self, step, moment, input_level, done_in, output_level, parts_made, broken, MTTF, MTTR):
-        # TODO: Test in the _working method.
-        # if statement ready-to-use but case never called in the working method.
+        # Signature = step, moment, input_level, done_in (time_process), output_level, parts_made (produced), broken,
+        # MTTF, MTTR
         if moment == "0":
             text = "{0}.{1} - mach: state of {2} at step {0} moment {1}: input buffer {3}, output buffer {4}"
             # Print in the console
@@ -457,7 +425,6 @@ class Machine(object):
             self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
                               MTTF, MTTR])
 
-        # TODO: Test in the _working method.
         # if statement ready-to-use but case never called in the working method.
         elif moment == "10":
             text = "{0}.{1} - out_full - mach: the {2} output buffer level is {3}. Waiting 1 time step and re-check."
@@ -514,6 +481,7 @@ class Machine(object):
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
                               MTTF, MTTR])
+
 
 # MINOR FUNCTIONS ------------------------------------------------------------------------------------------------------
 """

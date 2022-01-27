@@ -59,9 +59,9 @@ output_C = OutputContainer(env, name="output C", max_capacity=GlobalVariables.CO
 
 # MACHINES DEFINITION --------------------------------------------------------------------------------------------------
 machine_A = Machine(env, "Machine A", GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.SIGMA_PROCESS_TIME_A,
-                    GlobalVariables.MTTF_A, GlobalVariables.REPAIR_TIME_A, input_A, output_A)
+                    GlobalVariables.MTTF_A, GlobalVariables.MTTR_A, input_A, output_A)
 machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, GlobalVariables.SIGMA_PROCESS_TIME_B,
-                    GlobalVariables.MTTF_B, GlobalVariables.REPAIR_TIME_B, input_B, output_B)
+                    GlobalVariables.MTTF_B, GlobalVariables.MTTR_B, input_B, output_B)
 
 # TODO: maybe **args and **kwargs could help here?
 # Moving from output A&B to input C
@@ -75,7 +75,7 @@ transference_from_A_B_to_C = TransferenceSystem(env, "from A and B to C", output
 # transference_from_A_B_to_C = DummyTransferenceSystem(env, "from A and B to C", output_A, output_B, input_C)
 
 machine_C = Machine(env, "Machine C", GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
-                    GlobalVariables.MTTF_C, GlobalVariables.REPAIR_TIME_C, input_C, output_C)
+                    GlobalVariables.MTTF_C, GlobalVariables.MTTR_C, input_C, output_C)
 
 # SIMULATION RUN! ------------------------------------------------------------------------------------------------------
 print(f'STARTING SIMULATION')

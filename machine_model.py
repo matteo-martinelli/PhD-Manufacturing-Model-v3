@@ -42,8 +42,6 @@ from global_variables import *
 
 
 # TODO: think about turning private the appropriate attributes.
-# TODO: test the class behaviour with the csv merged file:
-#  - with long simulations and breakdowns in the loop.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """
@@ -54,7 +52,7 @@ class Machine(object):
 
     A machine has a "name" and a number of parts processed.
     """
-    def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, repair_time, input_buffer,
+    def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, MTTR, input_buffer,
                  output_buffer):
         self.env = env
         self.name = name    # Must be coded as "Machine" + identifying letter from A to Z
@@ -67,14 +65,14 @@ class Machine(object):
         # Breakdowns variables.
         self.MTTF = MTTF
         self.break_mean = 1 / self.MTTF
-        self.repair_time = repair_time
+        self.MTTR = MTTR
+        self.repair_mean = 1 / self.MTTR
         self.broken = False
 
         self.input_buffer = input_buffer
         self.output_buffer = output_buffer
 
         # Simpy processes
-        # Start "working" and "break_machine" processes for this machine.
         self.process = env.process(self.working())
         self.env.process(self._break_machine())
         self.logistic_breakdowns = True         # To exclude breakdowns during logistic operations, set to False.
@@ -102,8 +100,6 @@ class Machine(object):
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
         self.data.append(['-1', self.input_buffer.level, '0', self.output_buffer.level, self.parts_made, self.broken,
                           self.MTTF, '0'])
-
-        # TODO: check if there is a logging action everytime something happens.
         while True:
             # LOG THE INITIAL STATE ----------------------------------------------------------------------------------
             self._write_extended_log(self.env.now, '0', self.input_buffer.level, '0', self.output_buffer.level,
@@ -132,7 +128,7 @@ class Machine(object):
             # Take the raw product from raw products warehouse. Wait the necessary step to retrieve the material.
             # The action is performed in a try-except block because the machine may break during the handling of the
             # material
-            handled_in = 0
+            handled_in = GlobalVariables.GET_STD_DELAY
             start_handling = 0
             while handled_in:
                 try:
@@ -145,9 +141,8 @@ class Machine(object):
 
                 except simpy.Interrupt:
                     # If machine breakdowns are considered during logistic operations into the simulation...
-                    if self.logistic_breakdowns:
+                    if self.logistic_breakdowns is True:
                         # ... then simulate the process stop for the machine breakdown and relative time to repair
-                        # wait...
 
                         # The machine broke.
                         self.broken = True
@@ -155,9 +150,9 @@ class Machine(object):
 
                         self._write_extended_log(self.env.now, '3', self.input_buffer.level, '0',
                                                  self.output_buffer.level, self.parts_made, self.broken, '0',
-                                                 self.repair_time)
-
-                        yield self.env.timeout(self.repair_time)
+                                                 self.MTTR)
+                        # The yield value is truncate in order to have int time-steps
+                        yield self.env.timeout(int(random.expovariate(self.repair_mean)))
 
                         # Machine repaired.
                         self.broken = False
@@ -177,8 +172,9 @@ class Machine(object):
 
             # PROCESSING THE MATERIAL ----------------------------------------------------------------------------------
             # Start making a new part
-            time_per_part = self.mean_process_time
-            done_in = time_per_part       # time_per_part() is the real stochastic function.
+            time_per_part = int(random.normalvariate(self.mean_process_time, self.sigma_process_time))
+            # time_per_part = self.mean_process_time
+            done_in = time_per_part
             start = 0
             while done_in:
                 try:
@@ -187,14 +183,14 @@ class Machine(object):
 
                     self._write_extended_log(self.env.now, '6', self.input_buffer.level, done_in,
                                              self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
-
+                    # The yield value is truncate in order to have int time-steps
                     yield self.env.timeout(done_in)
                     # Set 0 to exit to the loop
                     done_in = 0
 
                 except simpy.Interrupt:
                     # If machine breakdowns are considered during machine operations into the simulation...
-                    if self.processing_breakdowns:
+                    if self.processing_breakdowns is True:
                         # ... then simulate the process stop for the machine breakdown and relative time to repair
                         # wait..
 
@@ -204,9 +200,9 @@ class Machine(object):
 
                         self._write_extended_log(self.env.now, '7', self.input_buffer.level, done_in,
                                                  self.output_buffer.level, self.parts_made, self.broken, '0',
-                                                 self.repair_time)
-
-                        yield self.env.timeout(self.repair_time)
+                                                 self.MTTR)
+                        # The yield value is truncate in order to have int time-steps
+                        yield self.env.timeout(int(random.expovariate(self.repair_mean)))
 
                         # Machine repaired.
                         self.broken = False
@@ -258,9 +254,8 @@ class Machine(object):
 
                 except simpy.Interrupt:
                     # If machine breakdowns are considered during logistic operations into the simulation...
-                    if self.logistic_breakdowns:
+                    if self.logistic_breakdowns is True:
                         # ... then simulate the process stop for the machine breakdown and relative time to repair
-                        # wait ...
 
                         # The machine broke.
                         self.broken = True
@@ -268,9 +263,9 @@ class Machine(object):
 
                         self._write_extended_log(self.env.now, '12', self.input_buffer.level, '0',
                                                  self.output_buffer.level, self.parts_made, self.broken, '0',
-                                                 self.repair_time)
-
-                        yield self.env.timeout(self.repair_time)
+                                                 self.MTTR)
+                        # The yield value is truncate in order to have int time-steps
+                        yield self.env.timeout(int(random.expovariate(self.repair_mean)))
 
                         # Machine repaired.
                         self.broken = False
@@ -304,10 +299,12 @@ class Machine(object):
         """Break the machine every now and then."""
         random.seed(0)
         while True:
-            time_to_failure = round(random.expovariate(self.break_mean))
+            # Extract the next failure step following the MTTF distribution
+            time_to_failure = int(random.expovariate(self.break_mean))
+            # Block the failure triggering process for the TTF extracted time.
             yield self.env.timeout(time_to_failure)
-            if not self.broken:
-                # Only breaks when machine is currently working and is not already broken.
+            # If the machine is not already broken and is currently working...
+            if self.broken is not True:
                 self.process.interrupt()
 
     def _write_extended_log(self, step, moment, input_level, done_in, output_level, parts_made, broken, MTTF, MTTR):
@@ -481,15 +478,3 @@ class Machine(object):
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
                               MTTF, MTTR])
-
-
-# MINOR FUNCTIONS ------------------------------------------------------------------------------------------------------
-"""
-def time_per_part():
-    Return actual processing time for a concrete part.
-    return random.normalvariate(PT_MEAN, PT_SIGMA)
-
-def time_to_failure():
-    Return time until next failure for a machine
-    return random.expovariate(BREAK_MEAN)
-"""

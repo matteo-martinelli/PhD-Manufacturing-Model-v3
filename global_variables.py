@@ -66,33 +66,33 @@ class GlobalVariables(object):
 
     # PROCESS PARAMETERS ----------------------------------------------------------------------------------------------
     RANDOM_SEED = 42
-    # Employees per activity
+    # TODO: set a proper time base measure - I think minutes can be good enough, maybe seconds could be good too.
     # 1.Node A - Note: the aleatory process time has not been used.
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_A = 1         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_A = 0.1      # Sigma processing time.
-    MTTF_A = 4                      # Mean time to failure in minutes Initial value: 300
+    SIGMA_PROCESS_TIME_A = 0.15     # Sigma processing time.
+    MTTF_A = 300                    # Mean time to failure in minutes Initial value: 300
     BREAK_MEAN_A = 1 / MTTF_A       # Param. for expovariate distribution
-    REPAIR_TIME_A = 2               # Time it takes to repair a machine, in minutes. Initial value: 30.
-    OTHER_JOB_DURATION_A = 30.0     # Duration of other repairman jobs in minutes. NO MORE NECESSARY
+    MTTR_A = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
+    REPAIR_MEAN_A = 1 / MTTR_A      # Param. for expovariate distribution
 
     # 2.Node B - Note: the aleatory process time has not been used.
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_B = 1         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_B = 0.1      # Sigma processing time.
-    MTTF_B = 6                      # Mean time to failure in minutes
+    MTTF_B = 600                    # Mean time to failure in minutes
     BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distribution
-    REPAIR_TIME_B = 2               # Time it takes to repair a machine, in minutes. Initial value: 30.
-    OTHER_JOB_DURATION_B = 30.0     # Duration of other repairman jobs in minutes. NO MORE NECESSARY
+    MTTR_B = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
+    REPAIR_MEAN_B = 1 / MTTR_B      # Param. for expovariate distribution
 
     # 3.Node C - Note: the aleatory process time has not been used.
     NUM_MACHINES_C = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_C = 1         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_C = 0.1      # Sigma processing time.
-    MTTF_C = 8                      # Mean time to failure in minutes
+    SIGMA_PROCESS_TIME_C = 0.08     # Sigma processing time.
+    MTTF_C = 400                    # Mean time to failure in minutes
     BREAK_MEAN_C = 1 / MTTF_C       # Param. for expovariate distribution
-    REPAIR_TIME_C = 2               # Time it takes to repair a machine, in minutes. Initial value: 30.
-    OTHER_JOB_DURATION_C = 30.0     # Duration of other repairman jobs in minutes. NO MORE NECESSARY
+    MTTR_C = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
+    REPAIR_MEAN_C = 1 / MTTR_C      # Param. for expovariate distribution
 
     # SIM PARAMETERS ---------------------------------------------------------------------------------------------------
     # Working hours in a day - for test purposes keep 1 day - 8hours/day
@@ -100,7 +100,7 @@ class GlobalVariables(object):
     # Business days in a week - for test purposes keep 1 day - 8hours/day
     BUSINESS_DAYS = 5
     # Business weeks in a month - for test purposes keep 1 day - 8hours/day
-    WORKING_WEEKS = 4
+    WORKING_WEEKS = 52
     # Total simulation time - for test purposes keep 1 day - 8hours/day
     SIM_TIME = WORKING_HOURS * BUSINESS_DAYS * WORKING_WEEKS  # Simulation time in hours.
 

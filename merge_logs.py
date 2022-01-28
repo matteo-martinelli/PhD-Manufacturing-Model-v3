@@ -18,7 +18,7 @@ import data_logger
 
 
 # TODO: re-engineer the class fields: split into a super class and 2 subclasses with specified use.
-class MergeLogs(monitoring.DataLogger):
+class MergeLogs(data_logger.DataLogger):
     def __init__(self, path, filename_txt='none', filename_csv='none'):
         super().__init__(path)
 

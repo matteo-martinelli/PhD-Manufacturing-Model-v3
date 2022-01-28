@@ -99,12 +99,14 @@ class GlobalVariables(object):
     # SIM PARAMETERS ---------------------------------------------------------------------------------------------------
     # Working hours in a day - for test purposes keep 1 day - 8hours/day
     WORKING_HOURS = 8
+    # Number of shifts in a day - for test purposes keep 1 shift/day - 8hours/day
+    SHIFTS_IN_A_WORKING_DAY = 1
     # Business days in a week - for test purposes keep 1 day - 8hours/day
     BUSINESS_DAYS = 5
     # Business weeks in a month - for test purposes keep 1 day - 8hours/day
     WORKING_WEEKS = 52
-    # Total simulation time - for test purposes keep 1 day - 8hours/day
-    SIM_TIME = 60*WORKING_HOURS * BUSINESS_DAYS * WORKING_WEEKS  # Simulation time in minutes (added 60* at the head).
+    # Total simulation time in minutes (added "60 *" at the head) - for test purposes keep 1 day - 8hours/day
+    SIM_TIME = 60 * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
     # Log path for generic model version

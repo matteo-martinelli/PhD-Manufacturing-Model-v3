@@ -68,6 +68,8 @@ class Machine(object):
         self._MTTR = MTTR
         self._repair_mean = 1 / self._MTTR
         self._broken = False
+        self._breakdown_num_counter = 0
+        self._breakdown_time_counter = 0
 
         self._input_buffer = input_buffer
         self._output_buffer = output_buffer
@@ -150,8 +152,14 @@ class Machine(object):
                         self._write_extended_log(self.env.now, '3', self._input_buffer.level, '0',
                                                  self._output_buffer.level, self.parts_made, self._broken, '0',
                                                  self._MTTR)
+
                         # The yield value is truncate in order to have int time-steps
-                        yield self.env.timeout(int(random.expovariate(self._repair_mean)))
+                        break_down_time = int(random.expovariate(self._repair_mean))
+                        yield self.env.timeout(break_down_time)
+
+                        # Count breakdown number and time.
+                        self._breakdown_num_counter += 1
+                        self._breakdown_time_counter += break_down_time
 
                         # Machine repaired.
                         self._broken = False
@@ -201,8 +209,16 @@ class Machine(object):
                         self._write_extended_log(self.env.now, '7', self._input_buffer.level, done_in,
                                                  self._output_buffer.level, self.parts_made, self._broken, '0',
                                                  self._MTTR)
+
+                        # Count breakdown number and time.
+                        break_down_time = int(random.expovariate(self._repair_mean))
+
                         # The yield value is truncate in order to have int time-steps
-                        yield self.env.timeout(int(random.expovariate(self._repair_mean)))
+                        yield self.env.timeout(break_down_time)
+
+                        # Count breakdown number and time.
+                        self._breakdown_num_counter += 1
+                        self._breakdown_time_counter += break_down_time
 
                         # Machine repaired.
                         self._broken = False
@@ -265,9 +281,17 @@ class Machine(object):
                         self._write_extended_log(self.env.now, '12', self._input_buffer.level, '0',
                                                  self._output_buffer.level, self.parts_made, self._broken, '0',
                                                  self._MTTR)
-                        # The yield value is truncate in order to have int time-steps
-                        yield self.env.timeout(int(random.expovariate(self._repair_mean)))
 
+                        # Count breakdown number and time.
+                        break_down_time = int(random.expovariate(self._repair_mean))
+
+                        # The yield value is truncate in order to have int time-steps
+                        yield self.env.timeout(break_down_time)
+
+                        # Count breakdown number and time.
+                        self._breakdown_num_counter += 1
+                        self._breakdown_time_counter += break_down_time
+                        
                         # Machine repaired.
                         self._broken = False
 

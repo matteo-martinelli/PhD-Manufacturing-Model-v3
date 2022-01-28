@@ -12,7 +12,6 @@ from monitoring import DataLogger
 from global_variables import GlobalVariables
 
 
-# TODO: think about turning private the appropriate attributes.
 class InputContainer(simpy.Container):
 
     def __init__(self, env, name, max_capacity, init_capacity, input_control=True, critical_level_input_container=50,

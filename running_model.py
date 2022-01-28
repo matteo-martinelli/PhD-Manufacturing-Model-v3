@@ -8,7 +8,6 @@ Moreover, also process parameters are floats. To prevent "raw" steps generation,
 the comma level.
 """
 
-# TODO: think about turning private the appropriate attributes.
 # TODO: manage this file as a class with a main section as program entry point.
 import simpy
 from machine_model import Machine

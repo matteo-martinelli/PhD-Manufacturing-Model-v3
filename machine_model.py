@@ -41,7 +41,6 @@ from monitoring import DataLogger
 from global_variables import GlobalVariables
 
 
-# TODO: think about turning private the appropriate attributes.
 # TODO: implement breakdowns counter and total breakdown delays.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
@@ -86,7 +85,6 @@ class Machine(object):
         self._data_logger = DataLogger(self._log_path, self._log_filename, self._csv_filename)
         self._data = list()                      # The list containing the csv log files of each machine.
 
-    # TODO: turn private
     # Function describing the machine process.
     def _working(self):
         """

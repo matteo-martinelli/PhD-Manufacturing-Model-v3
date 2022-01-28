@@ -16,7 +16,6 @@ import os
 import pandas
 
 
-# TODO: think about turning private the appropriate attributes.
 # TODO: re-engineer the class fields: split into a super class and 2 subclasses with specified use.
 class DataLogger(object):
     def __init__(self, path, filename_txt='none', filename_csv='none'):

@@ -21,7 +21,6 @@ import pandas
 class DataLogger(object):
     def __init__(self, path, filename_txt='none', filename_csv='none'):
         self.path = path
-        self.save_path = path   # TODO: check and merge with self.path
 
         self.filename_txt = filename_txt
         self.complete_filename_txt = self.path + "\\" + self.filename_txt
@@ -97,18 +96,18 @@ class DataLogger(object):
     def merge_logs(self, *args):
         # Initializing the merged_logs.csv file.
         try:
-            os.remove(self.save_path + "\\merged_logs.csv")
+            os.remove(self.path + "\\merged_logs.csv")
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
             # os.makedirs(self.path)
-            with open(self.save_path + "\\merged_logs.csv", "w") as f:
+            with open(self.path + "\\merged_logs.csv", "w") as f:
                 f.close()
 
         # Creating a list as a buffer to temporally save the data read from the CSVs files.
         df_list = list()
         # Appending the data in the list read from the CSVs files.
         for arg in args:
-            df = pandas.read_csv(self.save_path + "\\" + arg)
+            df = pandas.read_csv(self.path + "\\" + arg)
             df_list.append(df)
 
         # Merging the first two dataframes.
@@ -129,4 +128,4 @@ class DataLogger(object):
         df_merge.fillna(method="ffill", inplace=True)
 
         # Saving the merged dataframe into a csv file.
-        df_merge.to_csv(self.save_path + "\\merged_logs.csv")
+        df_merge.to_csv(self.path + "\\merged_logs.csv")

@@ -11,7 +11,8 @@ from machine_model import *
 from input_container import *
 from output_container import *
 from transference_system import *
-from log_merger import *
+# from log_merger import *
+from monitoring import *
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
@@ -109,7 +110,5 @@ print('total pieces assembled: {0}'.format(machine_C.parts_made))
 print(f'----------------------------------')
 print(f'SIMULATION COMPLETED')
 
-
-lm = LogMerger(GlobalVariables.LOG_PATH)
-lm.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
-
+mn = DataLogger(GlobalVariables.LOG_PATH)
+mn.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")

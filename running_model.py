@@ -15,7 +15,7 @@ from input_container import InputContainer
 from output_container import OutputContainer
 from transference_system import TransferenceSystem
 from global_variables import GlobalVariables
-from monitoring import DataLogger
+from merge_logs import MergeLogs
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
@@ -104,5 +104,5 @@ print('total pieces assembled: {0}'.format(machine_C.parts_made))
 print(f'----------------------------------')
 print(f'SIMULATION COMPLETED')
 
-mn = DataLogger(GlobalVariables.LOG_PATH)
+mn = MergeLogs(GlobalVariables.LOG_PATH)
 mn.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")

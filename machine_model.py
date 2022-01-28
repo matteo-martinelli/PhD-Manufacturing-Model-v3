@@ -37,11 +37,10 @@ The log encoding is the following:
 
 import random
 import simpy
-from monitoring import DataLogger
+from data_logger import DataLogger
 from global_variables import GlobalVariables
 
 
-# TODO: implement breakdowns counter and total breakdown delays.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """
@@ -96,11 +95,10 @@ class Machine(object):
         When machine breaks, MTTR is computed from its statistics.
         """
 
-        # TODO: should it be moved? It can be eliminated!
         # Writing the -1 initial condition in the csv file.
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-        self._data.append(['-1', self._input_buffer.level, '0', self._output_buffer.level, self.parts_made,
-                           self._broken, self._MTTF, '0'])
+        # self._data.append(['-1', self._input_buffer.level, '0', self._output_buffer.level, self.parts_made,
+        #                    self._broken, self._MTTF, '0'])
         while True:
             # LOG THE INITIAL STATE ----------------------------------------------------------------------------------
             self._write_extended_log(self.env.now, '0', self._input_buffer.level, '0', self._output_buffer.level,
@@ -291,7 +289,7 @@ class Machine(object):
                         # Count breakdown number and time.
                         self._breakdown_num_counter += 1
                         self._breakdown_time_counter += break_down_time
-                        
+
                         # Machine repaired.
                         self._broken = False
 

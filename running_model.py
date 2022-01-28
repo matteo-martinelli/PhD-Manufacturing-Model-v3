@@ -9,14 +9,14 @@ the comma level.
 """
 
 # TODO: think about turning private the appropriate attributes.
-# TODO: refactor the import statements adding the package reference in each imported file.
 # TODO: manage this file as a class with a main section as program entry point.
-from machine_model import *
-from input_container import *
-from output_container import *
-from transference_system import *
-# from log_merger import *
-from monitoring import *
+import simpy
+from machine_model import Machine
+from input_container import InputContainer
+from output_container import OutputContainer
+from transference_system import TransferenceSystem
+from global_variables import GlobalVariables
+from monitoring import DataLogger
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()

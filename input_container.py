@@ -8,8 +8,8 @@ Is possible to exclude the level control service.
 """
 
 import simpy
-from monitoring import *
-from global_variables import *
+from monitoring import DataLogger
+from global_variables import GlobalVariables
 
 
 # TODO: think about turning private the appropriate attributes.

@@ -7,10 +7,12 @@ Class containing the global variables for the model.
 
 class GlobalVariables(object):
     # LOGISTIC PARAMETERS ----------------------------------------------------------------------------------------------
+
     # NOTE: Containers critical levels
     # Critical stock should be 1 business day greater than supplier take to come
     # wood_critical_stock = (((8/mean_A) * num_A + (8/mean_B) * num_B) * 3)  # 2 days to deliver + 1 marging
     # electronic_critical_stock = (8/mean_assembly) * num_assembly * 2  # 1 day to deliver + 1 marging
+
     # 1.Node A Raw Container
     CONTAINER_A_RAW_CAPACITY = 500
     INITIAL_A_RAW = 200
@@ -102,7 +104,7 @@ class GlobalVariables(object):
     # Business weeks in a month - for test purposes keep 1 day - 8hours/day
     WORKING_WEEKS = 52
     # Total simulation time - for test purposes keep 1 day - 8hours/day
-    SIM_TIME = WORKING_HOURS * BUSINESS_DAYS * WORKING_WEEKS  # Simulation time in hours.
+    SIM_TIME = 60*WORKING_HOURS * BUSINESS_DAYS * WORKING_WEEKS  # Simulation time in minutes (added 60* at the head).
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
     # Log path for generic model version

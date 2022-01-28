@@ -16,18 +16,18 @@ log dataframes from the relative CSVs.
 
 The log encoding is the following:
     -1: initial state
-    -----------------------------------------------------------------
+    # Input buffer logs ---------------------------------------------
     x.1: input buffer empty, waiting one time step till is filled up
     x.2: input buffer filled up, continuing the process
     x.3: breakdown during input material handling
     x.4: repairing during input material handling
     x.5: finished the input material handling
-    -----------------------------------------------------------------
+    # Process logs --------------------------------------------------
     x.6: start to work on the part, required time to finish saved
     x.7: breakdown during the part processing
     x.8: repairing during the part processing
     x.9: finish to work on the part, required time to finish at zero
-    -----------------------------------------------------------------
+    # Output buffer logs -------------------------------------------
     x.10: output buffer full, waiting one time step till is emptied
     x.11: output buffer emptied, continuing with the process
     x.12: breakdown during output material handling

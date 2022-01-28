@@ -59,36 +59,36 @@ class Machine(object):
         self.name = name    # Must be coded as "Machine" + identifying letter from A to Z
 
         # Process variables.
-        self.parts_made = 0
-        self.mean_process_time = mean_process_time
-        self.sigma_process_time = sigma_process_time
+        self.parts_made = 0                             # No private
+        self._mean_process_time = mean_process_time
+        self._sigma_process_time = sigma_process_time
 
         # Breakdowns variables.
-        self.MTTF = MTTF
-        self.break_mean = 1 / self.MTTF
-        self.MTTR = MTTR
-        self.repair_mean = 1 / self.MTTR
-        self.broken = False
+        self._MTTF = MTTF
+        self._break_mean = 1 / self._MTTF
+        self._MTTR = MTTR
+        self._repair_mean = 1 / self._MTTR
+        self._broken = False
 
-        self.input_buffer = input_buffer
-        self.output_buffer = output_buffer
+        self._input_buffer = input_buffer
+        self._output_buffer = output_buffer
 
         # Simpy processes
-        self.process = env.process(self.working())
+        self._process = env.process(self._working())
         self.env.process(self._break_machine())
-        self.logistic_breakdowns = True         # To exclude breakdowns during logistic operations, set to False.
-        self.processing_breakdowns = True       # To exclude breakdowns during processing operations, set to False.
+        self._logistic_breakdowns = True         # To exclude breakdowns during logistic operations, set to False.
+        self._processing_breakdowns = True       # To exclude breakdowns during processing operations, set to False.
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
-        self.log_path = GlobalVariables.LOG_PATH
-        self.log_filename = GlobalVariables.LOG_FILENAME
-        self.csv_filename = self.name + " log.csv"
-        self.data_logger = DataLogger(self.log_path, self.log_filename, self.csv_filename)
-        self.data = list()                      # The list containing the csv log files of each machine.
+        self._log_path = GlobalVariables.LOG_PATH
+        self._log_filename = GlobalVariables.LOG_FILENAME
+        self._csv_filename = self.name + " log.csv"
+        self._data_logger = DataLogger(self._log_path, self._log_filename, self._csv_filename)
+        self._data = list()                      # The list containing the csv log files of each machine.
 
     # TODO: turn private
     # Function describing the machine process.
-    def working(self):
+    def _working(self):
         """
         Produces parts as long as the simulation runs.
 
@@ -99,31 +99,31 @@ class Machine(object):
         # TODO: should it be moved? It can be eliminated!
         # Writing the -1 initial condition in the csv file.
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-        self.data.append(['-1', self.input_buffer.level, '0', self.output_buffer.level, self.parts_made, self.broken,
-                          self.MTTF, '0'])
+        self._data.append(['-1', self._input_buffer.level, '0', self._output_buffer.level, self.parts_made,
+                           self._broken, self._MTTF, '0'])
         while True:
             # LOG THE INITIAL STATE ----------------------------------------------------------------------------------
-            self._write_extended_log(self.env.now, '0', self.input_buffer.level, '0', self.output_buffer.level,
-                                     self.parts_made, self.broken, self.MTTF, '0')
+            self._write_extended_log(self.env.now, '0', self._input_buffer.level, '0', self._output_buffer.level,
+                                     self.parts_made, self._broken, self._MTTF, '0')
 
             # CHECK THE INPUT BUFFER LEVEL -----------------------------------------------------------------------------
             # Perform the output warehouse level checking: if empty, wait 1 time step.
             # If in the input buffer there is no raw material ...
-            if self.input_buffer.level == 0:
+            if self._input_buffer.level == 0:
                 # ... and while the buffer is empty ...
-                while self.input_buffer.level == 0:
+                while self._input_buffer.level == 0:
                     # ... log the status ...
                     # Maybe this log is non necessary due to the initial state log... think about it
-                    self._write_extended_log(self.env.now, '1', self.input_buffer.level, '0', self.output_buffer.level,
-                                             self.parts_made, self.broken, self.MTTF, '0')
+                    self._write_extended_log(self.env.now, '1', self._input_buffer.level, '0',
+                                             self._output_buffer.level, self.parts_made, self._broken, self._MTTF, '0')
                     try:
                         # ... and wait one time step.
                         yield self.env.timeout(1)
                     except simpy.Interrupt:
                         pass
                 # When the buffer is filled, log the status and continue.
-                self._write_extended_log(self.env.now, '2', self.input_buffer.level, '0',
-                                         self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
+                self._write_extended_log(self.env.now, '2', self._input_buffer.level, '0',
+                                         self._output_buffer.level, self.parts_made, self._broken, self._MTTF, '0')
 
             # HANDLING INPUT MATERIAL ----------------------------------------------------------------------------------
             # Take the raw product from raw products warehouse. Wait the necessary step to retrieve the material.
@@ -142,38 +142,39 @@ class Machine(object):
 
                 except simpy.Interrupt:
                     # If machine breakdowns are considered during logistic operations into the simulation...
-                    if self.logistic_breakdowns is True:
+                    if self._logistic_breakdowns is True:
                         # ... then simulate the process stop for the machine breakdown and relative time to repair
 
                         # The machine broke.
-                        self.broken = True
+                        self._broken = True
                         handled_in -= self.env.now - start_handling  # How much time left to handle the material?
 
-                        self._write_extended_log(self.env.now, '3', self.input_buffer.level, '0',
-                                                 self.output_buffer.level, self.parts_made, self.broken, '0',
-                                                 self.MTTR)
+                        self._write_extended_log(self.env.now, '3', self._input_buffer.level, '0',
+                                                 self._output_buffer.level, self.parts_made, self._broken, '0',
+                                                 self._MTTR)
                         # The yield value is truncate in order to have int time-steps
-                        yield self.env.timeout(int(random.expovariate(self.repair_mean)))
+                        yield self.env.timeout(int(random.expovariate(self._repair_mean)))
 
                         # Machine repaired.
-                        self.broken = False
+                        self._broken = False
 
-                        self._write_extended_log(self.env.now, '4', self.input_buffer.level, '0',
-                                                 self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
+                        self._write_extended_log(self.env.now, '4', self._input_buffer.level, '0',
+                                                 self._output_buffer.level, self.parts_made, self._broken, self._MTTF,
+                                                 '0')
                     else:
                         # ... else, skip the time to repair wait and go ahead.
                         pass
 
             # Logging the event.
-            self.input_buffer.get(1)  # Take the piece from the input buffer
-            self.input_buffer.products_picked += 1  # Track the total products picked from the buffer
+            self._input_buffer.get(1)  # Take the piece from the input buffer
+            self._input_buffer.products_picked += 1  # Track the total products picked from the buffer
 
-            self._write_extended_log(self.env.now, '5', self.input_buffer.level, '0', self.output_buffer.level,
-                                     self.parts_made, self.broken, self.MTTF, '0')
+            self._write_extended_log(self.env.now, '5', self._input_buffer.level, '0', self._output_buffer.level,
+                                     self.parts_made, self._broken, self._MTTF, '0')
 
             # PROCESSING THE MATERIAL ----------------------------------------------------------------------------------
             # Start making a new part
-            time_per_part = int(random.normalvariate(self.mean_process_time, self.sigma_process_time))
+            time_per_part = int(random.normalvariate(self._mean_process_time, self._sigma_process_time))
             # time_per_part = self.mean_process_time
             done_in = time_per_part
             start = 0
@@ -182,8 +183,8 @@ class Machine(object):
                     # Working on the part
                     start = self.env.now
 
-                    self._write_extended_log(self.env.now, '6', self.input_buffer.level, done_in,
-                                             self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
+                    self._write_extended_log(self.env.now, '6', self._input_buffer.level, done_in,
+                                             self._output_buffer.level, self.parts_made, self._broken, self._MTTF, '0')
                     # The yield value is truncate in order to have int time-steps
                     yield self.env.timeout(done_in)
                     # Set 0 to exit to the loop
@@ -191,25 +192,26 @@ class Machine(object):
 
                 except simpy.Interrupt:
                     # If machine breakdowns are considered during machine operations into the simulation...
-                    if self.processing_breakdowns is True:
+                    if self._processing_breakdowns is True:
                         # ... then simulate the process stop for the machine breakdown and relative time to repair
                         # wait..
 
                         # The machine broke.
-                        self.broken = True
+                        self._broken = True
                         done_in -= self.env.now - start     # How much time left to finish the job?
 
-                        self._write_extended_log(self.env.now, '7', self.input_buffer.level, done_in,
-                                                 self.output_buffer.level, self.parts_made, self.broken, '0',
-                                                 self.MTTR)
+                        self._write_extended_log(self.env.now, '7', self._input_buffer.level, done_in,
+                                                 self._output_buffer.level, self.parts_made, self._broken, '0',
+                                                 self._MTTR)
                         # The yield value is truncate in order to have int time-steps
-                        yield self.env.timeout(int(random.expovariate(self.repair_mean)))
+                        yield self.env.timeout(int(random.expovariate(self._repair_mean)))
 
                         # Machine repaired.
-                        self.broken = False
+                        self._broken = False
 
-                        self._write_extended_log(self.env.now, '8', self.input_buffer.level, done_in,
-                                                 self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
+                        self._write_extended_log(self.env.now, '8', self._input_buffer.level, done_in,
+                                                 self._output_buffer.level, self.parts_made, self._broken, self._MTTF,
+                                                 '0')
                     else:
                         # ... else, skip the time to repair wait and go ahead.
                         pass
@@ -218,20 +220,20 @@ class Machine(object):
             prod_time = self.env.now
             self.parts_made += 1
 
-            self._write_extended_log(prod_time, '9', self.input_buffer.level, '0', self.output_buffer.level,
-                                     self.parts_made, self.broken, self.MTTF, '0')
+            self._write_extended_log(prod_time, '9', self._input_buffer.level, '0', self._output_buffer.level,
+                                     self.parts_made, self._broken, self._MTTF, '0')
 
             # CHECK THE OUTPUT BUFFER LEVEL ----------------------------------------------------------------------------
             # Perform the output warehouse level checking: if full, wait 1 time step.
             # self._output_level_check()
 
             # If in the output buffer there is full ...
-            if self.output_buffer.level == self.output_buffer.capacity:
+            if self._output_buffer.level == self._output_buffer.capacity:
                 # ... and while the buffer is still full ...
-                while self.output_buffer.level == self.output_buffer.capacity:
+                while self._output_buffer.level == self._output_buffer.capacity:
                     # ... log the status ...
-                    self._write_extended_log(self.env.now, '10', self.input_buffer.level, '0', self.output_buffer.level,
-                                             self.parts_made, self.broken, self.MTTF, '0')
+                    self._write_extended_log(self.env.now, '10', self._input_buffer.level, '0',
+                                             self._output_buffer.level, self.parts_made, self._broken, self._MTTF, '0')
 
                     try:
                         # ... and wait one time step.
@@ -239,8 +241,8 @@ class Machine(object):
                     except simpy.Interrupt:
                         pass
                 # When the buffer is emptied, log the status and continue.
-                self._write_extended_log(self.env.now, '11', self.input_buffer.level, '0',
-                                         self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
+                self._write_extended_log(self.env.now, '11', self._input_buffer.level, '0',
+                                         self._output_buffer.level, self.parts_made, self._broken, self._MTTF, '0')
 
             # HANDLING OUTPUT MATERIAL ---------------------------------------------------------------------------------
             handled_out = GlobalVariables.PUT_STD_DELAY
@@ -255,24 +257,25 @@ class Machine(object):
 
                 except simpy.Interrupt:
                     # If machine breakdowns are considered during logistic operations into the simulation...
-                    if self.logistic_breakdowns is True:
+                    if self._logistic_breakdowns is True:
                         # ... then simulate the process stop for the machine breakdown and relative time to repair
 
                         # The machine broke.
-                        self.broken = True
+                        self._broken = True
                         handled_out -= self.env.now - start_handling  # How much time left to handle the material?
 
-                        self._write_extended_log(self.env.now, '12', self.input_buffer.level, '0',
-                                                 self.output_buffer.level, self.parts_made, self.broken, '0',
-                                                 self.MTTR)
+                        self._write_extended_log(self.env.now, '12', self._input_buffer.level, '0',
+                                                 self._output_buffer.level, self.parts_made, self._broken, '0',
+                                                 self._MTTR)
                         # The yield value is truncate in order to have int time-steps
-                        yield self.env.timeout(int(random.expovariate(self.repair_mean)))
+                        yield self.env.timeout(int(random.expovariate(self._repair_mean)))
 
                         # Machine repaired.
-                        self.broken = False
+                        self._broken = False
 
-                        self._write_extended_log(self.env.now, '13', self.input_buffer.level, '0',
-                                                 self.output_buffer.level, self.parts_made, self.broken, self.MTTF, '0')
+                        self._write_extended_log(self.env.now, '13', self._input_buffer.level, '0',
+                                                 self._output_buffer.level, self.parts_made, self._broken, self._MTTF,
+                                                 '0')
                     else:
                         # ... else, skip the time to repair wait and go ahead.
                         pass
@@ -280,16 +283,16 @@ class Machine(object):
             # Handling_out is done
             handled_out_time = self.env.now
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.output_buffer.put(1)                # Take the piece from the input buffer
-            self.output_buffer.products_stored += 1  # Track the total products stored in the buffer
+            self._output_buffer.put(1)                # Take the piece from the input buffer
+            self._output_buffer.products_stored += 1  # Track the total products stored in the buffer
 
-            self._write_extended_log(self.env.now, '14', self.input_buffer.level, '0', self.output_buffer.level,
-                                     self.parts_made, self.broken, self.MTTF, '0')
+            self._write_extended_log(self.env.now, '14', self._input_buffer.level, '0', self._output_buffer.level,
+                                     self.parts_made, self._broken, self._MTTF, '0')
 
             # Writing all the collected file into the csv.
-            self.data_logger.write_log_csv(self.data)
+            self._data_logger.write_log_csv(self._data)
             # Resetting the data collecting list.
-            self.data = list()
+            self._data = list()
             # Going at the next time-step
             try:
                 yield self.env.timeout(1)
@@ -301,12 +304,12 @@ class Machine(object):
         random.seed(0)
         while True:
             # Extract the next failure step following the MTTF distribution
-            time_to_failure = int(random.expovariate(self.break_mean))
+            time_to_failure = int(random.expovariate(self._break_mean))
             # Block the failure triggering process for the TTF extracted time.
             yield self.env.timeout(time_to_failure)
             # If the machine is not already broken and is currently working...
-            if self.broken is not True:
-                self.process.interrupt()
+            if self._broken is not True:
+                self._process.interrupt()
 
     def _write_extended_log(self, step, moment, input_level, done_in, output_level, parts_made, broken, MTTF, MTTR):
         # Signature = step, moment, input_level, done_in (time_process), output_level, parts_made (produced), broken,
@@ -316,78 +319,78 @@ class Machine(object):
             # Print in the console
             print(text.format(step, moment, self.name, input_level, output_level))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, input_level, output_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         if moment == "1":
             text = "{0}.{1} - mach: the {2} input buffer level is {3}. Waiting 1 time step and re-check."
             # Print in the console
             print(text.format(step, moment, self.name, input_level))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         if moment == "2":
-            text = "{0}.{1} - mach: the {2} input buffer has been filled up. The buffer level is {3}. Continuing with " \
+            text = "{0}.{1} - mach: the {2} input buffer has been filled up. The buffer level is {3}. Continuing with "\
                    "the process"
             # Print in the console
             print(text.format(step, moment, self.name, input_level))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "3":
             text = "\n{0}.{1} down - mach: {2} broke. Handling-in stopped. Machine will be repaired in {3}\n"
             # Print in the console
             print(text.format(step, moment, self.name, MTTR))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, MTTR))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, MTTR))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "4":
             text = "\n{0}.{1} up - mach: {2} repaired. Handling-in restarted.\n"
             # Print in the console
             print(text.format(step, moment, self.name))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "5":
             text = "{0}.{1} - mach: input {2} level {3}; taken 1 from input {2}."
             # Print in the console
             print(text.format(step, moment, self.name, input_level))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "6":
             text = "{0}.{1} - mach: started 1 in {2}"
             # Print in the console
             print(text.format(step, moment, self.name))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "7":
             text = "\n{0}.{1} down - mach: {2} broke. {3} step for the job to be completed. Machine will be repaired " \
@@ -395,33 +398,33 @@ class Machine(object):
             # Print in the console
             print(text.format(step, moment, self.name, done_in, MTTR))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, done_in, MTTR))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, done_in, MTTR))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "8":
             text = "\n{0}.{1} up - mach: {2} repaired. Working restarted.\n"
             # Print in the console
             print(text.format(step, moment, self.name))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "9":
             text = "{0}.{1} - mach: made 1 in {2}. Total pieces made: {3}."
             # Print in the console
             print(text.format(step, moment, self.name, parts_made))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, parts_made))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, parts_made))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         # if statement ready-to-use but case never called in the working method.
         elif moment == "10":
@@ -429,11 +432,11 @@ class Machine(object):
             # Print in the console
             print(text.format(step, moment, self.name, output_level))
             # Print in the txt
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, output_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                             MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "11":
             text = "{0}.{1} - mach: the {2} output buffer has been emptied. The buffer level is {3}. Continuing with " \
@@ -441,41 +444,41 @@ class Machine(object):
             # Print in the console
             print(text.format(step, moment, self.name, input_level))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "12":
             text = "\n{0}.{1} down - mach: {2} broke. Handling-out stopped. Machine will be repaired in {3}\n"
             # Print in the console
             print(text.format(step, moment, self.name, MTTR))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, MTTR))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, MTTR))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "13":
             text = "\n{0}.{1} up - mach: {2} repaired. Handling-out restarted.\n"
             # Print in the console
             print(text.format(step, moment, self.name))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])
 
         elif moment == "14":
             text = "{0}.{1} - mach: output {2} level {3}; put 1 in output {2}."
             # Print in the console
             print(text.format(step, moment, self.name, output_level))
             # Print in the txt file
-            self.data_logger.write_log_txt(text.format(step, moment, self.name, output_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self.name, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-            self.data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
-                              MTTF, MTTR])
+            self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
+                               MTTF, MTTR])

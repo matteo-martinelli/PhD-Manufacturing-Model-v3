@@ -16,9 +16,8 @@ class OutputContainer(simpy.Container):
     def __init__(self, env, name, max_capacity, init_capacity, output_control=True, critical_level_output_container=50,
                  dispatcher_lead_time=0, dispatcher_retrieved_check_time=8, dispatcher_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
-        # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
-        self.name = name
         self.env = env
+        self._name = name
         # The following container has to be always full. The stock-out is to avoid.
         self.env.process(self._output_control_container())
 
@@ -50,12 +49,12 @@ class OutputContainer(simpy.Container):
 
                 # Logging the event.
                 print('{0}.1 - out_log: container {1} dispatch stock upper the critical level{2}, {3} pieces left.'
-                      .format(self.env.now, self.name, self._critical_level_output_container, self.level))
+                      .format(self.env.now, self._name, self._critical_level_output_container, self.level))
                 print('Calling the dispatcher.')
                 print('----------------------------------')
                 # Writing into the log file - logistic
                 self._data_logger.write_log_txt('{0}.1 - out_log: container {1} dispatch stock upper the critical level '
-                                               '{2}, {3} pieces left.'.format(self.env.now, self.name,
+                                               '{2}, {3} pieces left.'.format(self.env.now, self._name,
                                                                               self._critical_level_output_container,
                                                                               self.level))
                 self._data_logger.write_log_txt('Calling the dispatcher.\n')
@@ -64,9 +63,9 @@ class OutputContainer(simpy.Container):
                 yield self.env.timeout(self._dispatcher_lead_time)
 
                 # Dispatcher arrived, writing in the console.
-                print('{0}.2 - out_log: component dispatcher {1} arrived'.format(self.env.now, self.name))
+                print('{0}.2 - out_log: component dispatcher {1} arrived'.format(self.env.now, self._name))
                 # Writing into the log file - logistic
-                self._data_logger.write_log_txt('{0}.2 - out_log: component dispatcher {1} arrived\n'.format(self.env.now, self.name))
+                self._data_logger.write_log_txt('{0}.2 - out_log: component dispatcher {1} arrived\n'.format(self.env.now, self._name))
 
                 # The warehouse will be completely emptied. Counting the material amount.
                 self.products_delivered += self.level

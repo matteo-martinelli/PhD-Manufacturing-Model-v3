@@ -56,7 +56,7 @@ class Machine(object):
     def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, MTTR, input_buffer,
                  output_buffer):
         self.env = env
-        self.name = name    # Must be coded as "Machine" + identifying letter from A to Z
+        self._name = name    # Must be coded as "Machine" + identifying letter from A to Z
 
         # Process variables.
         self.parts_made = 0                             # No private
@@ -82,7 +82,7 @@ class Machine(object):
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
         self._log_path = GlobalVariables.LOG_PATH
         self._log_filename = GlobalVariables.LOG_FILENAME
-        self._csv_filename = self.name + " log.csv"
+        self._csv_filename = self._name + " log.csv"
         self._data_logger = DataLogger(self._log_path, self._log_filename, self._csv_filename)
         self._data = list()                      # The list containing the csv log files of each machine.
 
@@ -281,7 +281,6 @@ class Machine(object):
                         pass
 
             # Handling_out is done
-            handled_out_time = self.env.now
             # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._output_buffer.put(1)                # Take the piece from the input buffer
             self._output_buffer.products_stored += 1  # Track the total products stored in the buffer
@@ -317,9 +316,9 @@ class Machine(object):
         if moment == "0":
             text = "{0}.{1} - mach: state of {2} at step {0} moment {1}: input buffer {3}, output buffer {4}"
             # Print in the console
-            print(text.format(step, moment, self.name, input_level, output_level))
+            print(text.format(step, moment, self._name, input_level, output_level))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level, output_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, input_level, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -328,9 +327,9 @@ class Machine(object):
         if moment == "1":
             text = "{0}.{1} - mach: the {2} input buffer level is {3}. Waiting 1 time step and re-check."
             # Print in the console
-            print(text.format(step, moment, self.name, input_level))
+            print(text.format(step, moment, self._name, input_level))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -340,9 +339,9 @@ class Machine(object):
             text = "{0}.{1} - mach: the {2} input buffer has been filled up. The buffer level is {3}. Continuing with "\
                    "the process"
             # Print in the console
-            print(text.format(step, moment, self.name, input_level))
+            print(text.format(step, moment, self._name, input_level))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -351,9 +350,9 @@ class Machine(object):
         elif moment == "3":
             text = "\n{0}.{1} down - mach: {2} broke. Handling-in stopped. Machine will be repaired in {3}\n"
             # Print in the console
-            print(text.format(step, moment, self.name, MTTR))
+            print(text.format(step, moment, self._name, MTTR))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, MTTR))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, MTTR))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -362,9 +361,9 @@ class Machine(object):
         elif moment == "4":
             text = "\n{0}.{1} up - mach: {2} repaired. Handling-in restarted.\n"
             # Print in the console
-            print(text.format(step, moment, self.name))
+            print(text.format(step, moment, self._name))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -373,9 +372,9 @@ class Machine(object):
         elif moment == "5":
             text = "{0}.{1} - mach: input {2} level {3}; taken 1 from input {2}."
             # Print in the console
-            print(text.format(step, moment, self.name, input_level))
+            print(text.format(step, moment, self._name, input_level))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -384,9 +383,9 @@ class Machine(object):
         elif moment == "6":
             text = "{0}.{1} - mach: started 1 in {2}"
             # Print in the console
-            print(text.format(step, moment, self.name))
+            print(text.format(step, moment, self._name))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -396,9 +395,9 @@ class Machine(object):
             text = "\n{0}.{1} down - mach: {2} broke. {3} step for the job to be completed. Machine will be repaired " \
                    "in {4}\n"
             # Print in the console
-            print(text.format(step, moment, self.name, done_in, MTTR))
+            print(text.format(step, moment, self._name, done_in, MTTR))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, done_in, MTTR))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, done_in, MTTR))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -407,9 +406,9 @@ class Machine(object):
         elif moment == "8":
             text = "\n{0}.{1} up - mach: {2} repaired. Working restarted.\n"
             # Print in the console
-            print(text.format(step, moment, self.name))
+            print(text.format(step, moment, self._name))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -418,9 +417,9 @@ class Machine(object):
         elif moment == "9":
             text = "{0}.{1} - mach: made 1 in {2}. Total pieces made: {3}."
             # Print in the console
-            print(text.format(step, moment, self.name, parts_made))
+            print(text.format(step, moment, self._name, parts_made))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, parts_made))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, parts_made))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -430,9 +429,9 @@ class Machine(object):
         elif moment == "10":
             text = "{0}.{1} - out_full - mach: the {2} output buffer level is {3}. Waiting 1 time step and re-check."
             # Print in the console
-            print(text.format(step, moment, self.name, output_level))
+            print(text.format(step, moment, self._name, output_level))
             # Print in the txt
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, output_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -442,9 +441,9 @@ class Machine(object):
             text = "{0}.{1} - mach: the {2} output buffer has been emptied. The buffer level is {3}. Continuing with " \
                    "the process"
             # Print in the console
-            print(text.format(step, moment, self.name, input_level))
+            print(text.format(step, moment, self._name, input_level))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, input_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, input_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -453,9 +452,9 @@ class Machine(object):
         elif moment == "12":
             text = "\n{0}.{1} down - mach: {2} broke. Handling-out stopped. Machine will be repaired in {3}\n"
             # Print in the console
-            print(text.format(step, moment, self.name, MTTR))
+            print(text.format(step, moment, self._name, MTTR))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, MTTR))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, MTTR))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -464,9 +463,9 @@ class Machine(object):
         elif moment == "13":
             text = "\n{0}.{1} up - mach: {2} repaired. Handling-out restarted.\n"
             # Print in the console
-            print(text.format(step, moment, self.name))
+            print(text.format(step, moment, self._name))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,
@@ -475,9 +474,9 @@ class Machine(object):
         elif moment == "14":
             text = "{0}.{1} - mach: output {2} level {3}; put 1 in output {2}."
             # Print in the console
-            print(text.format(step, moment, self.name, output_level))
+            print(text.format(step, moment, self._name, output_level))
             # Print in the txt file
-            self._data_logger.write_log_txt(text.format(step, moment, self.name, output_level))
+            self._data_logger.write_log_txt(text.format(step, moment, self._name, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,

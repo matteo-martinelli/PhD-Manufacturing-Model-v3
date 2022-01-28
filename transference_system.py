@@ -41,7 +41,7 @@ class TransferenceSystem(object):
                 for element in range(len(self._input_containers)):
                     self._input_containers[element].get(1)
                 # ... and put the material into the output container
-                # TODO: put the output level check. If the output containers are full, is not possibile to store the
+                # TODO: put the output level check. If the output containers are full, is not possible to store the
                 #  material!
                 self._output_container.put(1)
             # Then wait one time-step and re-do the buffer checking.

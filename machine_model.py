@@ -42,6 +42,7 @@ from global_variables import *
 
 
 # TODO: think about turning private the appropriate attributes.
+# TODO: implement breakdowns counter and total breakdown delays.
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
 class Machine(object):
     """

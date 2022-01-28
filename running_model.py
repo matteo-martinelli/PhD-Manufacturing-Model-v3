@@ -2,6 +2,10 @@
 Model.py file:
 
 that's the class where the model is described and launched.
+
+NOTE: all the numbers extracted in the step generation are floats because the functions involved are stochastic.
+Moreover, also process parameters are floats. To prevent "raw" steps generation, each time-step has been truncated at
+the comma level.
 """
 
 # TODO: think about turning private the appropriate attributes.

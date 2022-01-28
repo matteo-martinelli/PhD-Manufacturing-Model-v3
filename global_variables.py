@@ -68,7 +68,7 @@ class GlobalVariables(object):
 
     # PROCESS PARAMETERS ----------------------------------------------------------------------------------------------
     RANDOM_SEED = 42
-    # TODO: set a proper time base measure - I think minutes can be good enough, maybe seconds could be good too.
+
     # 1.Node A - Note: the aleatory process time has not been used.
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_A = 1         # Avg. processing time in hours.

@@ -29,7 +29,7 @@ class TransferenceSystem(object):
             # Assuming that the input buffers are not empty and the output are not full.
             not_empty = True
             not_full = True
-            
+
             # Looping all the input elements...
             for element in range(len(self._input_containers)):
                 # ...if the input element is empty, change the flag in False.

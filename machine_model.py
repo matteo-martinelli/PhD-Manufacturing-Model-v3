@@ -15,7 +15,7 @@ are defined as "time_step.progressive_number". This was necessary in order to co
 log dataframes from the relative CSVs.
 
 The log encoding is the following:
-    -1: initial state
+
     # Input buffer logs ---------------------------------------------
     x.1: input buffer empty, waiting one time step till is filled up
     x.2: input buffer filled up, continuing the process
@@ -33,6 +33,7 @@ The log encoding is the following:
     x.12: breakdown during output material handling
     x.13: repairing during output material handling
     x.14: finished the output material handling
+    x.y: the expected output is not met - TO BE ADDED
 """
 
 import random
@@ -76,6 +77,7 @@ class Machine(object):
         # Simpy processes
         self._process = env.process(self._working())
         self.env.process(self._break_machine())
+        self.env.process(self._expected_products_sensor())
         self._logistic_breakdowns = True         # To exclude breakdowns during logistic operations, set to False.
         self._processing_breakdowns = True       # To exclude breakdowns during processing operations, set to False.
 
@@ -95,12 +97,10 @@ class Machine(object):
         When machine breaks, MTTR is computed from its statistics.
         """
 
-        # Writing the -1 initial condition in the csv file.
+        # TODO: add THE EXPECTED OUTPUT IS NOT MET flag.
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
-        # self._data.append(['-1', self._input_buffer.level, '0', self._output_buffer.level, self.parts_made,
-        #                    self._broken, self._MTTF, '0'])
         while True:
-            # LOG THE INITIAL STATE ----------------------------------------------------------------------------------
+            # LOG THE INITIAL STATE OF THE STEP ----------------------------------------------------------------------
             self._write_extended_log(self.env.now, '0', self._input_buffer.level, '0', self._output_buffer.level,
                                      self.parts_made, self._broken, self._MTTF, '0')
 
@@ -308,6 +308,8 @@ class Machine(object):
             self._write_extended_log(self.env.now, '14', self._input_buffer.level, '0', self._output_buffer.level,
                                      self.parts_made, self._broken, self._MTTF, '0')
 
+            # The single product making is end!
+
             # Writing all the collected file into the csv.
             self._data_logger.write_log_csv(self._data)
             # Resetting the data collecting list.
@@ -329,6 +331,29 @@ class Machine(object):
             # If the machine is not already broken and is currently working...
             if self._broken is not True:
                 self._process.interrupt()
+
+    def _expected_products_sensor(self):
+        # Setting the initial values
+        initial_level = self._output_buffer.level
+        initial_step = 0
+        # Continuously looping ...
+        while True:
+            # Getting the actual values while time is passing
+            sensed_step = self.env.now
+            sensed_level = self._output_buffer.level
+
+            # If the actual step is beyond the initial step plus the expected process time and the output level during
+            # this time has not increased (or changed) as expected ...
+            if (sensed_step > initial_step + self._mean_process_time) and (sensed_level == initial_level):
+                # The initial step has to be updated - I think this should be added in the else statement only.
+                # initial_step = sensed_step
+                # initial_level = sensed_level
+                # The "something is not happening" flag has to be raised at True.
+                return True
+            else:
+                initial_step = sensed_step
+                initial_level = sensed_level
+                return False
 
     def _write_extended_log(self, step, moment, input_level, done_in, output_level, parts_made, broken, MTTF, MTTR):
         # Signature = step, moment, input_level, done_in (time_process), output_level, parts_made (produced), broken,

@@ -54,7 +54,7 @@ class DataLogger(object):
             with open(self.complete_filename_csv, "a") as f:
                 f.write('step,input ' + self.heading + ',time process ' + self.heading + ',output ' +
                         self.heading + ',produced,failure ' + self.heading + ',MTTF ' + self.heading + ',MTTR '
-                        + self.heading + '\n')
+                        + self.heading + ', expectation_not_met''\n')
                 f.close()
 
     def write_log_txt(self, text):
@@ -63,7 +63,7 @@ class DataLogger(object):
             f.close()
 
     def write_log_csv(self, data_list):
-        # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR
+        # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR, expectation_not_met
         text = ''
         # For each line in the data_list ...
         for i in range(len(data_list)):

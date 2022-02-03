@@ -12,6 +12,7 @@ the comma level.
 #  https://stackoverflow.com/questions/25376213/delete-unused-packages-from-requirements-file
 # TODO: pack all the sim files into a single package.
 # TODO: manage this file as a class with a main section as program entry point.
+import shutil
 import simpy
 from machine_model import Machine
 from input_container import InputContainer
@@ -109,3 +110,10 @@ print(f'SIMULATION COMPLETED')
 
 mn = MergeLogs(GlobalVariables.LOG_PATH)
 mn.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
+
+# Copying the merged logs file to the Colab folder.
+shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
+            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
+            'PhD-Manufacturing-Model-v3\\Causal Learning\\Dataset')
+
+# TODO: transfer merged logs to GDrive.

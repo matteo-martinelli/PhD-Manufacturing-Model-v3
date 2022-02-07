@@ -73,7 +73,7 @@ class GlobalVariables(object):
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_A = 1         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_A = 0.15     # Sigma processing time.
-    MTTF_A = 300                    # Mean time to failure in minutes Initial value: 300
+    MTTF_A = 30                     # Mean time to failure in minutes Initial value: 300
     BREAK_MEAN_A = 1 / MTTF_A       # Param. for expovariate distribution
     MTTR_A = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
     REPAIR_MEAN_A = 1 / MTTR_A      # Param. for expovariate distribution
@@ -82,7 +82,7 @@ class GlobalVariables(object):
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_B = 1         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_B = 0.1      # Sigma processing time.
-    MTTF_B = 600                    # Mean time to failure in minutes
+    MTTF_B = 60                     # Mean time to failure in minutes
     BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distribution
     MTTR_B = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
     REPAIR_MEAN_B = 1 / MTTR_B      # Param. for expovariate distribution
@@ -91,7 +91,7 @@ class GlobalVariables(object):
     NUM_MACHINES_C = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_C = 1         # Avg. processing time in hours.
     SIGMA_PROCESS_TIME_C = 0.08     # Sigma processing time.
-    MTTF_C = 400                    # Mean time to failure in minutes
+    MTTF_C = 40                     # Mean time to failure in minutes
     BREAK_MEAN_C = 1 / MTTF_C       # Param. for expovariate distribution
     MTTR_C = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
     REPAIR_MEAN_C = 1 / MTTR_C      # Param. for expovariate distribution
@@ -104,7 +104,7 @@ class GlobalVariables(object):
     # Business days in a week - for test purposes keep 1 day - 8hours/day
     BUSINESS_DAYS = 5
     # Business weeks in a month - for test purposes keep 1 day - 8hours/day
-    WORKING_WEEKS = 4
+    WORKING_WEEKS = 52
     # Total simulation time in minutes (added "60 *" at the head) - for test purposes keep 1 day - 8hours/day
     SIM_TIME = WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS
 

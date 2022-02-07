@@ -353,30 +353,6 @@ class Machine(object):
                 pass
             yield self.env.timeout(1)
 
-        """
-        # Setting the initial values
-        initial_level = self._output_buffer.level
-        initial_step = 0
-        # Continuously looping ...
-        while True:
-            # Getting the actual values while time is passing
-            sensed_step = self.env.now
-            sensed_level = self._output_buffer.level
-
-            # If the actual step is beyond the initial step plus the expected process time and the output level during
-            # this time has not increased (or changed) as expected ...
-            if (sensed_step > initial_step + self._mean_process_time) and (sensed_level == initial_level):
-                # The initial step has to be updated - I think this should be added in the else statement only.
-                initial_step = sensed_step
-                initial_level = sensed_level
-                # The "something is not happening" flag has to be raised at True.
-                return True
-            else:
-                # initial_step = sensed_step
-                # initial_level = sensed_level
-                return False
-        """
-
     def _write_extended_log(self, step, moment, input_level, done_in, output_level, parts_made, broken, MTTF, MTTR,
                             exp_pieces_not_met):
         # Signature = step, moment, input_level, done_in (time_process), output_level, parts_made (produced), broken,

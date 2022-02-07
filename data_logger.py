@@ -16,51 +16,58 @@ import os
 
 
 class DataLogger(object):
-    def __init__(self, path, filename_txt='none', filename_csv='none'):
+    def __init__(self, path, global_filename_txt='none', single_filename_txt='none', single_filename_csv='none'):
         self.path = path
 
-        self.filename_txt = filename_txt
-        self.complete_filename_txt = self.path + "\\" + self.filename_txt
+        self.global_filename_txt = global_filename_txt
+        self.complete_global_filename_txt = self.path + "\\" + self.global_filename_txt
 
-        self.filename_csv = filename_csv
-        self.heading = self.filename_csv.split("log.")[0].strip()
-        self.complete_filename_csv = self.path + "\\" + self.filename_csv
+        self.single_filename_txt = single_filename_txt
+        self.complete_single_filename_txt = self.path + "\\" + self.single_filename_txt
+
+        self.single_filename_csv = single_filename_csv
+        self.heading = self.single_filename_csv.split("log.")[0].strip()
+        self.complete_single_filename_csv = self.path + "\\" + self.single_filename_csv
 
         self.initialize_log_txt_file()
         self.initialize_log_csv_file()
 
     def initialize_log_txt_file(self):
-        if self.filename_txt != 'none':
+        if self.global_filename_txt != 'none':
             try:
-                os.remove(self.complete_filename_txt)
+                os.remove(self.complete_global_filename_txt)
             except FileNotFoundError:
                 print("The log file has not been found in the directory, creating a new one.")
                 # os.makedirs(self.path)
-                with open(self.complete_filename_txt, "w") as f:
+                with open(self.complete_global_filename_txt, "w") as f:
                     f.close()
 
     def initialize_log_csv_file(self):
-        if self.filename_csv != 'none':
+        if self.single_filename_csv != 'none':
             try:
-                with open(self.complete_filename_csv, "w") as f:
+                with open(self.complete_single_filename_csv, "w") as f:
                     f.close()
             except FileExistsError:
                 print('The log file already exists, cleaning up and creating a new one.')
-                os.remove(self.complete_filename_csv)
-                with open(self.complete_filename_csv, "w") as f:
+                os.remove(self.complete_single_filename_csv)
+                with open(self.complete_single_filename_csv, "w") as f:
                     f.close()
             # TODO: Maybe instead of time process should be written the number of the processed material ...
             #  or should be added as a column
-            with open(self.complete_filename_csv, "a") as f:
+            with open(self.complete_single_filename_csv, "a") as f:
                 f.write('step,input ' + self.heading + ',time process ' + self.heading + ',output ' +
                         self.heading + ',produced,failure ' + self.heading + ',MTTF ' + self.heading + ',MTTR '
                         + self.heading + ', expectation_not_met''\n')
                 f.close()
 
     def write_log_txt(self, text):
-        with open(self.complete_filename_txt, "a") as f:
+        with open(self.complete_global_filename_txt, "a") as f:
             f.write(text)
             f.close()
+
+        with open(self.complete_single_filename_txt, "a") as g:
+            g.write(text)
+            g.close()
 
     def write_log_csv(self, data_list):
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR, expectation_not_met
@@ -85,6 +92,6 @@ class DataLogger(object):
                     # ... else, just add the string to the text.
                     text = text + str(data_list[i][j]) + ","
 
-        with open(self.complete_filename_csv, "a") as f:
+        with open(self.complete_single_filename_csv, "a") as f:
             f.write(text)
             f.close()

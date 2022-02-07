@@ -86,9 +86,11 @@ class Machine(object):
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
         self._log_path = GlobalVariables.LOG_PATH
-        self._log_filename = GlobalVariables.LOG_FILENAME
-        self._csv_filename = self._name + " log.csv"
-        self._data_logger = DataLogger(self._log_path, self._log_filename, self._csv_filename)
+        self._log_global_txt_filename = GlobalVariables.LOG_FILENAME
+        self._log_single_txt_filename = self._name + " log.txt"
+        self._log_single_csv_filename = self._name + " log.csv"
+        self._data_logger = DataLogger(self._log_path, self._log_global_txt_filename, self._log_single_txt_filename,
+                                       self._log_single_csv_filename)
         self._data = list()                      # The list containing the csv log files of each machine.
 
     # Function describing the machine process.

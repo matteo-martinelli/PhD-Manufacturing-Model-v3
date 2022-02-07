@@ -36,7 +36,7 @@ class OutputContainer(simpy.Container):
         self._log_path = GlobalVariables.LOG_PATH
         self._log_filename = GlobalVariables.LOG_FILENAME
         self._data_logger = DataLogger(self._log_path, self._log_filename)
-        self._data_logger.write_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
+        self._data_logger.write_global_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
 
     def _output_control_container(self):
         yield self.env.timeout(0)
@@ -53,11 +53,11 @@ class OutputContainer(simpy.Container):
                 print('Calling the dispatcher.')
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self._data_logger.write_log_txt('{0}.1 - out_log: container {1} dispatch stock upper the critical level'
+                self._data_logger.write_global_log_txt('{0}.1 - out_log: container {1} dispatch stock upper the critical level'
                                                 ' {2}, {3} pieces left.'.format(self.env.now, self._name,
                                                                                 self._critical_level_output_container,
                                                                                 self.level))
-                self._data_logger.write_log_txt('Calling the dispatcher.\n')
+                self._data_logger.write_global_log_txt('Calling the dispatcher.\n')
 
                 # Wait for the dispatcher lead time.
                 yield self.env.timeout(self._dispatcher_lead_time)
@@ -65,8 +65,8 @@ class OutputContainer(simpy.Container):
                 # Dispatcher arrived, writing in the console.
                 print('{0}.2 - out_log: component dispatcher {1} arrived'.format(self.env.now, self._name))
                 # Writing into the log file - logistic
-                self._data_logger.write_log_txt('{0}.2 - out_log: component dispatcher {1} arrived\n'
-                                                .format(self.env.now, self._name))
+                self._data_logger.write_global_log_txt('{0}.2 - out_log: component dispatcher {1} arrived\n'
+                                                       .format(self.env.now, self._name))
 
                 # The warehouse will be completely emptied. Counting the material amount.
                 self.products_delivered += self.level
@@ -76,7 +76,7 @@ class OutputContainer(simpy.Container):
                       .format(str(self.env.now), str(self.level)))
                 print('----------------------------------')
                 # Writing to the log file
-                self._data_logger.write_log_txt("{0}.3 - out_log: dispatcher arrived. {1} pieces took by the "
+                self._data_logger.write_global_log_txt("{0}.3 - out_log: dispatcher arrived. {1} pieces took by the "
                                                 "dispatcher.\n".format(str(self.env.now), str(self.level)))
                 # Dispatcher get made after the log; otherwise the level logged would be zero.
                 yield self.get(self.level)

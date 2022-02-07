@@ -15,6 +15,7 @@ a full-outer-join.
 import os
 
 
+#TODO: set initialization as private.
 class DataLogger(object):
     def __init__(self, path, global_filename_txt='none', single_filename_txt='none', single_filename_csv='none'):
         self.path = path
@@ -29,20 +30,29 @@ class DataLogger(object):
         self.heading = self.single_filename_csv.split("log.")[0].strip()
         self.complete_single_filename_csv = self.path + "\\" + self.single_filename_csv
 
-        self.initialize_log_txt_file()
-        self.initialize_log_csv_file()
+        self._initialize_global_log_txt_file()
+        self._initialize_single_log_txt_file()
+        self._initialize_single_log_csv_file()
 
-    def initialize_log_txt_file(self):
+    def _initialize_global_log_txt_file(self):
         if self.global_filename_txt != 'none':
             try:
                 os.remove(self.complete_global_filename_txt)
             except FileNotFoundError:
                 print("The log file has not been found in the directory, creating a new one.")
-                # os.makedirs(self.path)
                 with open(self.complete_global_filename_txt, "w") as f:
                     f.close()
 
-    def initialize_log_csv_file(self):
+    def _initialize_single_log_txt_file(self):
+        if self.single_filename_txt != 'none':
+            try:
+                os.remove(self.complete_single_filename_txt)
+            except FileNotFoundError:
+                print("The log file has not been found in the directory, creating a new one.")
+                with open(self.complete_single_filename_txt, "w") as f:
+                    f.close()
+
+    def _initialize_single_log_csv_file(self):
         if self.single_filename_csv != 'none':
             try:
                 with open(self.complete_single_filename_csv, "w") as f:
@@ -60,11 +70,12 @@ class DataLogger(object):
                         + self.heading + ', expectation_not_met''\n')
                 f.close()
 
-    def write_log_txt(self, text):
+    def write_global_log_txt(self, text):
         with open(self.complete_global_filename_txt, "a") as f:
             f.write(text)
             f.close()
 
+    def write_single_log_txt(self, text):
         with open(self.complete_single_filename_txt, "a") as g:
             g.write(text)
             g.close()

@@ -19,29 +19,34 @@ class TransferenceSystem(object):
 
         # self.process = env.process(self.material_transfer())
         # self.env.process(self.material_transfer(env))
-        self._material_transfer = env.process(self._material_transfer(self.env))
+        env.process(self._material_transfer(self.env))
 
+# TODO: RIPRENDI DA QUI, DEVI DEBUGGARLA E RISCRIVERLA!
     #  Function describing the machine process.
     def _material_transfer(self, env):
-        yield env.timeout(0)
+        # yield env.timeout(0)
 
         while True:
             # Assuming that the input buffers are not empty and the output are not full.
-            not_empty = True
-            not_full = True
+            empty = False
+            full = False
 
             # Looping all the input elements...
             for element in range(len(self._input_containers)):
                 # ...if the input element is empty, change the flag in False.
-                if self._input_containers[element].level is 0:
-                    not_empty = False
+                if self._input_containers[element].level == 0:
+                    empty = True
+                else:
+                    empty = False
 
             # ...if the output container is full, change the flag in False.
-            if self._output_container.level is self._output_container.capacity:
-                not_full = False
+            if self._output_container.level == self._output_container.capacity:
+                full = True
+            else:
+                full = False
 
             # If the input buffers are not full ...
-            if not_empty is True and not_full is True:
+            if full is False & empty is False:
                 # ... get all the material in the input container ...
                 for element in range(len(self._input_containers)):
                     self._input_containers[element].get(1)

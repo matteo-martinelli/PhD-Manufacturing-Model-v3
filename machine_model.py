@@ -288,7 +288,7 @@ class Machine(object):
                         self._broken = True
                         handled_out -= self.env.now - start_handling  # How much time left to handle the material?
                         # TODO: change the MTTR with the actual reparinig time extracted. Change the same thing in every
-                        #  stochastic extracted number.
+                        #  stochastic extracted number. -> DONE ONLY FOR MTTR, changed to TTR.
 
                         # Count breakdown number and time.
                         break_down_time = int(random.expovariate(self._repair_mean))

@@ -15,7 +15,7 @@ a full-outer-join.
 import os
 
 
-#TODO: set initialization as private.
+# TODO: set initialization as private.
 class DataLogger(object):
     def __init__(self, path, global_filename_txt='none', single_filename_txt='none', single_filename_csv='none'):
         self.path = path

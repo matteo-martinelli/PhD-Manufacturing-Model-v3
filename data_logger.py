@@ -66,7 +66,7 @@ class DataLogger(object):
             #  or should be added as a column
             with open(self.complete_single_filename_csv, "a") as f:
                 f.write('step,input ' + self.heading + ',time process ' + self.heading + ',output ' +
-                        self.heading + ',produced,failure ' + self.heading + ',MTTF ' + self.heading + ',MTTR '
+                        self.heading + ',produced,failure ' + self.heading + ',MTTF ' + self.heading + ',repair time '
                         + self.heading + ', expectation_not_met''\n')
                 f.close()
 

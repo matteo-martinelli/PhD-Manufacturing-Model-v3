@@ -66,47 +66,48 @@ class GlobalVariables(object):
     GET_STD_DELAY = 1
     PUT_STD_DELAY = 1
 
+    # TODO: change process time measure: from hours to seconds.
     # PROCESS PARAMETERS ----------------------------------------------------------------------------------------------
     RANDOM_SEED = 42
 
     # 1.Node A
-    NUM_MACHINES_A = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_A = 3         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_A = 1        # Sigma processing time.
-    MTTF_A = 30                     # Mean time to failure in minutes Initial value: 300
-    BREAK_MEAN_A = 1 / MTTF_A       # Param. for expovariate distribution
-    MTTR_A = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
-    REPAIR_MEAN_A = 1 / MTTR_A      # Param. for expovariate distribution
+    NUM_MACHINES_A = 1          # Number of machines in the work-shop.
+    MEAN_PROCESS_TIME_A = 210   # Avg. processing time in seconds - std 3,5 min = 210 sec
+    SIGMA_PROCESS_TIME_A = 15   # Sigma processing time.
+    MTTF_A = 1080000            # Mean time to failure in seconds - Standard value: 300 hours = 18000 min = 1080000 sec
+    BREAK_MEAN_A = 1 / MTTF_A   # Param. for expovariate distribution
+    MTTR_A = 900                # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
+    REPAIR_MEAN_A = 1 / MTTR_A  # Param. for expovariate distribution
 
     # 2.Node B
-    NUM_MACHINES_B = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_B = 5         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_B = 1.5      # Sigma processing time.
-    MTTF_B = 60                     # Mean time to failure in minutes
-    BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distribution
-    MTTR_B = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
-    REPAIR_MEAN_B = 1 / MTTR_B      # Param. for expovariate distribution
+    NUM_MACHINES_B = 1          # Number of machines in the work-shop.
+    MEAN_PROCESS_TIME_B = 270   # Avg. processing time in seconds - Standard value: 4,5 min = 270 sec
+    SIGMA_PROCESS_TIME_B = 19   # Sigma processing time.
+    MTTF_B = 2160000            # Mean time to failure in minutes - Standard value: 600 hours = 36000 min = 2160000 sec
+    BREAK_MEAN_B = 1 / MTTF_B   # Param. for expovariate distribution
+    MTTR_B = 900                # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
+    REPAIR_MEAN_B = 1 / MTTR_B  # Param. for expovariate distribution
 
     # 3.Node C
-    NUM_MACHINES_C = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_C = 4         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_C = 1.5      # Sigma processing time.
-    MTTF_C = 40                     # Mean time to failure in minutes
-    BREAK_MEAN_C = 1 / MTTF_C       # Param. for expovariate distribution
-    MTTR_C = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
-    REPAIR_MEAN_C = 1 / MTTR_C      # Param. for expovariate distribution
+    NUM_MACHINES_C = 1          # Number of machines in the work-shop.
+    MEAN_PROCESS_TIME_C = 240   # Avg. processing time in seconds - Standard value: 4 min = 240 sec
+    SIGMA_PROCESS_TIME_C = 17   # Sigma processing time.
+    MTTF_C = 1620000            # Mean time to failure in minutes - Standard value: 450 hours = 27000 min = 1620000 sec
+    BREAK_MEAN_C = 1 / MTTF_C   # Param. for expovariate distribution
+    MTTR_C = 900                # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
+    REPAIR_MEAN_C = 1 / MTTR_C  # Param. for expovariate distribution
 
     # SIM PARAMETERS ---------------------------------------------------------------------------------------------------
-    # Working hours in a day - for test purposes keep 1 day - 8hours/day
-    WORKING_HOURS = 8
-    # Number of shifts in a day - for test purposes keep 1 shift/day - 8hours/day
-    SHIFTS_IN_A_WORKING_DAY = 1
-    # Business days in a week - for test purposes keep 1 day - 8hours/day
-    BUSINESS_DAYS = 5
-    # Business weeks in a month - for test purposes keep 1 day - 8hours/day
-    WORKING_WEEKS = 52
+    WORKING_SECONDS = 60            # Working seconds for a minute in a day
+    WORKING_MINUTES = 60            # Working minutes for an hour in a day
+    WORKING_HOURS = 8               # Working hours in a day - for test purposes keep 1 day - 8hours/day
+    SHIFTS_IN_A_WORKING_DAY = 1     # Number of shifts in a day - for test purposes keep 1 shift/day - 8hours/day
+    BUSINESS_DAYS = 5               # Business days in a week - for test purposes keep 1 day - 8hours/day
+    WORKING_WEEKS = 6               # Business weeks in a month - for test purposes keep 1 day - 8hours/day
+
     # Total simulation time in minutes (added "60 *" at the head) - for test purposes keep 1 day - 8hours/day
-    SIM_TIME = WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS
+    SIM_TIME = WORKING_SECONDS * WORKING_MINUTES * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * \
+               WORKING_WEEKS
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
     # Log path for generic model version

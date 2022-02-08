@@ -69,28 +69,28 @@ class GlobalVariables(object):
     # PROCESS PARAMETERS ----------------------------------------------------------------------------------------------
     RANDOM_SEED = 42
 
-    # 1.Node A - Note: the aleatory process time has not been used.
+    # 1.Node A
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_A = 1         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_A = 0.15     # Sigma processing time.
+    MEAN_PROCESS_TIME_A = 3         # Avg. processing time in hours.
+    SIGMA_PROCESS_TIME_A = 1        # Sigma processing time.
     MTTF_A = 30                     # Mean time to failure in minutes Initial value: 300
     BREAK_MEAN_A = 1 / MTTF_A       # Param. for expovariate distribution
     MTTR_A = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
     REPAIR_MEAN_A = 1 / MTTR_A      # Param. for expovariate distribution
 
-    # 2.Node B - Note: the aleatory process time has not been used.
+    # 2.Node B
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_B = 1         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_B = 0.1      # Sigma processing time.
+    MEAN_PROCESS_TIME_B = 5         # Avg. processing time in hours.
+    SIGMA_PROCESS_TIME_B = 1.5      # Sigma processing time.
     MTTF_B = 60                     # Mean time to failure in minutes
     BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distribution
     MTTR_B = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.
     REPAIR_MEAN_B = 1 / MTTR_B      # Param. for expovariate distribution
 
-    # 3.Node C - Note: the aleatory process time has not been used.
+    # 3.Node C
     NUM_MACHINES_C = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_C = 1         # Avg. processing time in hours.
-    SIGMA_PROCESS_TIME_C = 0.08     # Sigma processing time.
+    MEAN_PROCESS_TIME_C = 4         # Avg. processing time in hours.
+    SIGMA_PROCESS_TIME_C = 1.5      # Sigma processing time.
     MTTF_C = 40                     # Mean time to failure in minutes
     BREAK_MEAN_C = 1 / MTTF_C       # Param. for expovariate distribution
     MTTR_C = 4                      # Time it takes to repair a machine, in minutes. Initial value: 30.

@@ -349,7 +349,7 @@ class Machine(object):
     def _expected_products(self):
         while True:
             try:
-                if (self._last_piece_step + self._mean_process_time + 2) < self.env.now:
+                if (self._last_piece_step + self._mean_process_time + 1) < self.env.now:
                     self._expected_products_sensor = True
                 else:
                     self._expected_products_sensor = False
@@ -441,13 +441,13 @@ class Machine(object):
                                MTTF, TTR, exp_pieces_not_met])
 
         elif moment == "6":
-            text = "{0}.{1} - mach: started 1 in {2}\n"
+            text = "{0}.{1} - mach: started 1 in {2}. Processing time: {3}\n"
             # Print in the console
-            print(text.format(step, moment, self._name))
+            print(text.format(step, moment, self._name, done_in))
             # Print in the txt file
-            self._data_logger.write_global_log_txt(text.format(step, moment, self._name))
+            self._data_logger.write_global_log_txt(text.format(step, moment, self._name, done_in))
 
-            self._data_logger.write_single_log_txt(text.format(step, moment, self._name))
+            self._data_logger.write_single_log_txt(text.format(step, moment, self._name, done_in))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,

@@ -40,6 +40,7 @@ import random
 import simpy
 from data_logger import DataLogger
 from global_variables import GlobalVariables
+from statistics import mean
 
 
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
@@ -347,9 +348,12 @@ class Machine(object):
                 self._process.interrupt()
 
     def _expected_products(self):
+        check_error = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
+                           GlobalVariables.MEAN_PROCESS_TIME_C])
+
         while True:
             try:
-                if (self._last_piece_step + self._mean_process_time + 1) < self.env.now:
+                if (self._last_piece_step + self._mean_process_time + int(check_error)) < self.env.now:
                     self._expected_products_sensor = True
                 else:
                     self._expected_products_sensor = False
@@ -511,11 +515,11 @@ class Machine(object):
             text = "{0}.{1} - mach: the {2} output buffer has been emptied. The buffer level is {3}. Continuing with " \
                    "the process\n"
             # Print in the console
-            print(text.format(step, moment, self._name, input_level))
+            print(text.format(step, moment, self._name, output_level))
             # Print in the txt file
-            self._data_logger.write_global_log_txt(text.format(step, moment, self._name, input_level))
+            self._data_logger.write_global_log_txt(text.format(step, moment, self._name, output_level))
 
-            self._data_logger.write_single_log_txt(text.format(step, moment, self._name, input_level))
+            self._data_logger.write_single_log_txt(text.format(step, moment, self._name, output_level))
 
             # csv_log = step + moment, input_level, time_process, output_level, produced, failure, MTTF, MTTR
             self._data.append([str(step) + "." + str(moment), input_level, done_in, output_level, parts_made, broken,

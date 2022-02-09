@@ -351,7 +351,7 @@ class Machine(object):
     def _expected_products(self):
         # TODO: change the check_error_tolerance to 10% of the MTTR mean between al machines.
         check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
-                           GlobalVariables.MEAN_PROCESS_TIME_C])
+                                      GlobalVariables.MEAN_PROCESS_TIME_C])
 
         while True:
             try:

@@ -48,18 +48,24 @@ class TransferenceSystem(object):
             # If the input buffers are not full ...
             if (not output_full) & (not input_empty):
                 # ... get all the material in the input container ...
-                """print(str(self.env.now) + "Input containers level: " + ", "
+
+                """
+                # Print the imminent action.
+                print(str(self.env.now) + "Input containers level: " + ", "
                       .join(str(x.level) for x in self._input_containers) + "; output container level: "
-                      + str(self._output_container.level) + ". Moving material")"""
+                      + str(self._output_container.level) + ". Moving material")
+                """
 
                 for element in range(len(self._input_containers)):
                     self._input_containers[element].get(1)
                 # ... and put the material into the output container
                 self._output_container.put(1)
+
                 """
                 # Printing the event
                 print(str(self.env.now) + ": material moved from " + ", ".join(x.name for x in self._input_containers) +
-                      " to " + self._output_container.name)"""
+                      " to " + self._output_container.name)      
+                """
 
             # Then wait one time-step and re-do the buffer checking.
             yield env.timeout(1)

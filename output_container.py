@@ -21,6 +21,8 @@ class OutputContainer(simpy.Container):
         # The following container has to be always full. The stock-out is to avoid.
         self.env.process(self._output_control_container())
 
+        # TODO: adding an explicit level parameter will improve the code?
+        # TODO: adding an explicit full/empty parameter will improve the code?
         # Basic parameters
         self._output_control = output_control
         self._critical_level_output_container = critical_level_output_container

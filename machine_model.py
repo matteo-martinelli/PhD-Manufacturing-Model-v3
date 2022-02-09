@@ -117,7 +117,7 @@ class Machine(object):
                 # ... and while the buffer is empty ...
                 while self._input_buffer.level == 0:
                     # ... log the status ...
-                    # Maybe this log is non necessary due to the initial state log... think about it
+                    # Maybe this log is not necessary due to the initial state log... think about it
                     self._write_extended_log(self.env.now, '1', self._input_buffer.level, '0',
                                              self._output_buffer.level, self.parts_made, self._broken, self._MTTF, '0',
                                              self._expected_products_sensor)
@@ -187,8 +187,8 @@ class Machine(object):
 
             # PROCESSING THE MATERIAL ----------------------------------------------------------------------------------
             # Start making a new part
-            time_per_part = int(random.normalvariate(self._mean_process_time, self._sigma_process_time))
-            # time_per_part = self.mean_process_time
+            # time_per_part = int(random.normalvariate(self._mean_process_time, self._sigma_process_time))
+            time_per_part = self._mean_process_time
             done_in = time_per_part
             start = 0
             while done_in:
@@ -250,7 +250,7 @@ class Machine(object):
             # Perform the output warehouse level checking: if full, wait 1 time step.
             # self._output_level_check()
 
-            # If in the output buffer there is full ...
+            # If the output buffer is full ...
             if self._output_buffer.level == self._output_buffer.capacity:
                 # ... and while the buffer is still full ...
                 while self._output_buffer.level == self._output_buffer.capacity:

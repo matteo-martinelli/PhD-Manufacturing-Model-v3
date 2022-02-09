@@ -81,7 +81,7 @@ class GlobalVariables(object):
 
     # 2.Node B
     NUM_MACHINES_B = 1          # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_B = 270   # Avg. processing time in seconds - Standard value: 4,5 min = 270 sec
+    MEAN_PROCESS_TIME_B = 210   # Avg. processing time in seconds - Standard value: 4,5 min = 270 sec
     SIGMA_PROCESS_TIME_B = 19   # Sigma processing time.
     MTTF_B = 2160000            # Mean time to failure in minutes - Standard value: 600 hours = 36000 min = 2160000 sec
     BREAK_MEAN_B = 1 / MTTF_B   # Param. for expovariate distribution
@@ -90,7 +90,7 @@ class GlobalVariables(object):
 
     # 3.Node C
     NUM_MACHINES_C = 1          # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_C = 240   # Avg. processing time in seconds - Standard value: 4 min = 240 sec
+    MEAN_PROCESS_TIME_C = 210   # Avg. processing time in seconds - Standard value: 4 min = 240 sec
     SIGMA_PROCESS_TIME_C = 17   # Sigma processing time.
     MTTF_C = 1620000            # Mean time to failure in minutes - Standard value: 450 hours = 27000 min = 1620000 sec
     BREAK_MEAN_C = 1 / MTTF_C   # Param. for expovariate distribution
@@ -103,7 +103,7 @@ class GlobalVariables(object):
     WORKING_HOURS = 8               # Working hours in a day - for test purposes keep 1 day - 8hours/day
     SHIFTS_IN_A_WORKING_DAY = 1     # Number of shifts in a day - for test purposes keep 1 shift/day - 8hours/day
     BUSINESS_DAYS = 5               # Business days in a week - for test purposes keep 1 day - 8hours/day
-    WORKING_WEEKS = 6               # Business weeks in a month - for test purposes keep 1 day - 8hours/day
+    WORKING_WEEKS = 1               # Business weeks in a month - for test purposes keep 1 day - 8hours/day
 
     # Total simulation time in minutes (added "60 *" at the head) - for test purposes keep 1 day - 8hours/day
     SIM_TIME = WORKING_SECONDS * WORKING_MINUTES * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * \

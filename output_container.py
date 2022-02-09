@@ -17,7 +17,7 @@ class OutputContainer(simpy.Container):
                  dispatcher_lead_time=0, dispatcher_retrieved_check_time=8, dispatcher_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
         self.env = env
-        self._name = name
+        self.name = name
         # The following container has to be always full. The stock-out is to avoid.
         self.env.process(self._output_control_container())
 
@@ -49,24 +49,24 @@ class OutputContainer(simpy.Container):
 
                 # Logging the event.
                 print('{0}.1 - out_log: container {1} dispatch stock upper the critical level{2}, {3} pieces left.'
-                      .format(self.env.now, self._name, self._critical_level_output_container, self.level))
+                      .format(self.env.now, self.name, self._critical_level_output_container, self.level))
                 print('Calling the dispatcher.')
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self._data_logger.write_global_log_txt('{0}.1 - out_log: container {1} dispatch stock upper the critical level'
-                                                ' {2}, {3} pieces left.'.format(self.env.now, self._name,
-                                                                                self._critical_level_output_container,
-                                                                                self.level))
+                self._data_logger.write_global_log_txt('{0}.1 - out_log: container {1} dispatch stock upper the '
+                                                       'critical level {2}, {3} pieces left.'.
+                                                       format(self.env.now, self.name,
+                                                              self._critical_level_output_container, self.level))
                 self._data_logger.write_global_log_txt('Calling the dispatcher.\n')
 
                 # Wait for the dispatcher lead time.
                 yield self.env.timeout(self._dispatcher_lead_time)
 
                 # Dispatcher arrived, writing in the console.
-                print('{0}.2 - out_log: component dispatcher {1} arrived'.format(self.env.now, self._name))
+                print('{0}.2 - out_log: component dispatcher {1} arrived'.format(self.env.now, self.name))
                 # Writing into the log file - logistic
                 self._data_logger.write_global_log_txt('{0}.2 - out_log: component dispatcher {1} arrived\n'
-                                                       .format(self.env.now, self._name))
+                                                       .format(self.env.now, self.name))
 
                 # The warehouse will be completely emptied. Counting the material amount.
                 self.products_delivered += self.level
@@ -77,7 +77,7 @@ class OutputContainer(simpy.Container):
                 print('----------------------------------')
                 # Writing to the log file
                 self._data_logger.write_global_log_txt("{0}.3 - out_log: dispatcher arrived. {1} pieces took by the "
-                                                "dispatcher.\n".format(str(self.env.now), str(self.level)))
+                                                       "dispatcher.\n".format(str(self.env.now), str(self.level)))
                 # Dispatcher get made after the log; otherwise the level logged would be zero.
                 yield self.get(self.level)
 

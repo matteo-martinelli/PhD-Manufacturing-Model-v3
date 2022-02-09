@@ -18,7 +18,7 @@ class InputContainer(simpy.Container):
                  supplier_lead_time=0, supplier_std_supply=50, input_refilled_check_time=8, input_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
         # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
-        self._name = name
+        self.name = name
         self._env = env
         # The following container has to be always full. The stock-out is to avoid.
         self._env.process(self._input_control_container())
@@ -51,34 +51,34 @@ class InputContainer(simpy.Container):
 
                 # Logging the event.
                 print('{0}.1 in_log: container {1} stock under the critical level {2}, {3} pieces left.'
-                      .format(self._env.now, self._name, self._critical_level, self.level))
+                      .format(self._env.now, self.name, self._critical_level, self.level))
                 print('calling the component supplier')
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self._data_logger.write_global_log_txt('{0}.1 in_log: container {1} stock under the critical level {2}, {3} '
-                                                'pieces left.'.format(self._env.now, self._name, self._critical_level,
-                                                                      self.level))
+                self._data_logger.write_global_log_txt('{0}.1 in_log: container {1} stock under the critical level '
+                                                       '{2}, {3} pieces left.'.format(self._env.now, self.name,
+                                                                                      self._critical_level, self.level))
                 self._data_logger.write_global_log_txt('Calling the components supplier. \n')
 
                 # Wait for the supplier lead time.
                 yield self._env.timeout(self._supplier_lead_time)
 
                 # Supplier arrived, logging the event.
-                print('{0}.2 in_log: component supplier {1} arrived'.format(self._env.now, self._name))
+                print('{0}.2 in_log: component supplier {1} arrived'.format(self._env.now, self.name))
                 # Writing into the log file - logistic
-                self._data_logger.write_global_log_txt('{0}.2 in_log: component supplier {1} arrived\n'.format(self._env.now,
-                                                                                                               self._name))
+                self._data_logger.write_global_log_txt('{0}.2 in_log: component supplier {1} arrived\n'.
+                                                       format(self._env.now, self.name))
 
                 # The warehouse will be refilled with a standard quantity.
                 yield self.put(50)
 
                 # Logging the event.
-                print('{0}.3 in_log: container {1} new A component stock is {2}'.format(self._env.now, self._name,
+                print('{0}.3 in_log: container {1} new A component stock is {2}'.format(self._env.now, self.name,
                                                                                         self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
                 self._data_logger.write_global_log_txt('{0}.3 in_log: container {1} new A component stock is {2}\n'
-                                                       .format(self._env.now, self._name, self.level))
+                                                       .format(self._env.now, self.name, self.level))
 
                 # After the refill, check the level status after a given time (usually 8).
                 yield self._env.timeout(self._after_refilling_check_time)

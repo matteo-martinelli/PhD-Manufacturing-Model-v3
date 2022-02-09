@@ -21,36 +21,45 @@ class TransferenceSystem(object):
         # self.env.process(self.material_transfer(env))
         env.process(self._material_transfer(self.env))
 
-# TODO: RIPRENDI DA QUI, DEVI DEBUGGARLA E RISCRIVERLA!
     #  Function describing the machine process.
     def _material_transfer(self, env):
         # yield env.timeout(0)
 
         while True:
             # Assuming that the input buffers are not empty and the output are not full.
-            empty = False
-            full = False
+            input_empty = False
+            output_full = False
 
             # Looping all the input elements...
             for element in range(len(self._input_containers)):
-                # ...if the input element is empty, change the flag in False.
+                # ...if the input element is empty, change the flag in True.
                 if self._input_containers[element].level == 0:
-                    empty = True
+                    input_empty = True
+                    break
                 else:
-                    empty = False
+                    input_empty = False
 
-            # ...if the output container is full, change the flag in False.
+            # ...if the output container is full, change the flag in True.
             if self._output_container.level == self._output_container.capacity:
-                full = True
+                output_full = True
             else:
-                full = False
+                output_full = False
 
             # If the input buffers are not full ...
-            if full is False & empty is False:
+            if (not output_full) & (not input_empty):
                 # ... get all the material in the input container ...
+                """print(str(self.env.now) + "Input containers level: " + ", "
+                      .join(str(x.level) for x in self._input_containers) + "; output container level: "
+                      + str(self._output_container.level) + ". Moving material")"""
+
                 for element in range(len(self._input_containers)):
                     self._input_containers[element].get(1)
                 # ... and put the material into the output container
                 self._output_container.put(1)
+                """
+                # Printing the event
+                print(str(self.env.now) + ": material moved from " + ", ".join(x.name for x in self._input_containers) +
+                      " to " + self._output_container.name)"""
+
             # Then wait one time-step and re-do the buffer checking.
             yield env.timeout(1)

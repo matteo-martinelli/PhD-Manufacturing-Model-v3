@@ -17,6 +17,7 @@ import pandas
 import data_logger
 
 
+# TODO: check better hereditary of the class because is made very very badly.
 class MergeLogs(data_logger.DataLogger):
     def __init__(self, path):
         super().__init__(path)

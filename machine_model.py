@@ -104,6 +104,7 @@ class Machine(object):
         """
 
         # TODO: add THE EXPECTED OUTPUT IS NOT MET flag.
+        # TODO: convert the timestep print from seconds to minutes
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR, expectation_not_met
         while True:
             # LOG THE INITIAL STATE OF THE STEP ----------------------------------------------------------------------
@@ -348,12 +349,13 @@ class Machine(object):
                 self._process.interrupt()
 
     def _expected_products(self):
-        check_error = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
+        # TODO: change the check_error_tolerance to 10% of the MTTR mean between al machines.
+        check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
                            GlobalVariables.MEAN_PROCESS_TIME_C])
 
         while True:
             try:
-                if (self._last_piece_step + self._mean_process_time + int(check_error)) < self.env.now:
+                if (self._last_piece_step + self._mean_process_time + int(check_error_tolerance)) < self.env.now:
                     self._expected_products_sensor = True
                 else:
                     self._expected_products_sensor = False

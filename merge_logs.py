@@ -36,7 +36,6 @@ class MergeLogs(data_logger.DataLogger):
             os.remove(self.path + "\\merged_logs.csv")
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
-            # os.makedirs(self.path)
             with open(self.path + "\\merged_logs.csv", "w") as f:
                 f.close()
 

@@ -84,7 +84,6 @@ class GlobalVariables(object):
     SIGMA_PROCESS_TIME_B = 13       # Sigma processing time in seconds.
     MTTF_B = 86400                  # Mean time to failure in seconds - Standard value: 24 hours = 14400 min = 86400 sec
     BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distributions
-    # TODO: try with 9000 min of MTTR and check if more 1 flags are printed in the log. -> found good fit
     MTTR_B = 12000                  # Time to repair a machine in seconds - Standard value: 3,33 h = 200 min = 12000 sec
     REPAIR_MEAN_B = 1 / MTTR_B      # Param. for expovariate distribution
 

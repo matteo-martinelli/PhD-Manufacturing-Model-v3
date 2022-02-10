@@ -132,6 +132,6 @@ mn.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
 # Copying the merged logs file to the Colab folder.
 shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
             'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
-            'PhD-Manufacturing-Model-v3\\Causal Learning\\Dataset')
+            'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')
 
-# TODO: transfer merged logs to GDrive.
+

@@ -350,6 +350,8 @@ class Machine(object):
             if self._broken is not True:
                 self._process.interrupt()
 
+    # TODO: riprendi da qui: segna il flag col relativo timestep in un file a parte. Poi controlla se il risultato
+    #  corrisponde.
     def _expected_products(self):
         # TODO: change the check_error_tolerance to 10% of the MTTR mean between al machines.
         check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,

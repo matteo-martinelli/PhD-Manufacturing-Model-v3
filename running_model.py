@@ -12,7 +12,10 @@ the comma level.
 #  https://stackoverflow.com/questions/25376213/delete-unused-packages-from-requirements-file
 # TODO: pack all the sim files into a single package.
 # TODO: manage this file as a class with a main section as program entry point.
+# TODO: add sim time measurement
 import shutil
+import time
+
 import simpy
 from machine_model import Machine
 from input_container import InputContainer
@@ -20,6 +23,10 @@ from output_container import OutputContainer
 from transference_system import TransferenceSystem
 from global_variables import GlobalVariables
 from merge_logs import MergeLogs
+from datetime import datetime
+
+# Getting simulation start time
+start_time = time.time()
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
@@ -76,6 +83,7 @@ transference_from_A_B_to_C = TransferenceSystem(env, "from A and B to C", output
 machine_C = Machine(env, "Machine C", GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
                     GlobalVariables.MTTF_C, GlobalVariables.MTTR_C, input_C, output_C)
 
+
 # SIMULATION RUN! ------------------------------------------------------------------------------------------------------
 print(f'STARTING SIMULATION')
 print(f'----------------------------------')
@@ -107,6 +115,16 @@ print('total pieces delivered: {0}'.format(output_C.products_delivered + output_
 print('total pieces assembled: {0}'.format(machine_C.parts_made))
 print(f'----------------------------------')
 print(f'SIMULATION COMPLETED')
+
+finish_time = time.time()
+sim_time = finish_time - start_time
+print("Total sim time: {}".format(sim_time))
+
+# TODO: add automatic path generation with respect to the moment where the sim finishes.
+"""
+now = datetime.now().strftime("%d.%m.%Y-%H:%M:%S")
+print(now)
+"""
 
 mn = MergeLogs(GlobalVariables.LOG_PATH)
 mn.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")

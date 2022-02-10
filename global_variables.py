@@ -66,35 +66,35 @@ class GlobalVariables(object):
     GET_STD_DELAY = 1
     PUT_STD_DELAY = 1
 
-    # TODO: change process time measure: from hours to seconds.
     # PROCESS PARAMETERS ----------------------------------------------------------------------------------------------
     RANDOM_SEED = 42
 
     # 1.Node A
     NUM_MACHINES_A = 1          # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_A = 210   # Avg. processing time in seconds - std 3,5 min = 210 sec
+    MEAN_PROCESS_TIME_A = 230   # Avg. processing time in seconds - std 3,5 min = 210 sec
     SIGMA_PROCESS_TIME_A = 15   # Sigma processing time.
-    MTTF_A = 1080               # Mean time to failure in seconds - Standard value: 300 hours = 18000 min = 1080000 sec
+    MTTF_A = 72000              # Mean time to failure in seconds - Standard value: 300 hours = 18000 min = 1080000 sec
     BREAK_MEAN_A = 1 / MTTF_A   # Param. for expovariate distribution
-    MTTR_A = 900                # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
+    MTTR_A = 14400               # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
     REPAIR_MEAN_A = 1 / MTTR_A  # Param. for expovariate distribution
 
     # 2.Node B
     NUM_MACHINES_B = 1          # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_B = 210   # Avg. processing time in seconds - Standard value: 4,5 min = 270 sec
-    SIGMA_PROCESS_TIME_B = 19   # Sigma processing time.
-    MTTF_B = 2160               # Mean time to failure in minutes - Standard value: 600 hours = 36000 min = 2160000 sec
-    BREAK_MEAN_B = 1 / MTTF_B   # Param. for expovariate distribution
-    MTTR_B = 900                # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
+    MEAN_PROCESS_TIME_B = 240   # Avg. processing time in seconds - Standard value: 4,5 min = 270 sec
+    SIGMA_PROCESS_TIME_B = 13   # Sigma processing time.
+    MTTF_B = 86400              # Mean time to failure in minutes - Standard value: 600 hours = 36000 min = 2160000 sec
+    BREAK_MEAN_B = 1 / MTTF_B   # Param. for expovariate distributions
+    # TODO: try with 9000 min of MTTR and check if more 1 flags are printed in the log.
+    MTTR_B = 12000              # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
     REPAIR_MEAN_B = 1 / MTTR_B  # Param. for expovariate distribution
 
     # 3.Node C
     NUM_MACHINES_C = 1          # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_C = 210   # Avg. processing time in seconds - Standard value: 4 min = 240 sec
-    SIGMA_PROCESS_TIME_C = 17   # Sigma processing time.
-    MTTF_C = 1620               # Mean time to failure in minutes - Standard value: 450 hours = 27000 min = 1620000 sec
+    MEAN_PROCESS_TIME_C = 250   # Avg. processing time in seconds - Standard value: 4 min = 240 sec
+    SIGMA_PROCESS_TIME_C = 10   # Sigma processing time.
+    MTTF_C = 100800             # Mean time to failure in minutes - Standard value: 450 hours = 27000 min = 1620000 sec
     BREAK_MEAN_C = 1 / MTTF_C   # Param. for expovariate distribution
-    MTTR_C = 900                # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
+    MTTR_C = 9600               # Time it takes to repair a machine, in seconds - Standard value: 15 min = 900 sec
     REPAIR_MEAN_C = 1 / MTTR_C  # Param. for expovariate distribution
 
     # SIM PARAMETERS ---------------------------------------------------------------------------------------------------

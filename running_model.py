@@ -118,7 +118,7 @@ print(f'SIMULATION COMPLETED')
 
 finish_time = time.time()
 sim_time = finish_time - start_time
-print("Total sim time: {}".format(sim_time))
+print("Total sim time: {} seconds".format(round(sim_time, 2)))
 
 # TODO: add automatic path generation with respect to the moment where the sim finishes.
 """

@@ -41,6 +41,7 @@ import simpy
 from data_logger import DataLogger
 from global_variables import GlobalVariables
 from statistics import mean
+# from datetime import datetime
 
 
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
@@ -87,6 +88,7 @@ class Machine(object):
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
         self._log_path = GlobalVariables.LOG_PATH
+        # self.date_time = 0
         self._log_global_txt_filename = GlobalVariables.LOG_FILENAME
         self._log_single_txt_filename = self._name + " log.txt"
         self._log_single_csv_filename = self._name + " log.csv"
@@ -188,8 +190,8 @@ class Machine(object):
 
             # PROCESSING THE MATERIAL ----------------------------------------------------------------------------------
             # Start making a new part
-            # time_per_part = int(random.normalvariate(self._mean_process_time, self._sigma_process_time))
-            time_per_part = self._mean_process_time
+            time_per_part = int(random.normalvariate(self._mean_process_time, self._sigma_process_time))
+            # time_per_part = self._mean_process_time
             done_in = time_per_part
             start = 0
             while done_in:

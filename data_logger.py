@@ -15,7 +15,7 @@ a full-outer-join.
 import os
 
 
-# TODO: set initialization as private.
+# TODO: DISMISS
 class DataLogger(object):
     def __init__(self, path, global_filename_txt='none', single_filename_txt='none', single_filename_csv='none'):
         self.path = path
@@ -32,7 +32,7 @@ class DataLogger(object):
 
         self._initialize_global_log_txt_file()
         self._initialize_single_log_txt_file()
-        self._initialize_single_log_csv_file()
+        # self._initialize_single_log_csv_file()
 
     def _initialize_global_log_txt_file(self):
         if self.global_filename_txt != 'none':

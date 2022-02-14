@@ -9,6 +9,7 @@ Is possible to exclude the level control service.
 
 import simpy
 from data_logger import DataLogger
+from txt_logger import TxtLogger
 from global_variables import GlobalVariables
 
 
@@ -34,11 +35,16 @@ class OutputContainer(simpy.Container):
         self.products_stored = 0
         self.products_delivered = 0
 
+        # TODO: DISMISS
         # Logging objects
-        self._log_path = GlobalVariables.LOG_PATH
-        self._log_filename = GlobalVariables.LOG_FILENAME
-        self._data_logger = DataLogger(self._log_path, self._log_filename)
-        self._data_logger.write_global_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
+        # self._log_path = GlobalVariables.LOG_PATH
+        # self._log_filename = GlobalVariables.LOG_FILENAME
+        # self._data_logger = DataLogger(self._log_path, self._log_filename)
+        # self._data_logger.write_global_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
+
+        self.global_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, GlobalVariables.LOG_FILENAME)
+        # The following line is not printed ... Why? maybe delete it.
+        self.global_txt_logger.write_txt_log_file('### DATA LOG FROM OUTPUT CONTAINER FILE ###\n')
 
     def _output_control_container(self):
         yield self.env.timeout(0)
@@ -50,37 +56,41 @@ class OutputContainer(simpy.Container):
             if self.level >= self._critical_level_output_container:
 
                 # Logging the event.
-                print('{0}.1 - out_log: container {1} dispatch stock upper the critical level{2}, {3} pieces left.'
-                      .format(self.env.now, self.name, self._critical_level_output_container, self.level))
-                print('Calling the dispatcher.')
+                text = '{0}.1 - out_log: container {1} dispatch stock upper the critical level{2}, {3} pieces left.\n' \
+                       'Calling the dispatcher\n'
+
+                print(text.format(self.env.now, self.name, self._critical_level_output_container, self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                self._data_logger.write_global_log_txt('{0}.1 - out_log: container {1} dispatch stock upper the '
-                                                       'critical level {2}, {3} pieces left.'.
-                                                       format(self.env.now, self.name,
-                                                              self._critical_level_output_container, self.level))
-                self._data_logger.write_global_log_txt('Calling the dispatcher.\n')
+                # self._data_logger.write_global_log_txt(text.format(self.env.now, self.name,
+                                                                # self._critical_level_output_container, self.level))
+                self.global_txt_logger.write_txt_log_file(text.format(self.env.now, self.name,
+                                                                      self._critical_level_output_container,
+                                                                      self.level))
 
                 # Wait for the dispatcher lead time.
                 yield self.env.timeout(self._dispatcher_lead_time)
 
                 # Dispatcher arrived, writing in the console.
-                print('{0}.2 - out_log: component dispatcher {1} arrived'.format(self.env.now, self.name))
+                text = '{0}.2-out_log: component dispatcher {1} arrived'
+                print(text.format(self.env.now, self.name))
                 # Writing into the log file - logistic
-                self._data_logger.write_global_log_txt('{0}.2 - out_log: component dispatcher {1} arrived\n'
-                                                       .format(self.env.now, self.name))
+                # self._data_logger.write_global_log_txt(text.format(self.env.now, self.name))
+                self.global_txt_logger.write_txt_log_file(text.format(self.env.now, self.name))
 
                 # The warehouse will be completely emptied. Counting the material amount.
                 self.products_delivered += self.level
 
                 # Logging the event.
-                print("{0}.3 - out_log: dispatcher arrived. {1} pieces took by the dispatcher.\n"
-                      .format(str(self.env.now), str(self.level)))
+                text = '{0}.3-out_log: dispatcher arrived. {1} pieces took by the dispatcher.\n'
+                print(text.format(str(self.env.now), str(self.level)))
                 print('----------------------------------')
                 # Writing to the log file
-                self._data_logger.write_global_log_txt("{0}.3 - out_log: dispatcher arrived. {1} pieces took by the "
-                                                       "dispatcher.\n".format(str(self.env.now), str(self.level)))
+                # self._data_logger.write_global_log_txt(text.format(str(self.env.now), str(self.level)))
+                self.global_txt_logger.write_txt_log_file(text.format(str(self.env.now), str(self.level)))
+
                 # Dispatcher get made after the log; otherwise the level logged would be zero.
+
                 yield self.get(self.level)
 
                 # After the dispatch, check the level status after a given time (usually 8).

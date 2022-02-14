@@ -127,7 +127,8 @@ print(now)
 """
 
 mn = MergeLogs(GlobalVariables.LOG_PATH)
-mn.merge_logs("Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
+mn.merge_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
+mn.merge_logs("merged_logs.csv", "Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
 
 # Copying the merged logs file to the Colab folder.
 shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'

@@ -11,6 +11,7 @@ import os
 
 
 # Con questa classe devi scrivere il log in csv.
+# TODO: change signature names.
 class CsvLogger(object):
     def __init__(self, txt_log_path, txt_log_filename):
         self._csv_log_path = txt_log_path

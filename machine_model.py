@@ -38,7 +38,7 @@ The log encoding is the following:
 
 import random
 import simpy
-from data_logger import DataLogger
+# from data_logger import DataLogger
 from global_variables import GlobalVariables
 from statistics import mean
 from csv_logger import CsvLogger

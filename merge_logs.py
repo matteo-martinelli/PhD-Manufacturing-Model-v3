@@ -14,14 +14,14 @@ a full-outer-join.
 
 import os
 import pandas
-import data_logger
+# import data_logger
 
 
 # TODO: check better hereditary of the class because is made very very badly.
-class MergeLogs(data_logger.DataLogger):
-    def __init__(self, path):
-        super().__init__(path)
-
+class MergeLogs(object):
+    def __init__(self, merged_log_path):
+        # super().__init__(path)
+        self._merged_log_path = merged_log_path
         # self.filename_txt = filename_txt
         # self.complete_filename_txt = self.path + "\\" + self.filename_txt
 
@@ -33,17 +33,17 @@ class MergeLogs(data_logger.DataLogger):
     def merge_logs(self, *args):
         # Initializing the merged_logs.csv file.
         try:
-            os.remove(self.path + "\\merged_logs.csv")
+            os.remove(self._merged_log_path + "\\merged_logs.csv")
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
-            with open(self.path + "\\merged_logs.csv", "w") as f:
+            with open(self._merged_log_path + "\\merged_logs.csv", "w") as f:
                 f.close()
 
         # Creating a list as a buffer to temporally save the data read from the CSVs files.
         df_list = list()
         # Appending the data in the list read from the CSVs files.
         for arg in args:
-            df = pandas.read_csv(self.path + "\\" + arg)
+            df = pandas.read_csv(self._merged_log_path + "\\" + arg)
             df_list.append(df)
 
         # Merging the first two dataframes.
@@ -64,4 +64,4 @@ class MergeLogs(data_logger.DataLogger):
         df_merge.fillna(method="ffill", inplace=True)
 
         # Saving the merged dataframe into a csv file.
-        df_merge.to_csv(self.path + "\\merged_logs.csv")
+        df_merge.to_csv(self._merged_log_path + "\\merged_logs.csv")

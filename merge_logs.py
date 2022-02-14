@@ -17,6 +17,7 @@ import pandas
 # import data_logger
 
 
+# TODO: check merging data and convert every float into int.
 class MergeLogs(object):
     def __init__(self, merged_log_path):
         self._merged_log_path = merged_log_path
@@ -45,7 +46,7 @@ class MergeLogs(object):
 
         # Merging the remaining dataframes, if any.
         for element in range(len(df_list)):
-            # Skipping the first two dataframes in the list, cause they have been merged few lines before.
+            # Skipping the first two dataframes in the list, because they have been merged few lines before.
             if element == 0 or element == 1:
                 continue
             # Merging the remaining files.

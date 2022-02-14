@@ -17,17 +17,9 @@ import pandas
 # import data_logger
 
 
-# TODO: check better hereditary of the class because is made very very badly.
 class MergeLogs(object):
     def __init__(self, merged_log_path):
-        # super().__init__(path)
         self._merged_log_path = merged_log_path
-        # self.filename_txt = filename_txt
-        # self.complete_filename_txt = self.path + "\\" + self.filename_txt
-
-        # self.filename_csv = filename_csv
-        # self.heading = self.filename_csv.split("log.")[0].strip()
-        # self.complete_filename_csv = self.path + "\\" + self.filename_csv
 
     # TODO: split the "Moment" part of the time-step field of the csv file into a standalone field.
     def merge_logs(self, *args):

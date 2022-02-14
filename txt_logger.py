@@ -10,7 +10,6 @@ file.
 import os
 
 
-# Con questa classe devi scrivere sia il global che il single log in txt.
 class TxtLogger(object):
     def __init__(self, txt_log_path, txt_log_filename):
         self.txt_log_path = txt_log_path

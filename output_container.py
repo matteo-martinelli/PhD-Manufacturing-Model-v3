@@ -8,7 +8,6 @@ Is possible to exclude the level control service.
 """
 
 import simpy
-# from data_logger import DataLogger
 from txt_logger import TxtLogger
 from global_variables import GlobalVariables
 
@@ -19,6 +18,7 @@ class OutputContainer(simpy.Container):
         super().__init__(env, max_capacity, init_capacity)
         self.env = env
         self.name = name
+
         # The following container has to be always full. The stock-out is to avoid.
         self.env.process(self._output_control_container())
 
@@ -35,13 +35,7 @@ class OutputContainer(simpy.Container):
         self.products_stored = 0
         self.products_delivered = 0
 
-        # TODO: DISMISS
         # Logging objects
-        # self._log_path = GlobalVariables.LOG_PATH
-        # self._log_filename = GlobalVariables.LOG_FILENAME
-        # self._data_logger = DataLogger(self._log_path, self._log_filename)
-        # self._data_logger.write_global_log_txt("### DATA LOG FROM OUTPUT CONTAINER FILE ###\n")
-
         self.global_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, GlobalVariables.LOG_FILENAME)
         # The following line is not printed ... Why? maybe delete it.
         self.global_txt_logger.write_txt_log_file('### DATA LOG FROM OUTPUT CONTAINER FILE ###\n')
@@ -62,8 +56,6 @@ class OutputContainer(simpy.Container):
                 print(text.format(self.env.now, self.name, self._critical_level_output_container, self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                # self._data_logger.write_global_log_txt(text.format(self.env.now, self.name,
-                                                                # self._critical_level_output_container, self.level))
                 self.global_txt_logger.write_txt_log_file(text.format(self.env.now, self.name,
                                                                       self._critical_level_output_container,
                                                                       self.level))
@@ -74,8 +66,6 @@ class OutputContainer(simpy.Container):
                 # Dispatcher arrived, writing in the console.
                 text = '{0}.2-out_log: component dispatcher {1} arrived'
                 print(text.format(self.env.now, self.name))
-                # Writing into the log file - logistic
-                # self._data_logger.write_global_log_txt(text.format(self.env.now, self.name))
                 self.global_txt_logger.write_txt_log_file(text.format(self.env.now, self.name))
 
                 # The warehouse will be completely emptied. Counting the material amount.
@@ -85,8 +75,6 @@ class OutputContainer(simpy.Container):
                 text = '{0}.3-out_log: dispatcher arrived. {1} pieces took by the dispatcher.\n'
                 print(text.format(str(self.env.now), str(self.level)))
                 print('----------------------------------')
-                # Writing to the log file
-                # self._data_logger.write_global_log_txt(text.format(str(self.env.now), str(self.level)))
                 self.global_txt_logger.write_txt_log_file(text.format(str(self.env.now), str(self.level)))
 
                 # Dispatcher get made after the log; otherwise the level logged would be zero.

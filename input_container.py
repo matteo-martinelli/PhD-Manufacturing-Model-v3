@@ -8,19 +8,17 @@ Is possible to exclude the level control service.
 """
 
 import simpy
-# from data_logger import DataLogger
 from txt_logger import TxtLogger
 from global_variables import GlobalVariables
 
 
 class InputContainer(simpy.Container):
-
     def __init__(self, env, name, max_capacity, init_capacity, input_control=True, critical_level_input_container=50,
                  supplier_lead_time=0, supplier_std_supply=50, input_refilled_check_time=8, input_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
-        # self.input_container = simpy.Container(env, capacity=max_capacity, init=init_capacity)
         self.name = name
         self._env = env
+
         # The following container has to be always full. The stock-out is to avoid.
         self._env.process(self._input_control_container())
 
@@ -35,11 +33,6 @@ class InputContainer(simpy.Container):
         self.products_picked = 0
 
         # Logging objects
-        # self._log_path = GlobalVariables.LOG_PATH
-        # self._log_filename = GlobalVariables.LOG_FILENAME
-        # self._data_logger = DataLogger(self._log_path, self._log_filename)
-        # self._data_logger.write_global_log_txt("### DATA LOG FROM INPUT CONTAINER FILE ###\n")
-
         self.global_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, GlobalVariables.LOG_FILENAME)
         # The following line is not printed ... Why? maybe delete it.
         self.global_txt_logger.write_txt_log_file('### DATA LOG FROM INPUT CONTAINER FILE ###\n')
@@ -51,7 +44,6 @@ class InputContainer(simpy.Container):
         while self._input_control:
 
             # Check container level. If under the critical level, start the emptying process.
-            # if self.input_container.level <= self.critical_level_input_container:
             if self.level <= self._critical_level:
 
                 # Logging the event.
@@ -60,8 +52,6 @@ class InputContainer(simpy.Container):
                 print(text.format(self._env.now, self.name, self._critical_level, self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                # self._data_logger.write_global_log_txt(text.format(self._env.now, self.name, self._critical_level,
-                #                                                   self.level))
                 self.global_txt_logger.write_txt_log_file(text.format(self._env.now, self.name, self._critical_level,
                                                                       self.level))
 
@@ -72,7 +62,6 @@ class InputContainer(simpy.Container):
                 text = '{0}.2 - in_log: component supplier {1} arrived\n'
                 print(text.format(self._env.now, self.name))
                 # Writing into the log file - logistic
-                # self._data_logger.write_global_log_txt(text.format(self._env.now, self.name))
                 self.global_txt_logger.write_txt_log_file(text.format(self._env.now, self.name))
 
                 # The warehouse will be refilled with a standard quantity.
@@ -83,7 +72,6 @@ class InputContainer(simpy.Container):
                 print(text.format(self._env.now, self.name, self.level))
                 print('----------------------------------')
                 # Writing into the log file - logistic
-                # self._data_logger.write_global_log_txt(text.format(self._env.now, self.name, self.level))
                 self.global_txt_logger.write_txt_log_file(text.format(self._env.now, self.name, self.level))
 
                 # After the refill, check the level status after a given time (usually 8).

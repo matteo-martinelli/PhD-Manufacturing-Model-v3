@@ -376,6 +376,8 @@ class Machine(object):
         csv_head = 'step,flag'
         self.expected_products_logger.initialise_csv_log_file(csv_head)
 
+        # TODO: log the initial state at step 0.
+
         while True:
             try:
                 if (self._last_piece_step + self._mean_process_time + int(check_error_tolerance)) < self.env.now:

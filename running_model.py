@@ -23,7 +23,7 @@ from output_container import OutputContainer
 from transference_system import TransferenceSystem
 from global_variables import GlobalVariables
 from merge_logs import MergeLogs
-from datetime import datetime
+# from datetime import datetime
 
 # Getting simulation start time
 start_time = time.time()
@@ -134,5 +134,3 @@ mn.merge_logs("merged_logs.csv", "Machine A log.csv", "Machine B log.csv", "Mach
 shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
             'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
             'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')
-
-

@@ -368,8 +368,6 @@ class Machine(object):
                 # self._process.interrupt(cause="breakdown")
                 self._process.interrupt()
 
-    # TODO: riprendi da qui: segna il flag col relativo timestep in un file a parte. Poi controlla se il risultato
-    #  corrisponde.
     def _expected_products(self):
         # TODO: change the check_error_tolerance to 10% of the MTTR mean between al machines.
         check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
@@ -384,12 +382,15 @@ class Machine(object):
                     self._expected_products_sensor = True
                     self._exp_pieces.append([self.env.now, self._expected_products_sensor])
                 else:
+                    # TODO: try to not log the False case and check if the merging works anyway,
                     self._expected_products_sensor = False
                     self._exp_pieces.append([self.env.now, self._expected_products_sensor])
             except simpy.Interrupt:
                 pass
 
-            # self.expected_products_logger()
+            self.expected_products_logger.write_csv_log_file(self._exp_pieces)
+            self._exp_pieces = list()
+
             yield self.env.timeout(1)
 
     # TODO: split datalist.append to the rest of the txt logging, in order to follow the SOLID principles.

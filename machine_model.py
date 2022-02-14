@@ -95,10 +95,11 @@ class Machine(object):
         # TODO: implement log saving based on the moment the sim is run.
         # self.date_time = 0
 
-        # New logging
+        # Logging objects
         self.global_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, GlobalVariables.LOG_FILENAME)
         self.local_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, self._name + " log.txt")
         self.csv_logger = CsvLogger(GlobalVariables.LOG_PATH, self._name + " log.csv")
+        self.expected_products_logger = CsvLogger(GlobalVariables.LOG_PATH, self._name + " exp_prod_flag.csv")
 
         # List containing the csv log files of each machine.
         self._data_list = list()
@@ -118,6 +119,11 @@ class Machine(object):
         # TODO: convert the timestep print from seconds to minutes
 
         # TODO: move here the first line csv printing.
+        csv_head = 'step,input ' + self._name + ',time process ' + self._name + ',output ' + self._name + \
+                   ',produced,failure ' + self._name + ',MTTF ' + self._name + ',repair time ' + self._name + \
+                   ', expectation_not_met''\n'
+
+        self.csv_logger.initialise_csv_log_file(csv_head)
 
         # csv_log = step, input_level, time_process, output_level, produced, failure, MTTF, MTTR, expectation_not_met
         while True:
@@ -369,6 +375,9 @@ class Machine(object):
         check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
                                       GlobalVariables.MEAN_PROCESS_TIME_C])
 
+        csv_head = 'step,flag'
+        self.expected_products_logger.initialise_csv_log_file(csv_head)
+
         while True:
             try:
                 if (self._last_piece_step + self._mean_process_time + int(check_error_tolerance)) < self.env.now:
@@ -380,6 +389,7 @@ class Machine(object):
             except simpy.Interrupt:
                 pass
 
+            # self.expected_products_logger()
             yield self.env.timeout(1)
 
     # TODO: split datalist.append to the rest of the txt logging, in order to follow the SOLID principles.

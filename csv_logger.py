@@ -10,26 +10,18 @@ file.
 import os
 
 
-# Con questa classe devi scrivere il log in csv.
 # TODO: change signature names.
 class CsvLogger(object):
-    def __init__(self, txt_log_path, txt_log_filename):
-        self._csv_log_path = txt_log_path
-        self._csv_log_filename = txt_log_filename
+    def __init__(self, csv_log_path, csv_log_filename):
+        self._csv_log_path = csv_log_path
+        self._csv_log_filename = csv_log_filename
 
         self._complete_csv_filename = self._csv_log_path + "\\" + self._csv_log_filename
 
         # TODO: make the csv_name standard in the machine class.
         self._heading = self._csv_log_filename.split("log.")[0].strip()
-        self._head_1 = 'step,input ' + self._heading + ',time process ' + self._heading + ',output ' + \
-                       self._heading + ',produced,failure ' + self._heading + ',MTTF ' + self._heading + \
-                       ',repair time ' + self._heading + ', expectation_not_met''\n'
 
-        self._head_2 = 'to be defined'
-
-        self._initialise_csv_log_file(self._head_1)
-
-    def _initialise_csv_log_file(self, head):
+    def initialise_csv_log_file(self, head):
         try:
             with open(self._complete_csv_filename, "w") as f:
                 f.close()
@@ -61,6 +53,7 @@ class CsvLogger(object):
                     # ... else, just add the string to the text.
                     text = text + str(data_list[i][j]) + ","
 
+                # Refactor True or False into 1 or 0.
                 # ... if the element is a True ...
                 if data_list[i][j] is True:
                     # Refactor into 1

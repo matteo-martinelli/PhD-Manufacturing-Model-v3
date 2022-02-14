@@ -42,7 +42,7 @@ class CsvLogger(object):
 
         # For each line in the data_list ...
         for i in range(len(data_list)):
-            # Refactoring True and False into 1 and 0
+            # Adding comma between data, avoiding comma at the end of the line
             # ... for each element in the data_list ...
             for j in range(len(data_list[i])):
                 # ... if the element is the last in the line ...
@@ -53,13 +53,14 @@ class CsvLogger(object):
                     # ... else, just add the string to the text.
                     text = text + str(data_list[i][j]) + ","
 
+                # TODO: NOT WORKING: modify in order to make it work. Pandas could help
                 # Refactor True or False into 1 or 0.
                 # ... if the element is a True ...
-                if data_list[i][j] is True:
+                if data_list[i][j] == "True":
                     # Refactor into 1
                     data_list[i][j] = 1
                 # ... if the element is a False ...
-                if data_list[i][j] is False:
+                if data_list[i][j] == "False":
                     # Refactor into 0
                     data_list[i][j] = 0
 

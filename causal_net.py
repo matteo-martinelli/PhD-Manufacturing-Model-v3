@@ -4,7 +4,8 @@ causal_net.py: file where all the causal operations will be managed.
 This file should become a class.
 """
 
-# TODO: transfer all on Colab. Eventually retry with The new CUDA env and paddlepaddle-gpu.
+# TO-do: transfer all on Colab. Eventually retry with The new CUDA env and paddlepaddle-gpu. -> Done
+# To-do: test with GPU acceleration -> che pippa non va.
 import time
 import pandas
 
@@ -27,7 +28,6 @@ def get_available_gpus():
 CSV_PATH = 'C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\' \
            'merged_logs.csv'
 
-# TODO: test with GPU acceleration -> che pippa non va.
 
 # print(tf.test.is_gpu_available(cuda_only=False, min_cuda_compute_capability=None))
 # print("List physical GPUs: ", tf.config.list_physical_devices('GPU'))

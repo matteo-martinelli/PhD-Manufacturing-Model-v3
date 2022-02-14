@@ -10,7 +10,6 @@ file.
 import os
 
 
-# TODO: change signature names.
 class CsvLogger(object):
     def __init__(self, csv_log_path, csv_log_filename):
         self._csv_log_path = csv_log_path
@@ -18,7 +17,7 @@ class CsvLogger(object):
 
         self._complete_csv_filename = self._csv_log_path + "\\" + self._csv_log_filename
 
-        # TODO: make the csv_name standard in the machine class.
+        # TODO: make the csv_name standard in the machine class. -> Cosa significa?
         self._heading = self._csv_log_filename.split("log.")[0].strip()
 
     def initialise_csv_log_file(self, head):

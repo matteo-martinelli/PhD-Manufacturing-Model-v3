@@ -106,6 +106,7 @@ class Machine(object):
         # List containing the csv log files of the expected product flag of each machine.
         self._exp_pieces = list()
 
+    # TODO: convert the time-step print from seconds to minutes
     # Function describing the machine process.
     def _working(self):
         """
@@ -115,10 +116,6 @@ class Machine(object):
         When machine breaks, MTTR is computed from its statistics.
         """
 
-        # TODO: add THE EXPECTED OUTPUT IS NOT MET flag.
-        # TODO: convert the time-step print from seconds to minutes
-
-        # TODO: move here the first line csv printing.
         csv_head = 'step,input ' + self._name + ',time process ' + self._name + ',output ' + self._name + \
                    ',produced,failure ' + self._name + ',MTTF ' + self._name + ',repair time ' + self._name + '\n'
 
@@ -370,15 +367,13 @@ class Machine(object):
         csv_head = 'step,flag\n'
         self.expected_products_logger.initialise_csv_log_file(csv_head)
 
-        # TODO: log the initial state at step 0.
-
         while True:
             try:
                 if (self._last_piece_step + self._mean_process_time + int(check_error_tolerance)) < self.env.now:
                     self._expected_products_sensor = True
                     self._exp_pieces.append([self.env.now, self._expected_products_sensor])
                 else:
-                    # TODO: try to not log the False case and check if the merging works anyway,
+                    # TODO: try to not log the False case and check if the merging works anyway and if is faster.
                     self._expected_products_sensor = False
                     self._exp_pieces.append([self.env.now, self._expected_products_sensor])
             except simpy.Interrupt:

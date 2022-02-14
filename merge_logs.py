@@ -23,13 +23,13 @@ class MergeLogs(object):
         self._merged_log_path = merged_log_path
 
     # TODO: split the "Moment" part of the time-step field of the csv file into a standalone field.
-    def merge_logs(self, *args):
+    def merge_logs(self, output_name, *args):
         # Initializing the merged_logs.csv file.
         try:
-            os.remove(self._merged_log_path + "\\merged_logs.csv")
+            os.remove(self._merged_log_path + "\\" + output_name)
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
-            with open(self._merged_log_path + "\\merged_logs.csv", "w") as f:
+            with open(self._merged_log_path + "\\" + output_name, "w") as f:
                 f.close()
 
         # Creating a list as a buffer to temporally save the data read from the CSVs files.
@@ -57,4 +57,4 @@ class MergeLogs(object):
         df_merge.fillna(method="ffill", inplace=True)
 
         # Saving the merged dataframe into a csv file.
-        df_merge.to_csv(self._merged_log_path + "\\merged_logs.csv")
+        df_merge.to_csv(self._merged_log_path + "\\" + output_name)

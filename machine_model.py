@@ -364,7 +364,7 @@ class Machine(object):
         check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
                                       GlobalVariables.MEAN_PROCESS_TIME_C])
 
-        csv_head = 'step,flag\n'
+        csv_head = 'step,' + self._name + ' flag\n'
         self.expected_products_logger.initialise_csv_log_file(csv_head)
 
         while True:

@@ -117,7 +117,8 @@ class Machine(object):
         """
 
         csv_head = 'step,input ' + self._name + ',time process ' + self._name + ',output ' + self._name + \
-                   ',produced,failure ' + self._name + ',MTTF ' + self._name + ',repair time ' + self._name + '\n'
+                   ',produced' + self._name + ',failure ' + self._name + ',MTTF ' + self._name + \
+                   ',repair time ' + self._name + '\n'
 
         self.csv_logger.initialise_csv_log_file(csv_head)
 

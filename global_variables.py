@@ -101,8 +101,8 @@ class GlobalVariables(object):
     WORKING_MINS = 60               # Working minutes for an hour in a day
     WORKING_HOURS = 8               # Working hours in a day - for test purposes keep 8hours/day
     SHIFTS_IN_A_WORKING_DAY = 1     # Number of shifts in a day - for test purposes keep 1 shift/day
-    BUSINESS_DAYS = 1               # Business days in a week - for test purposes keep 5 days/week
-    WORKING_WEEKS = 1               # Business weeks in a month - for test purposes keep 12/24/36 weeks
+    BUSINESS_DAYS = 5               # Business days in a week - for test purposes keep 5 days/week
+    WORKING_WEEKS = 12               # Business weeks in a month - for test purposes keep 12/24/36 weeks
 
     # Total simulation time in minutes - for test purposes keep 60/90/120 total days
     SIM_TIME = WORKING_SECS * WORKING_MINS * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS

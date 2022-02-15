@@ -127,10 +127,14 @@ print(now)
 """
 
 mn = MergeLogs(GlobalVariables.LOG_PATH)
-mn.merge_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
-mn.merge_logs("merged_logs.csv", "Machine A log.csv", "Machine B log.csv", "Machine C log.csv")
+# Merging each machine log with the respect expected products log.
+mn.merge_flags_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
+mn.merge_flags_logs("merged_Mach_B.csv", "Machine B log.csv", "Machine B exp_prod_flag.csv")
+mn.merge_flags_logs("merged_Mach_C.csv", "Machine C log.csv", "Machine C exp_prod_flag.csv")
+
+# mn.merge_logs("merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv", "merged_Mach_C.csv")
 
 # Copying the merged logs file to the Colab folder.
-shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
-            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
-            'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')
+# shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
+#            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
+#            'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')

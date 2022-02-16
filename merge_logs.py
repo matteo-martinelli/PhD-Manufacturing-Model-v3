@@ -20,25 +20,26 @@ from global_variables import GlobalVariables
 
 # TODO: check merging data and convert every float into int.
 class MergeLogs(object):
-    def __init__(self, merged_log_path):
-        self._merged_log_path = merged_log_path
+    def __init__(self, input_path, output_path):
+        self.input_path = input_path
+        self.output_path = output_path
 
     # TODO: split the "Moment" part of the time-step field of the csv file into a standalone field.
 
     def merge_logs(self, output_name, *args):
         # Initializing the merged_logs.csv file.
         try:
-            os.remove(self._merged_log_path + "\\" + output_name)
+            os.remove(self.output_path + "\\" + output_name)
         except FileNotFoundError:
             print("The log file has not been found in the directory, creating a new one.")
-            with open(self._merged_log_path + "\\" + output_name, "w") as f:
+            with open(self.output_path + "\\" + output_name, "w") as f:
                 f.close()
 
         # Creating a list as a buffer to temporally save the data read from the CSVs files.
         df_list = list()
         # Appending the data in the list read from the CSVs files.
         for arg in args:
-            df = pandas.read_csv(self._merged_log_path + "\\" + arg)
+            df = pandas.read_csv(self.input_path + "\\" + arg)
             df_list.append(df)
 
         # Merging the first two dataframes.
@@ -59,21 +60,28 @@ class MergeLogs(object):
         df_merge.fillna(method="ffill", inplace=True)
         # df_merge = df_merge.astype(int)
         # Converting all the data into int except Trues and Falses
-        # df_merge = df_merge.astype(int)
+        df_merge.iloc[:, 1:] = df_merge.iloc[:, 1:].astype('int')
         # Saving the merged dataframe into a csv file.
-        df_merge.to_csv(self._merged_log_path + "\\" + output_name, index=False)
+        df_merge.to_csv(self.output_path + "\\" + output_name, index=False)
 
 
 # TODO: implement if name = main to do proper tests easily.
 # File Main entry point.
 if __name__ == "__main__":
-    mn = MergeLogs(GlobalVariables.LOG_PATH)
-    # Merging each machine log with the respect expected products log.
-    mn.merge_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
-    mn.merge_logs("merged_Mach_B.csv", "Machine B log.csv", "Machine B exp_prod_flag.csv")
-    mn.merge_logs("merged_Mach_C.csv", "Machine C log.csv", "Machine C exp_prod_flag.csv")
+    raw_log_path = GlobalVariables.LOG_PATH
+    merged_log_path = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\" \
+                      "logs\\merged_logs"
 
-    mn.merge_logs("merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv", "merged_Mach_C.csv")
+    # Merging each machine log with the respect expected products log.
+    local_log_merger = MergeLogs(raw_log_path, merged_log_path)
+    local_log_merger.merge_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
+    local_log_merger.merge_logs("merged_Mach_B.csv", "Machine B log.csv", "Machine B exp_prod_flag.csv")
+    local_log_merger.merge_logs("merged_Mach_C.csv", "Machine C log.csv", "Machine C exp_prod_flag.csv")
+
+    # Merging each complete machine log to have a general log with all the relevant data.
+    global_log_merger = MergeLogs(merged_log_path, merged_log_path)
+    global_log_merger.merge_logs("merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv", "merged_Mach_C.csv")
+
     # Copying the merged logs file to the Colab folder.
     # shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
     #            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'

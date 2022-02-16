@@ -15,14 +15,12 @@ the comma level.
 # TODO: add sim time measurement
 import shutil
 import time
-
 import simpy
 from machine_model import Machine
 from input_container import InputContainer
 from output_container import OutputContainer
 from transference_system import TransferenceSystem
 from global_variables import GlobalVariables
-from merge_logs import MergeLogs
 # from datetime import datetime
 
 # Getting simulation start time
@@ -125,16 +123,3 @@ print("Total sim time: {} seconds".format(round(sim_time, 2)))
 now = datetime.now().strftime("%d.%m.%Y-%H:%M:%S")
 print(now)
 """
-
-mn = MergeLogs(GlobalVariables.LOG_PATH)
-# Merging each machine log with the respect expected products log.
-mn.merge_flags_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
-mn.merge_flags_logs("merged_Mach_B.csv", "Machine B log.csv", "Machine B exp_prod_flag.csv")
-mn.merge_flags_logs("merged_Mach_C.csv", "Machine C log.csv", "Machine C exp_prod_flag.csv")
-
-# mn.merge_logs("merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv", "merged_Mach_C.csv")
-
-# Copying the merged logs file to the Colab folder.
-# shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
-#            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
-#            'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')

@@ -14,6 +14,8 @@ a full-outer-join.
 
 import os
 import pandas
+import shutil
+from global_variables import GlobalVariables
 
 
 # TODO: check merging data and convert every float into int.
@@ -22,6 +24,7 @@ class MergeLogs(object):
         self._merged_log_path = merged_log_path
 
     # TODO: split the "Moment" part of the time-step field of the csv file into a standalone field.
+
     def merge_logs(self, output_name, *args):
         # Initializing the merged_logs.csv file.
         try:
@@ -54,46 +57,24 @@ class MergeLogs(object):
 
         # Handling missing data generated from machine breakdowns
         df_merge.fillna(method="ffill", inplace=True)
+        # df_merge = df_merge.astype(int)
         # Converting all the data into int except Trues and Falses
         # df_merge = df_merge.astype(int)
         # Saving the merged dataframe into a csv file.
-        df_merge.to_csv(self._merged_log_path + "\\" + output_name)
+        df_merge.to_csv(self._merged_log_path + "\\" + output_name, index=False)
 
-    def merge_flags_logs(self, output_name, *args):
-        # Initializing the merged_logs.csv file.
-        try:
-            os.remove(self._merged_log_path + "\\" + output_name)
-        except FileNotFoundError:
-            print("The log file has not been found in the directory, creating a new one.")
-            with open(self._merged_log_path + "\\" + output_name, "w") as f:
-                f.close()
-
-        # Creating a list as a buffer to temporally save the data read from the CSVs files.
-        df_list = list()
-        # Appending the data in the list read from the CSVs files.
-        for arg in args:
-            df = pandas.read_csv(self._merged_log_path + "\\" + arg)
-            df_list.append(df)
-
-        # Merging the first two dataframes.
-        df1 = df_list[0]
-        df2 = df_list[1]
-        df_merge = pandas.merge(left=df1, right=df2, on='step', how="outer", sort=True)
-
-        # Merging the remaining dataframes, if any.
-        for element in range(len(df_list)):
-            # Skipping the first two dataframes in the list, because they have been merged few lines before.
-            if element == 0 or element == 1:
-                continue
-            # Merging the remaining files.
-            else:
-                df_merge = pandas.merge(left=df_merge, right=df_list[element], on='step', how='outer', sort=True)
-
-        # Handling missing data generated from machine breakdowns
-        df_merge.fillna(method="ffill", inplace=True)
-        # Converting all the data into int except Trues and Falses
-        # df_merge = df_merge.astype(int)
-        # Saving the merged dataframe into a csv file.
-        df_merge.to_csv(self._merged_log_path + "\\" + output_name)
 
 # TODO: implement if name = main to do proper tests easily.
+# File Main entry point.
+if __name__ == "__main__":
+    mn = MergeLogs(GlobalVariables.LOG_PATH)
+    # Merging each machine log with the respect expected products log.
+    mn.merge_logs("merged_Mach_A.csv", "Machine A log.csv", "Machine A exp_prod_flag.csv")
+    mn.merge_logs("merged_Mach_B.csv", "Machine B log.csv", "Machine B exp_prod_flag.csv")
+    mn.merge_logs("merged_Mach_C.csv", "Machine C log.csv", "Machine C exp_prod_flag.csv")
+
+    mn.merge_logs("merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv", "merged_Mach_C.csv")
+    # Copying the merged logs file to the Colab folder.
+    # shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
+    #            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
+    #            'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')

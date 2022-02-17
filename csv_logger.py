@@ -52,7 +52,8 @@ class CsvLogger(object):
                     # ... else, just add the string to the text.
                     text = text + str(data_list[i][j]) + ","
 
-                # TODO: NOT WORKING: modify in order to make it work. Pandas could help
+                # TODO: NOT WORKING: modify in order to make it work. Pandas could help -> Conversion made in the log
+                #  merger. Delete the following code. 
                 # Refactor True or False into 1 or 0.
                 # ... if the element is a True ...
                 if data_list[i][j] == "True":

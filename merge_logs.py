@@ -20,7 +20,6 @@ import shutil
 from global_variables import GlobalVariables
 
 
-# TODO: check merging data and convert every float into int.
 class MergeLogs(object):
     def __init__(self):
         pass
@@ -58,22 +57,12 @@ class MergeLogs(object):
             else:
                 df_merge = pandas.merge(left=df_merge, right=df_list[element], on='step', how='outer', sort=True)
 
-        # print("1: ", df_merge.head(5))
         # Handling missing data generated from machine breakdowns
         df_merge.fillna(method="ffill", inplace=True)
-        # print("2: ", df_merge.head(5))
         # Converting all the data into int comprised Trues and Falses
         df_merge.iloc[:, 1:] = df_merge.iloc[:, 1:].astype('Int64')
-        # print("3: ", df_merge.head(5))
         # Saving the merged dataframe into a csv file.
         df_merge.to_csv(output_path + "\\" + output_name, index=False)
-
-    @staticmethod
-    def reformat_step(path):
-        dataframe = pandas.read_csv(path)
-        # dataframe.iloc[:, :0] = dataframe.iloc[:, :0].astype('string').replace(".", ":")
-        dataframe.iloc[:, 1:] = dataframe.iloc[:, 1:].astype('Int64')
-        dataframe.to_csv(path, index=False)
 
 
 # TODO: implement if name = main to do proper tests easily.

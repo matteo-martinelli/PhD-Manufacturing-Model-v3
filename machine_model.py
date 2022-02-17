@@ -36,13 +36,13 @@ The log encoding is the following:
     x.y: the expected output is not met - TO BE ADDED
 """
 
+import os
 import random
 import simpy
 from global_variables import GlobalVariables
 from statistics import mean
 from csv_logger import CsvLogger
 from txt_logger import TxtLogger
-# from datetime import datetime
 
 
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ class Machine(object):
 
     A machine has a "name" and a number of parts processed.
     """
-    def __init__(self, env, name, mean_process_time, sigma_process_time, MTTF, MTTR, input_buffer,
+    def __init__(self, env, name, log_path, mean_process_time, sigma_process_time, MTTF, MTTR, input_buffer,
                  output_buffer):
         self.env = env
         # TODO: add machine_naming_coding check.
@@ -91,15 +91,19 @@ class Machine(object):
         self._processing_breakdowns = True       # To exclude breakdowns during processing operations, set to False.
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
-        self._log_path = GlobalVariables.LOG_PATH
-        # TODO: implement log saving based on the moment the sim is run.
+        # self._log_path = log_path
         # self.date_time = 0
 
         # Logging objects
-        self.global_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, GlobalVariables.LOG_FILENAME)
-        self.local_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, self._name + " log.txt")
-        self.csv_logger = CsvLogger(GlobalVariables.LOG_PATH, self._name + " log.csv")
-        self.expected_products_logger = CsvLogger(GlobalVariables.LOG_PATH, self._name + " exp_prod_flag.csv")
+        # Creating the folder that contains the i-th machine log
+        os.mkdir(log_path + '\\Machine_' + self._name.split(" ")[1])
+        # Creating the local log path that will be used with log_path that represents the global log path.
+        local_log_path = log_path + '\\Machine_' + self._name.split(" ")[1]
+        # Creating logging objects
+        self.global_txt_logger = TxtLogger(log_path, GlobalVariables.LOG_FILENAME)
+        self.local_txt_logger = TxtLogger(local_log_path, self._name + " log.txt")
+        self.csv_logger = CsvLogger(local_log_path, self._name + " log.csv")
+        self.expected_products_logger = CsvLogger(local_log_path, self._name + " exp_prod_flag.csv")
 
         # List containing the csv log files of each machine.
         self._data_list = list()

@@ -63,7 +63,7 @@ class MergeLogs(object):
         df_merge.fillna(method="ffill", inplace=True)
         # print("2: ", df_merge.head(5))
         # Converting all the data into int comprised Trues and Falses
-        df_merge.iloc[:, 1:] = df_merge.iloc[:, 1:].astype('int')
+        df_merge.iloc[:, 1:] = df_merge.iloc[:, 1:].astype('Int64')
         # print("3: ", df_merge.head(5))
         # Saving the merged dataframe into a csv file.
         df_merge.to_csv(output_path + "\\" + output_name, index=False)
@@ -72,7 +72,7 @@ class MergeLogs(object):
     def reformat_step(path):
         dataframe = pandas.read_csv(path)
         # dataframe.iloc[:, :0] = dataframe.iloc[:, :0].astype('string').replace(".", ":")
-        dataframe.iloc[:, 1:] = dataframe.iloc[:, 1:].astype('int')
+        dataframe.iloc[:, 1:] = dataframe.iloc[:, 1:].astype('Int64')
         dataframe.to_csv(path, index=False)
 
 
@@ -96,17 +96,6 @@ if __name__ == "__main__":
     log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv",
                           "merged_Mach_C.csv")
 
-    data_frame = pandas.read_csv(merged_log_path + '\\merged_logs.csv')
-    print(data_frame.dtypes)
-    data_frame.iloc[:, 1:] = data_frame.iloc[:, 1:].astype('Int64') # WORKS.
-    print(data_frame.dtypes)
-    print(data_frame.head(5))
-    # time.sleep(1)
-
-    # log_merger.reformat_step(merged_log_path)
-
-    # global_log_merger.reformat_step('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\'
-    #                                 'Phd-Manufacturing-Model-v3\\logs\\merged_logs\\merged_logs.csv')
     # Copying the merged logs file to the Colab folder.
     # shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
     #            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'

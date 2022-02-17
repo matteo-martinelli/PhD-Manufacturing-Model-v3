@@ -1,5 +1,7 @@
 """
-causal_net.py: file where all the causal operations will be managed.
+causal_net.py file:
+
+File where all the causal operations will be managed.
 
 This file should become a class.
 """
@@ -20,6 +22,7 @@ import networkx
 from IPython.display import Image
 
 
+# TODO: class to be deleted.
 def get_available_gpus():
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']

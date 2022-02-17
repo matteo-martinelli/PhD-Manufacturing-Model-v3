@@ -6,6 +6,7 @@ Written in the most generic way, still a class taylor made to solve a singular p
 """
 
 
+# TODO: clean this file
 # TRANSFERENCE SYSTEM CLASS --------------------------------------------------------------------------------------------
 class TransferenceSystem(object):
     """

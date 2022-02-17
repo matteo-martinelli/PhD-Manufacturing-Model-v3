@@ -20,12 +20,6 @@ from global_variables import GlobalVariables
 
 
 class MergeLogs(object):
-    def __init__(self):
-        pass
-
-    # TODO: split the "Moment" part of the time-step field of the csv file into a standalone field. -> no, because is
-    #  useful to maintain events ordered. This task is done in the data cleaning made before the model training phase.
-
     @staticmethod
     def merge_logs(input_path, output_path, output_name, *args):
         # Initializing the merged_logs.csv file.

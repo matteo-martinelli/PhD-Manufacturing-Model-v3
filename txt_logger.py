@@ -6,13 +6,17 @@ file.
 """
 
 import os
+import time
 
 
 class TxtLogger(object):
+    # TODO: turn fields private.
     def __init__(self, txt_log_path, txt_log_filename):
         self.txt_log_path = txt_log_path
+        # self._txt_log_folder = self.folder_name = time.strftime('%Y.%m.%d - %H:%M Log')
         self.txt_log_filename = txt_log_filename
 
+        # Add later + self._txt_log_folder + "\\"
         self.complete_txt_filename = self.txt_log_path + "\\" + self.txt_log_filename
 
         self._initialise_txt_log_file()

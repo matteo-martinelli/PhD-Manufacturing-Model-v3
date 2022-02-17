@@ -102,14 +102,15 @@ class GlobalVariables(object):
     WORKING_HOURS = 8               # Working hours in a day - for test purposes keep 8hours/day
     SHIFTS_IN_A_WORKING_DAY = 1     # Number of shifts in a day - for test purposes keep 1 shift/day
     BUSINESS_DAYS = 1               # Business days in a week - for test purposes keep 5 days/week
-    WORKING_WEEKS = 12              # Business weeks in a month - for test purposes keep 12/24/36 weeks
+    WORKING_WEEKS = 1              # Business weeks in a month - for test purposes keep 12/24/36 weeks
 
     # Total simulation time in minutes - for test purposes keep 60/90/120 total days
     SIM_TIME = WORKING_SECS * WORKING_MINS * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
+    # TODO: delete the following log path, cause now is defined and passed in the running model file.
     # Relative log path for generic model version
-    LOG_PATH = "logs"
+    # LOG_PATH = "logs"
     # Log filename
     LOG_FILENAME = "Log.txt"
 

@@ -64,7 +64,6 @@ class MergeLogs(object):
         df_merge.to_csv(output_path + "\\" + output_name, index=False)
 
 
-# TODO: implement if name = main to do proper tests easily.
 # File Main entry point.
 if __name__ == "__main__":
     raw_log_path = GlobalVariables.LOG_PATH
@@ -85,6 +84,7 @@ if __name__ == "__main__":
                           "merged_Mach_C.csv")
 
     # Copying the merged logs file to the Colab folder.
-    # shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
-    #            'merged_logs.csv', 'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
-    #            'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')
+    shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
+                'merged_logs\\merged_logs.csv',
+                'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
+                'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')

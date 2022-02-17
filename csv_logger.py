@@ -15,7 +15,7 @@ class CsvLogger(object):
 
         self._complete_csv_filename = self._csv_log_path + "\\" + self._csv_log_filename
 
-        # TODO: make the csv_name standard in the machine class. -> Cosa significa?
+        # TODO: make the csv_name standard in the machine class. -> What does it mean?
         self._heading = self._csv_log_filename.split("log.")[0].strip()
 
     def initialise_csv_log_file(self, head):

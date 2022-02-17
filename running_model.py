@@ -20,7 +20,7 @@ from input_container import InputContainer
 from output_container import OutputContainer
 from transference_system import TransferenceSystem
 from global_variables import GlobalVariables
-# from datetime import datetime
+from datetime import datetime
 
 # Getting simulation start time
 start_time = time.time()
@@ -117,8 +117,3 @@ finish_time = time.time()
 sim_time = finish_time - start_time
 print("Total sim time: {} seconds".format(round(sim_time, 2)))
 
-# TODO: add automatic path generation with respect to the moment where the sim finishes.
-"""
-now = datetime.now().strftime("%d.%m.%Y-%H:%M:%S")
-print(now)
-"""

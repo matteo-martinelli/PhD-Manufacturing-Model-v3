@@ -13,8 +13,9 @@ from global_variables import GlobalVariables
 
 
 class OutputContainer(simpy.Container):
-    def __init__(self, env, name, max_capacity, init_capacity, output_control=True, critical_level_output_container=50,
-                 dispatcher_lead_time=0, dispatcher_retrieved_check_time=8, dispatcher_std_check_time=1):
+    def __init__(self, env, name, log_path, max_capacity, init_capacity, output_control=True,
+                 critical_level_output_container=50, dispatcher_lead_time=0, dispatcher_retrieved_check_time=8,
+                 dispatcher_std_check_time=1):
         super().__init__(env, max_capacity, init_capacity)
         self.env = env
         self.name = name
@@ -36,7 +37,8 @@ class OutputContainer(simpy.Container):
         self.products_delivered = 0
 
         # Logging objects
-        self.global_txt_logger = TxtLogger(GlobalVariables.LOG_PATH, GlobalVariables.LOG_FILENAME)
+        # No local log path is used because the log is only global for logistics instances
+        self.global_txt_logger = TxtLogger(log_path, GlobalVariables.LOG_FILENAME)
         # The following line is not printed ... Why? maybe delete it.
         self.global_txt_logger.write_txt_log_file('### DATA LOG FROM OUTPUT CONTAINER FILE ###\n')
 

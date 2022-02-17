@@ -17,7 +17,7 @@ import pandas
 import time
 import datetime
 import shutil
-from global_variables import GlobalVariables
+# from global_variables import GlobalVariables
 
 
 class MergeLogs(object):
@@ -61,28 +61,56 @@ class MergeLogs(object):
 
 
 # File Main entry point.
-if __name__ == "__main__":
+if __name__ == '__main__':
     # Get all the log sub-folders
     folder_list = os.listdir('logs')
-    print(folder_list)
+    # print(folder_list)
+
     # Considering only sub-folders with the last word as "log"
-    folder_list = [x for x in folder_list if x.split("-")[2] == 'log']
-    print(folder_list)
+    folder_list = [x for x in folder_list if x.split('-')[2] == 'log']
+    # print(folder_list)
+
     # TODO: consider rename the list "timestamp_list"
     # Converting all the folder names from %Y.%m.%d-%H.%M format to timestamp format. The output is stored in a
     # separated list, "converted_list"
-    converted_list = [time.mktime(datetime.datetime.strptime(x[:-4], '%Y.%m.%d-%H.%M').timetuple()) for x in folder_list]
+    converted_list = [time.mktime(datetime.datetime.strptime(x[:-4], '%Y.%m.%d-%H.%M').timetuple()) for x in
+                      folder_list]
+
     # Getting the index of the maximum timestamp, which represents the last folder created
     target_index = converted_list.index(max(converted_list))
-    print(target_index)
-    # Get that last folder created with the got index as input
-    target_folder = folder_list[target_index]
-    print(target_folder)
-    # Create a new folder inside it for merged logs
-    """
-    raw_log_path = GlobalVariables.LOG_PATH
-    merged_log_path = "logs\\merged_logs"   # Relative path
+    # print(target_index)
 
+    # Get that last folder created with the got index as input
+    run_folder = folder_list[target_index]
+    # print(target_folder)
+
+    # Create a new folder inside it for merged logs
+    raw_log_path = 'logs\\' + run_folder
+    merged_log_path = 'logs\\' + run_folder + '\\merged_logs'   # Relative path
+    # os.mkdir(merged_log_path)
+
+    # Get all the Machine_x.csv files in the folder
+    folder_list = os.listdir(raw_log_path)
+    print(folder_list)
+
+    # Select the keys to iterate
+    folder_list = [x for x in folder_list if '.' not in x]
+    print(folder_list)
+
+    # Iter in the Machine file list
+    log_merger = MergeLogs()
+    for component in folder_list:
+        # For each group of file, operate a merge over the flags.
+        log_merger.merge_logs(raw_log_path + '\\' + component, merged_log_path, 'merged_' + component + '.csv',
+                              component + ' log.csv', component + ' exp_prod_flag.csv')
+
+    file_list = [x + '\\merged_' + x + ".csv" for x in folder_list]
+
+    # TODO: test tomorrow
+    # Merging into 1.
+    log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", *file_list)
+
+    """
     # Merging each machine log with the respect expected products log.
     log_merger = MergeLogs()
     log_merger.merge_logs(raw_log_path, merged_log_path, "merged_Mach_A.csv", "Machine A log.csv",
@@ -98,7 +126,7 @@ if __name__ == "__main__":
 
     # Copying the merged logs file to the Colab folder.
     # Files inside the project folder are written with their relative path
+    """
     shutil.copy(src='logs\\merged_logs\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
                 'dataset')
-    """

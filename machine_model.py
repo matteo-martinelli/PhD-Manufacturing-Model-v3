@@ -1,5 +1,5 @@
 """
-machine_model.py -> Machine class:
+machine_model.py file: Machine class
 
 Class describing a single machine behaviour.
 Random breakdowns are embedded in the model.

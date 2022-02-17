@@ -1,5 +1,5 @@
 """
-transference_system.py class:
+transference_system.py file: TransferenceSystem class
 
 Class that has the responsibility to move material from the raw container A and B to the container C.
 Written in the most generic way, still a class taylor made to solve a singular problem.

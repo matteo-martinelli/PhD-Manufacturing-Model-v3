@@ -1,5 +1,5 @@
 """
-input_container.py Class:
+input_container.py file: InputContainer class
 
 This class extends the Container/Store Class of SimPy, integrating the level control.
 The level control is needed in order to have always some material available.

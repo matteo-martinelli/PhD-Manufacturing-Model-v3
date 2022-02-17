@@ -1,5 +1,5 @@
 """
-Monitoring.py class:
+merge_logs.py file: MergeLogs class
 
 the class responsibility is to enable the log capabilities for the instantiated model objects, and to save it into a csv
 file. Because of the similarity, the logs are also saved into a plain text .txt file and printed on the console.
@@ -14,7 +14,6 @@ a full-outer-join.
 
 import os
 import time
-
 import pandas
 import shutil
 from global_variables import GlobalVariables

@@ -1,7 +1,5 @@
 """
-txt_logger.py file:
-
-TxtLogger class:
+txt_logger.py file: TxtLogger class
 
 the class responsibility is to enable the log capabilities for the instantiated model objects and to save them as a .txt
 file.

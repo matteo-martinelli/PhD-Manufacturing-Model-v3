@@ -14,6 +14,8 @@ a full-outer-join.
 
 import os
 import pandas
+import time
+import datetime
 import shutil
 from global_variables import GlobalVariables
 
@@ -60,7 +62,24 @@ class MergeLogs(object):
 
 # File Main entry point.
 if __name__ == "__main__":
-
+    # Get all the log sub-folders
+    folder_list = os.listdir('logs')
+    print(folder_list)
+    # Considering only sub-folders with the last word as "log"
+    folder_list = [x for x in folder_list if x.split("-")[2] == 'log']
+    print(folder_list)
+    # TODO: consider rename the list "timestamp_list"
+    # Converting all the folder names from %Y.%m.%d-%H.%M format to timestamp format. The output is stored in a
+    # separated list, "converted_list"
+    converted_list = [time.mktime(datetime.datetime.strptime(x[:-4], '%Y.%m.%d-%H.%M').timetuple()) for x in folder_list]
+    # Getting the index of the maximum timestamp, which represents the last folder created
+    target_index = converted_list.index(max(converted_list))
+    print(target_index)
+    # Get that last folder created with the got index as input
+    target_folder = folder_list[target_index]
+    print(target_folder)
+    # Create a new folder inside it for merged logs
+    """
     raw_log_path = GlobalVariables.LOG_PATH
     merged_log_path = "logs\\merged_logs"   # Relative path
 
@@ -82,3 +101,4 @@ if __name__ == "__main__":
     shutil.copy(src='logs\\merged_logs\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
                 'dataset')
+    """

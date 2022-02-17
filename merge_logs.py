@@ -13,7 +13,6 @@ a full-outer-join.
 """
 
 import os
-import time
 import pandas
 import shutil
 from global_variables import GlobalVariables

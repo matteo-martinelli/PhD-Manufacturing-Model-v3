@@ -6,16 +6,13 @@ file.
 """
 
 import os
-import time
 
 
 class CsvLogger(object):
     def __init__(self, csv_log_path, csv_log_filename):
         self._csv_log_path = csv_log_path
-        # self.folder_name = time.strftime('%Y.%m.%d - %H:%M Log')
         self._csv_log_filename = csv_log_filename
 
-        # Add later: + self.folder_name + "\\"
         self._complete_csv_filename = self._csv_log_path + "\\" + self._csv_log_filename
 
         # TODO: make the csv_name standard in the machine class. -> What does it mean?

@@ -8,28 +8,40 @@ Moreover, also process parameters are floats. To prevent "raw" steps generation,
 the comma level.
 """
 
-# TODO: de-clutter unused libs. Check here how to do that:
+# TODO: de-clutter unused libs with pip. Check here how to do that:
 #  https://stackoverflow.com/questions/25376213/delete-unused-packages-from-requirements-file
 # TODO: pack all the sim files into a single package.
 # TODO: manage this file as a class with a main section as program entry point.
 # TODO: add sim-parameters.txt file automatic saving at the end of each sim run.
+# TODO: implement log saving based on the moment the sim is run. It should be indicated as a single string in the
+#  running file, passed to each object logging something, and used from each class to refer to the same lof folder for
+#  that particular run
+
 import time
 import simpy
+import os
 from machine_model import Machine
 from input_container import InputContainer
 from output_container import OutputContainer
 from transference_system import TransferenceSystem
 from global_variables import GlobalVariables
-from datetime import datetime
 
+# SIM INITIALIZATION ---------------------------------------------------------------------------------------------------
 # Getting simulation start time
 start_time = time.time()
+start_time_string = time.strftime('%Y.%m.%d-%H.%M')
+
+# TODO: create here the log folder. Is it the best place where to do
+#  it? I think yes, cause is related to the sim
+log_dir = 'logs\\' + start_time_string + '-log'
+os.mkdir(log_dir)
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()
 
 # LOGISTIC ENTITIES DEFINITION -----------------------------------------------------------------------------------------
-input_A = InputContainer(env, name="input A", max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPACITY,
+input_A = InputContainer(env, name="input A", log_path=log_dir,
+                         max_capacity=GlobalVariables.CONTAINER_A_RAW_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_A_RAW, input_control=True,
                          critical_level_input_container=GlobalVariables.CRITICAL_STOCK_A_RAW,
                          supplier_lead_time=GlobalVariables.SUPPLIER_LEAD_TIME_A_RAW,
@@ -37,11 +49,13 @@ input_A = InputContainer(env, name="input A", max_capacity=GlobalVariables.CONTA
                          input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_A_RAW,
                          input_std_check_time=GlobalVariables.STANDARD_A_CHECK_TIME)
 
-output_A = OutputContainer(env, name="output A", max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
+output_A = OutputContainer(env, name="output A", log_path=log_dir,
+                           max_capacity=GlobalVariables.CONTAINER_A_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_A_FINISHED, output_control=False)
 
 
-input_B = InputContainer(env, name="input B", max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
+input_B = InputContainer(env, name="input B", log_path=log_dir,
+                         max_capacity=GlobalVariables.CONTAINER_B_RAW_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_B_RAW, input_control=True,
                          critical_level_input_container=GlobalVariables.CRITICAL_STOCK_B_RAW,
                          supplier_lead_time=GlobalVariables.SUPPLIER_LEAD_TIME_B_RAW,
@@ -49,14 +63,17 @@ input_B = InputContainer(env, name="input B", max_capacity=GlobalVariables.CONTA
                          input_refilled_check_time=GlobalVariables.AFTER_REFILLING_CHECK_TIME_B_RAW,
                          input_std_check_time=GlobalVariables.STANDARD_B_CHECK_TIME)
 
-output_B = OutputContainer(env, name="output B", max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
+output_B = OutputContainer(env, name="output B", log_path=log_dir,
+                           max_capacity=GlobalVariables.CONTAINER_B_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_B_FINISHED, output_control=False)
 
 
-input_C = InputContainer(env, name="input C", max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
+input_C = InputContainer(env, name="input C", log_path=log_dir,
+                         max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                          init_capacity=GlobalVariables.INITIAL_C_FINISHED, input_control=False)
 
-output_C = OutputContainer(env, name="output C", max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
+output_C = OutputContainer(env, name="output C", log_path=log_dir,
+                           max_capacity=GlobalVariables.CONTAINER_C_FINISHED_CAPACITY,
                            init_capacity=GlobalVariables.INITIAL_C_FINISHED, output_control=True,
                            critical_level_output_container=GlobalVariables.CRITICAL_STOCK_C_FINISHED,
                            dispatcher_lead_time=GlobalVariables.DISPATCHER_LEAD_TIME_C_FINISHED,
@@ -64,9 +81,9 @@ output_C = OutputContainer(env, name="output C", max_capacity=GlobalVariables.CO
                            dispatcher_std_check_time=GlobalVariables.DISPATCHER_STD_CHECK_TIME_C_FINISHED)
 
 # MACHINES DEFINITION --------------------------------------------------------------------------------------------------
-machine_A = Machine(env, "Machine A", GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.SIGMA_PROCESS_TIME_A,
+machine_A = Machine(env, "Machine A", log_dir, GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.SIGMA_PROCESS_TIME_A,
                     GlobalVariables.MTTF_A, GlobalVariables.MTTR_A, input_A, output_A)
-machine_B = Machine(env, "Machine B", GlobalVariables.MEAN_PROCESS_TIME_B, GlobalVariables.SIGMA_PROCESS_TIME_B,
+machine_B = Machine(env, "Machine B", log_dir, GlobalVariables.MEAN_PROCESS_TIME_B, GlobalVariables.SIGMA_PROCESS_TIME_B,
                     GlobalVariables.MTTF_B, GlobalVariables.MTTR_B, input_B, output_B)
 
 # Maybe **args and **kwargs could help here? -> Implement in the next version of the sw.
@@ -77,7 +94,7 @@ output_containers.append(output_B)
 
 transference_from_A_B_to_C = TransferenceSystem(env, "from A and B to C", output_containers, input_C)
 
-machine_C = Machine(env, "Machine C", GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
+machine_C = Machine(env, "Machine C", log_dir, GlobalVariables.MEAN_PROCESS_TIME_C, GlobalVariables.SIGMA_PROCESS_TIME_C,
                     GlobalVariables.MTTF_C, GlobalVariables.MTTR_C, input_C, output_C)
 
 

@@ -60,9 +60,9 @@ class MergeLogs(object):
 
 # File Main entry point.
 if __name__ == "__main__":
+
     raw_log_path = GlobalVariables.LOG_PATH
-    merged_log_path = "C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\" \
-                      "logs\\merged_logs"
+    merged_log_path = "logs\\merged_logs"   # Relative path
 
     # Merging each machine log with the respect expected products log.
     log_merger = MergeLogs()
@@ -78,7 +78,7 @@ if __name__ == "__main__":
                           "merged_Mach_C.csv")
 
     # Copying the merged logs file to the Colab folder.
-    shutil.copy('C:\\Users\\wmatt\\Desktop\\Workspace\\Projects\\Phd-Projects\\Phd-Manufacturing-Model-v3\\logs\\'
-                'merged_logs\\merged_logs.csv',
-                'C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
-                'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset')
+    # Files inside the project folder are written with their relative path
+    shutil.copy(src='logs\\merged_logs\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
+                'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
+                'dataset')

@@ -111,10 +111,13 @@ if __name__ == '__main__':
 
     file_list = [x + '.csv' for x in folder_list]
 
-    # TODO: test tomorrow
     # Merging into 1.
     log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", *file_list)
 
-    shutil.copy(src='logs\\merged_logs\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
+    # TODO: create a new folder with the same name of the log run in the Colab dir and move there the relative log files
+    # For now do it manually.
+    """
+    shutil.copy(src=merged_log_path + '\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
                 'dataset')
+    """

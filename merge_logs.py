@@ -117,7 +117,9 @@ if __name__ == '__main__':
     # TODO: create a new folder with the same name of the log run in the Colab dir and move there the relative log files
     # For now do it manually.
     """
+    os.mkdir('C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
+             'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\' + run_folder + '\\dataset')
+    """
     shutil.copy(src=merged_log_path + '\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
-                'dataset')
-    """
+                + run_folder + '\\dataset')

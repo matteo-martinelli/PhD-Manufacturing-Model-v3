@@ -20,6 +20,7 @@ the comma level.
 import time
 import simpy
 import os
+import shutil
 from machine_model import Machine
 from input_container import InputContainer
 from output_container import OutputContainer
@@ -31,10 +32,16 @@ from global_variables import GlobalVariables
 start_time = time.time()
 start_time_string = time.strftime('%Y.%m.%d-%H.%M')
 
-# TODO: create here the log folder. Is it the best place where to do
-#  it? I think yes, cause is related to the sim
+# TODO: create here the log folder. Is it the best place where to do it? I think yes, cause is related to the sim
+# Creating the new log directory name
 log_dir = 'logs\\' + start_time_string + '-log'
+# Creating the relative new log directory
 os.mkdir(log_dir)
+# Copying the running variables to the new directory
+shutil.copy(src='global_variables.py', dst=log_dir)
+# Renaming the running variables filename in txt format
+pre, ext = os.path.splitext(log_dir + 'global_variables.py')
+os.rename(log_dir + 'global_variables.py', pre + '.txt')
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()

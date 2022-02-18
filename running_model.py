@@ -40,8 +40,8 @@ os.mkdir(log_dir)
 # Copying the running variables to the new directory
 shutil.copy(src='global_variables.py', dst=log_dir)
 # Renaming the running variables filename in txt format
-pre, ext = os.path.splitext(log_dir + 'global_variables.py')
-os.rename(log_dir + 'global_variables.py', pre + '.txt')
+# pre, ext = os.path.splitext(log_dir + '\\global_variables.py')
+os.rename(log_dir + '\\global_variables.py', log_dir + '\\sim-variables' + '.txt')
 
 # ENVIRONMENT DEFINITION -----------------------------------------------------------------------------------------------
 env = simpy.Environment()

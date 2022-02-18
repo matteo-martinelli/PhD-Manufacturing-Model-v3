@@ -73,7 +73,7 @@ class GlobalVariables(object):
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_A = 230       # Avg. processing time in seconds - std 3,83 min = 230 sec
     SIGMA_PROCESS_TIME_A = 15       # Sigma processing time in seconds.
-    MTTF_A = 72000                  # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
+    MTTF_A = 72000/3                # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
     BREAK_MEAN_A = 1 / MTTF_A       # Param. for expovariate distribution
     MTTR_A = 14400                  # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
     REPAIR_MEAN_A = 1 / MTTR_A      # Param. for expovariate distribution
@@ -82,7 +82,7 @@ class GlobalVariables(object):
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_B = 240       # Avg. processing time in seconds - Standard value: 4,0 min = 240 sec
     SIGMA_PROCESS_TIME_B = 13       # Sigma processing time in seconds.
-    MTTF_B = 86400                  # Mean time to failure in seconds - Standard value: 24 hours = 14400 min = 86400 sec
+    MTTF_B = 86400/3                # Mean time to failure in seconds - Standard value: 24 hours = 14400 min = 86400 sec
     BREAK_MEAN_B = 1 / MTTF_B       # Param. for expovariate distributions
     MTTR_B = 12000                  # Time to repair a machine in seconds - Standard value: 3,33 h = 200 min = 12000 sec
     REPAIR_MEAN_B = 1 / MTTR_B      # Param. for expovariate distribution

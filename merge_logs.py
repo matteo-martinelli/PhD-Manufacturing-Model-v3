@@ -124,6 +124,6 @@ if __name__ == '__main__':
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
                 'dataset\\' + run_folder)
 
-    shutil.copy(src=raw_log_path + '\\global_variables.txt', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
+    shutil.copy(src=raw_log_path + '\\sim-variables.txt', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
                 'dataset\\' + run_folder)

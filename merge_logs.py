@@ -87,46 +87,34 @@ if __name__ == '__main__':
     # Create a new folder inside it for merged logs
     raw_log_path = 'logs\\' + run_folder
     merged_log_path = 'logs\\' + run_folder + '\\merged_logs'   # Relative path
-    # os.mkdir(merged_log_path)
+    os.mkdir(merged_log_path)
 
     # Get all the Machine_x.csv files in the folder
     folder_list = os.listdir(raw_log_path)
     print(folder_list)
 
     # Select the keys to iterate
-    folder_list = [x for x in folder_list if '.' not in x]
+    folder_list = [x for x in folder_list if '.' not in x and 'Machine' in x]
     print(folder_list)
 
     # Iter in the Machine file list
     log_merger = MergeLogs()
     for component in folder_list:
         # For each group of file, operate a merge over the flags.
-        log_merger.merge_logs(raw_log_path + '\\' + component, merged_log_path, 'merged_' + component + '.csv',
-                              component + ' log.csv', component + ' exp_prod_flag.csv')
+        in_path = raw_log_path + '\\' + component
+        out_path = merged_log_path
+        out_file = component + '.csv'
+        merge_file_1 = component.split('_')[0] + ' ' + component.split('_')[1] + ' log.csv'
+        merge_file_2 = component.split('_')[0] + ' ' + component.split('_')[1] + ' exp_prod_flag.csv'
 
-    file_list = [x + '\\merged_' + x + ".csv" for x in folder_list]
+        log_merger.merge_logs(in_path, out_path, out_file, merge_file_1, merge_file_2)
+
+    file_list = [x + '.csv' for x in folder_list]
 
     # TODO: test tomorrow
     # Merging into 1.
     log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", *file_list)
 
-    """
-    # Merging each machine log with the respect expected products log.
-    log_merger = MergeLogs()
-    log_merger.merge_logs(raw_log_path, merged_log_path, "merged_Mach_A.csv", "Machine A log.csv",
-                          "Machine A exp_prod_flag.csv")
-    log_merger.merge_logs(raw_log_path, merged_log_path, "merged_Mach_B.csv", "Machine B log.csv",
-                          "Machine B exp_prod_flag.csv")
-    log_merger.merge_logs(raw_log_path, merged_log_path, "merged_Mach_C.csv", "Machine C log.csv",
-                          "Machine C exp_prod_flag.csv")
-
-    # Merging into 1.
-    log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", "merged_Mach_A.csv", "merged_Mach_B.csv",
-                          "merged_Mach_C.csv")
-
-    # Copying the merged logs file to the Colab folder.
-    # Files inside the project folder are written with their relative path
-    """
     shutil.copy(src='logs\\merged_logs\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
                 'dataset')

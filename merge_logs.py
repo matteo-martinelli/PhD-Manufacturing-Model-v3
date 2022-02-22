@@ -114,7 +114,7 @@ if __name__ == '__main__':
     # Merging into 1.
     log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", *file_list)
 
-    # TODO: create a new folder with the same name of the log run in the Colab dir and move there the relative log files
+    # TODO: create a new folder with the same name of the log run in the Colab dir and move there the relative log files -> DONE
     # For now do it manually.
 
     os.mkdir('C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'

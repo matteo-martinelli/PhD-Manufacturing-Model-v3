@@ -16,6 +16,8 @@ log dataframes from the relative CSVs.
 
 The log encoding is the following:
 
+    # Starting cycle log: -------------------------------------------
+    x.0: a new cycle starter, printing the initial state.
     # Input buffer logs ---------------------------------------------
     x.1: input buffer empty, waiting one time step till is filled up
     x.2: input buffer filled up, continuing the process

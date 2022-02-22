@@ -35,7 +35,6 @@ The log encoding is the following:
     x.12: breakdown during output material handling
     x.13: repairing during output material handling
     x.14: finished the output material handling
-    x.y: the expected output is not met - TO BE ADDED
 """
 
 import os

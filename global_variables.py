@@ -73,15 +73,19 @@ class GlobalVariables(object):
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_A = 250       # Avg. processing time in seconds - std 3,83 min = 230 sec
     SIGMA_PROCESS_TIME_A = 15       # Sigma processing time in seconds.
-    MTTF_A = 72000                  # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
-    MTTR_A = 14400                  # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
+    MTTF_A = 86400                  # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
+    MTTR_A = 12000                  # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
+    # Standard Availability = 83,3%
+    # Standard Un-Availability = 16,7%
 
     # 2.Node B
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_B = 250       # Avg. processing time in seconds - Standard value: 4,0 min = 240 sec
-    SIGMA_PROCESS_TIME_B = 13       # Sigma processing time in seconds.
+    SIGMA_PROCESS_TIME_B = 15       # Sigma processing time in seconds.
     MTTF_B = 86400                  # Mean time to failure in seconds - Standard value: 24 hours = 14400 min = 86400 sec
     MTTR_B = 12000                  # Time to repair a machine in seconds - Standard value: 3,33 h = 200 min = 12000 sec
+    # Standard Availability = 87,8%
+    # Standard Un-Availability = 12,2%
 
     # 3.Node C
     NUM_MACHINES_C = 1              # Number of machines in the work-shop.
@@ -89,6 +93,8 @@ class GlobalVariables(object):
     SIGMA_PROCESS_TIME_C = 10       # Sigma processing time in seconds.
     MTTF_C = 100800                 # Mean time to failure in seconds - Standard value: 28 hours = 1680 min = 100800 sec
     MTTR_C = 9600/5                 # Time to repair a machine in seconds - Standard value: 2,67 h = 160 min = 9600 sec
+    # Standard Availability = 91,3%
+    # Standard Un-Availability = 8,7%
 
     # SIM PARAMETERS ---------------------------------------------------------------------------------------------------
     WORKING_SECS = 60               # Working seconds for a minute in a day

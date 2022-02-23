@@ -71,21 +71,21 @@ class GlobalVariables(object):
 
     # 1.Node A
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_A = 230       # Avg. processing time in seconds - std 3,83 min = 230 sec
+    MEAN_PROCESS_TIME_A = 250       # Avg. processing time in seconds - std 3,83 min = 230 sec
     SIGMA_PROCESS_TIME_A = 15       # Sigma processing time in seconds.
-    MTTF_A = 72000/3                # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
-    MTTR_A = 1000/5                 # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
+    MTTF_A = 72000                  # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
+    MTTR_A = 14400                  # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
 
     # 2.Node B
     NUM_MACHINES_B = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_B = 240       # Avg. processing time in seconds - Standard value: 4,0 min = 240 sec
+    MEAN_PROCESS_TIME_B = 250       # Avg. processing time in seconds - Standard value: 4,0 min = 240 sec
     SIGMA_PROCESS_TIME_B = 13       # Sigma processing time in seconds.
-    MTTF_B = 86400/3                # Mean time to failure in seconds - Standard value: 24 hours = 14400 min = 86400 sec
-    MTTR_B = 1200/5                 # Time to repair a machine in seconds - Standard value: 3,33 h = 200 min = 12000 sec
+    MTTF_B = 86400                  # Mean time to failure in seconds - Standard value: 24 hours = 14400 min = 86400 sec
+    MTTR_B = 12000                  # Time to repair a machine in seconds - Standard value: 3,33 h = 200 min = 12000 sec
 
     # 3.Node C
     NUM_MACHINES_C = 1              # Number of machines in the work-shop.
-    MEAN_PROCESS_TIME_C = 250       # Avg. processing time in seconds - Standard value: 4,17 min = 250 sec
+    MEAN_PROCESS_TIME_C = 230       # Avg. processing time in seconds - Standard value: 4,17 min = 250 sec
     SIGMA_PROCESS_TIME_C = 10       # Sigma processing time in seconds.
     MTTF_C = 100800                 # Mean time to failure in seconds - Standard value: 28 hours = 1680 min = 100800 sec
     MTTR_C = 9600/5                 # Time to repair a machine in seconds - Standard value: 2,67 h = 160 min = 9600 sec
@@ -96,7 +96,7 @@ class GlobalVariables(object):
     WORKING_HOURS = 8               # Working hours in a day - for test purposes keep 8hours/day
     SHIFTS_IN_A_WORKING_DAY = 1     # Number of shifts in a day - for test purposes keep 1 shift/day
     BUSINESS_DAYS = 1               # Business days in a week - for test purposes keep 5 days/week
-    WORKING_WEEKS = 24              # Business weeks in a month - for test purposes keep 12/24/36 weeks
+    WORKING_WEEKS = 36              # Business weeks in a month - for test purposes keep 12/24/36 weeks
 
     # Total simulation time in minutes - for test purposes keep 60/90/120 total days
     SIM_TIME = WORKING_SECS * WORKING_MINS * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS

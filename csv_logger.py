@@ -50,6 +50,7 @@ class CsvLogger(object):
                     # ... else, just add the string to the text.
                     text = text + str(data_list[i][j]) + ","
 
+                """
                 # TODO: NOT WORKING: modify in order to make it work. Pandas could help -> Conversion made in the log
                 #  merger. Delete the following code.
                 # Refactor True or False into 1 or 0.
@@ -61,6 +62,7 @@ class CsvLogger(object):
                 if data_list[i][j] == "False":
                     # Refactor into 0
                     data_list[i][j] = 0
+                """
 
         with open(self._complete_csv_filename, "a") as f:
             f.write(text)

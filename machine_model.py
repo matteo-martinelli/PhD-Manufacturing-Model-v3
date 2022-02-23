@@ -386,7 +386,7 @@ class Machine(object):
                 pass
 
             self.expected_products_logger.write_csv_log_file(self._exp_pieces)
-            self._exp_pieces = list()\
+            self._exp_pieces = list()
 
             yield self.env.timeout(1)
 

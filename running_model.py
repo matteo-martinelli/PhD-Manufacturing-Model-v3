@@ -142,4 +142,4 @@ if __name__ == '__main__':
 
     finish_time = time.time()
     sim_time = finish_time - start_time
-    print("Total sim time: {} seconds".format(round(sim_time, 2)))
+    print("Total sim time: {} min and{} secs".format(round(sim_time/60, 0), round(sim_time % 60, 2)))

@@ -1,5 +1,5 @@
 """
-global_variables.py class: GlobalVariables class
+global_variables.py file: GlobalVariables class
 
 Class containing the global variables for the model.
 """

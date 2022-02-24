@@ -73,8 +73,8 @@ class GlobalVariables(object):
     NUM_MACHINES_A = 1              # Number of machines in the work-shop.
     MEAN_PROCESS_TIME_A = 250       # Avg. processing time in seconds - std 3,83 min = 230 sec
     SIGMA_PROCESS_TIME_A = 15       # Sigma processing time in seconds.
-    MTTF_A = 86400                  # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
-    MTTR_A = 12000                  # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
+    MTTF_A = 129600                 # Mean time to failure in seconds - Standard value: 20 hours = 1200 min = 72000 sec
+    MTTR_A = 17670                  # Time to repair a machine in seconds - Standard value: 4 h = 240 min = 14400 sec
     # Standard Availability = 83,3%
     # Standard Un-Availability = 16,7%
 

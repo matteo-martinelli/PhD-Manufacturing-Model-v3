@@ -70,32 +70,29 @@ if __name__ == '__main__':
     folder_list = [x for x in folder_list if x.split('-')[2] == 'log']
     # print(folder_list)
 
-    # TODO: consider rename the list "timestamp_list"
     # Converting all the folder names from %Y.%m.%d-%H.%M format to timestamp format. The output is stored in a
-    # separated list, "converted_list"
-    converted_list = [time.mktime(datetime.datetime.strptime(x[:-4], '%Y.%m.%d-%H.%M').timetuple()) for x in
+    # separated list, "timestamp_list"
+    timestamp_list = [time.mktime(datetime.datetime.strptime(x[:-4], '%Y.%m.%d-%H.%M').timetuple()) for x in
                       folder_list]
 
     # Getting the index of the maximum timestamp, which represents the last folder created
-    target_index = converted_list.index(max(converted_list))
-    # print(target_index)
+    target_index = timestamp_list.index(max(timestamp_list))
 
     # Get that last folder created with the got index as input
-    run_folder = folder_list[target_index]
-    # print(target_folder)
+    target_folder = folder_list[target_index]
 
     # Create a new folder inside it for merged logs
-    raw_log_path = 'logs\\' + run_folder
-    merged_log_path = 'logs\\' + run_folder + '\\merged_logs'   # Relative path
+    raw_log_path = 'logs\\' + target_folder
+    merged_log_path = 'logs\\' + target_folder + '\\merged_logs'   # Relative path
     os.mkdir(merged_log_path)
 
     # Get all the Machine_x.csv files in the folder
     folder_list = os.listdir(raw_log_path)
-    print(folder_list)
+    # print(folder_list)
 
     # Select the keys to iterate
     folder_list = [x for x in folder_list if '.' not in x and 'Machine' in x]
-    print(folder_list)
+    # print(folder_list)
 
     # Iter in the Machine file list
     log_merger = MergeLogs()
@@ -114,16 +111,16 @@ if __name__ == '__main__':
     # Merging into 1.
     log_merger.merge_logs(merged_log_path, merged_log_path, "merged_logs.csv", *file_list)
 
-    # TODO: create a new folder with the same name of the log run in the Colab dir and move there the relative log files -> DONE
-    # For now do it manually.
-
+    # Creating a folder with the same naming structure in the Colab project folder
     os.mkdir('C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\My Notebooks\\PhD Notebooks\\'
-             'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset\\' + run_folder)
+             'Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\dataset\\' + target_folder)
 
+    # Moving merged_logs.csv file in the twin Colab project folder
     shutil.copy(src=merged_log_path + '\\merged_logs.csv', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
-                'dataset\\' + run_folder)
+                'dataset\\' + target_folder)
 
+    # Moving associate sim-variables.txt file in the twin Colab project folder
     shutil.copy(src=raw_log_path + '\\sim-variables.txt', dst='C:\\Users\\wmatt\\Desktop\\GDrive\\Colab Notebooks\\'
                 'My Notebooks\\PhD Notebooks\\Colab-Manufacturing-Model-Learning\\Causal-Manufacturing-Learning-v1\\'
-                'dataset\\' + run_folder)
+                'dataset\\' + target_folder)

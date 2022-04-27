@@ -4,8 +4,6 @@ buffer_level_plot.py:
 This file has the responsibility to plot buffer levels at the end of the simulation.
 """
 
-import matplotlib.pyplot as plt
-from matplotlib import ticker
 import pandas
 
 MERGED_LOG_PATH = 'logs\\2022.03.14-11.54-log\\merged_logs\\merged_logs.csv'

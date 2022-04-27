@@ -15,7 +15,6 @@ class CsvLogger(object):
 
         self._complete_csv_filename = self._csv_log_path + "\\" + self._csv_log_filename
 
-        # TODO: make the csv_name standard in the machine class. -> What does it mean?
         self._heading = self._csv_log_filename.split("log.")[0].strip()
 
     def initialise_csv_log_file(self, head):
@@ -27,8 +26,7 @@ class CsvLogger(object):
             os.remove(self._complete_csv_filename)
             with open(self._complete_csv_filename, "w") as f:
                 f.close()
-        # TODO: Maybe instead of time process should be written the number of the processed material ...
-        #  or should be added as a column
+
         with open(self._complete_csv_filename, "a") as f:
             f.write(head)
             f.close()

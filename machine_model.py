@@ -47,6 +47,7 @@ from txt_logger import TxtLogger
 
 
 # MACHINE CLASS --------------------------------------------------------------------------------------------------------
+# noinspection PyPep8Naming
 class Machine(object):
     """
     A machine produces parts and occasionally gets broken.
@@ -60,10 +61,10 @@ class Machine(object):
                  output_buffer):
         self.env = env
         # TODO: add machine_naming_coding check.
-        self._name = name    # Must be coded as "Machine" + identifying letter from A to Z
+        self._name = name                       # Must be coded as "Machine" + identifying letter from A to Z
 
         # Process variables.
-        self.parts_made = 0                             # No private
+        self.parts_made = 0                     # No private
         self._mean_process_time = mean_process_time
         self._sigma_process_time = sigma_process_time
 
@@ -111,7 +112,6 @@ class Machine(object):
         # List containing the csv log files of the expected product flag of each machine.
         self._exp_pieces = list()
 
-    # TODO: convert the time-step print from seconds to minutes
     # Function describing the machine process.
     def _working(self):
         """
@@ -304,8 +304,6 @@ class Machine(object):
                         # The machine broke.
                         self._broken = True
                         handled_out -= self.env.now - start_handling  # How much time left to handle the material?
-                        # TODO: change the MTTR with the actual repairing time extracted. Change the same thing in every
-                        #  stochastic extracted number. -> DONE ONLY FOR MTTR, changed to TTR.
 
                         # Count breakdown number and time.
                         break_down_time = int(random.expovariate(self._repair_mean))
@@ -361,12 +359,9 @@ class Machine(object):
             yield self.env.timeout(time_to_failure)
             # If the machine is not already broken and is currently working...
             if not self._broken:
-                # TODO: test with CAUSE to discriminate different kinds of interrupts.
-                # self._process.interrupt(cause="breakdown")
                 self._process.interrupt()
 
     def _expected_products(self):
-        # TODO: change the check_error_tolerance to 10% of the MTTR mean between al machines.
         check_error_tolerance = mean([GlobalVariables.MEAN_PROCESS_TIME_A, GlobalVariables.MEAN_PROCESS_TIME_B,
                                       GlobalVariables.MEAN_PROCESS_TIME_C])
 
@@ -379,7 +374,6 @@ class Machine(object):
                     self._expected_products_sensor = True
                     self._exp_pieces.append([self.env.now, self._expected_products_sensor])
                 else:
-                    # TODO: try to not log the False case and check if the merging works anyway and if is faster.
                     self._expected_products_sensor = False
                     self._exp_pieces.append([self.env.now, self._expected_products_sensor])
             except simpy.Interrupt:
@@ -390,7 +384,6 @@ class Machine(object):
 
             yield self.env.timeout(1)
 
-    # TODO: split data-list.append to the rest of the txt logging, in order to follow the SOLID principles.
     def _write_extended_log(self, step, moment, input_level, done_in, output_level, parts_made, broken, MTTF, TTR):
         # Signature = step, moment, input_level, done_in (time_process), output_level, parts_made (produced), broken,
         # MTTF, MTTR

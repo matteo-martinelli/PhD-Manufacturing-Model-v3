@@ -12,10 +12,7 @@ the comma level.
 #  https://stackoverflow.com/questions/25376213/delete-unused-packages-from-requirements-file
 # TODO: pack all the sim files into a single package.
 # TODO: manage this file as a class with a main section as program entry point.
-# TODO: add sim-parameters.txt file automatic saving at the end of each sim run.
-# TODO: implement log saving based on the moment the sim is run. It should be indicated as a single string in the
-#  running file, passed to each object logging something, and used from each class to refer to the same lof folder for
-#  that particular run
+# TODO: add sim-parameters.txt file automatic saving at the end of each sim run. >>> DONE
 
 import time
 import simpy
@@ -34,7 +31,6 @@ if __name__ == '__main__':
     start_time = time.time()
     start_time_string = time.strftime('%Y.%m.%d-%H.%M')
 
-    # TODO: create here the log folder. Is it the best place where to do it? I think yes, cause is related to the sim
     # Creating the new log directory name
     log_dir = 'logs\\' + start_time_string + '-log'
     # Creating the relative new log directory

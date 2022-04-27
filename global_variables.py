@@ -108,10 +108,6 @@ class GlobalVariables(object):
     SIM_TIME = WORKING_SECS * WORKING_MINS * WORKING_HOURS * SHIFTS_IN_A_WORKING_DAY * BUSINESS_DAYS * WORKING_WEEKS
 
     # LOG PARAMETERS ---------------------------------------------------------------------------------------------------
-    # TODO: delete the following log path, cause now is defined and passed in the running model file.
-    # Relative log path for generic model version
-    # LOG_PATH = "logs"
-    # Log filename
     LOG_FILENAME = "Log.txt"
 
     # OTHER PARAMETERS -------------------------------------------------------------------------------------------------

@@ -17,7 +17,6 @@ import pandas
 import time
 import datetime
 import shutil
-# from global_variables import GlobalVariables
 
 
 class MergeLogs(object):

@@ -8,8 +8,6 @@ Moreover, also process parameters are floats. To prevent "raw" steps generation,
 the comma level.
 """
 
-# TODO: de-clutter unused libs with pip. Check here how to do that:
-#  https://stackoverflow.com/questions/25376213/delete-unused-packages-from-requirements-file
 # TODO: pack all the sim files into a single package.
 # TODO: manage this file as a class with a main section as program entry point.
 # TODO: add sim-parameters.txt file automatic saving at the end of each sim run. >>> DONE

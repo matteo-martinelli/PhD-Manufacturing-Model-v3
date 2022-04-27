@@ -93,8 +93,6 @@ class Machine(object):
         self._processing_breakdowns = True       # To exclude breakdowns during processing operations, set to False.
 
         # Logging objects - As a best practice, write before in the txt, console, then append data into the data list.
-        # self._log_path = log_path
-        # self.date_time = 0
 
         # Logging objects
         # Creating the folder that contains the i-th machine log

@@ -6,7 +6,6 @@ Written in the most generic way, still a class taylor made to solve a singular p
 """
 
 
-# TODO: clean this file
 # TRANSFERENCE SYSTEM CLASS --------------------------------------------------------------------------------------------
 class TransferenceSystem(object):
     """
@@ -22,12 +21,10 @@ class TransferenceSystem(object):
 
     #  Function describing the machine process.
     def _material_transfer(self, env):
-        # yield env.timeout(0)
 
         while True:
             # Assuming that the input buffers are not empty and the output are not full.
             input_empty = False
-            # output_full = False
 
             # Looping all the input elements...
             for element in range(len(self._input_containers)):
